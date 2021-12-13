@@ -1,0 +1,7 @@
+{
+	"name": "el-tweaks",
+	"version": "0.2.0",
+	"description": "Adds in many small changes designed to improve CrossCode.",
+
+    "prestart": "prestart.js"
+}

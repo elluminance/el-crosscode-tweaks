@@ -1,0 +1,41 @@
+{
+    "labels": {
+        "arena": {
+            "scoreTypes": {
+                "DAMAGE_HEALED": "HP Recovered" 
+            }
+        },
+
+        "options": {
+            "headers": {
+                "el-tweaks": "EL's Tweaks"
+            },
+
+            "assist-timing-window": {
+                "name": "Timing Windows",
+                "description": "Increases the window in which one may execute a Perfect Guard or Perfect Dash."
+            },
+
+            "el-arena-hp-bonus": {
+                "name": "Arena: HP Regen Points",
+                "description": "Allows regaining some lost points by regenerating HP in the Arena."
+            },
+
+            "el-flash-step-fix": {
+                "name": "Flash Step Fix",
+                "description": "Makes the modifier \\c[3]Flash Step\\c[0] work as intended - and have a more apparent effect."
+            },
+
+            "el-arena-item-restore": {
+                "name": "Arena: Item Restoration",
+                "description": "Returns items used during an arena round after the round is over."
+            },
+            
+            "controls":{
+                "keys": {
+                    "walk": "Walk"
+                }
+            }
+        }
+    }
+}
