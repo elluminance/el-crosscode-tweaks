@@ -31,6 +31,11 @@
                 "description": "Returns items used during an arena round after the round is over."
             },
             
+            "el-dash-effect": {
+                "name": "Effect on Perfect Dash",
+                "description": "Show an effect when successfully executing a perfect dash."
+            },
+
             "controls":{
                 "keys": {
                     "walk": "Walk"

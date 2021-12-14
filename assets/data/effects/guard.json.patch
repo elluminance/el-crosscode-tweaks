@@ -1,0 +1,22 @@
+{
+    "EFFECTS": {
+        "perfectDash2": [
+            {
+                "volume": 0.7,
+                "global": false,
+                "loop": false,
+                "speed": 1.4,
+                "sound": "media\/sound\/battle\/sweep-long.ogg",
+                "type": "PLAY_SOUND"
+            },
+            {
+                "color": "white",
+                "alpha": 0.8,
+                "duration": 0.5,
+                "keepDuration": 0,
+                "noLighter": true,
+                "type": "FLASH_COLOR"
+            }
+        ]
+    }
+}
