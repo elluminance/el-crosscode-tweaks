@@ -41,6 +41,20 @@
                     "walk": "Walk"
                 }
             }
+        },
+        
+        "menu": {
+            "new-game": {
+                "options": {
+                    "names": {
+                        "no-equipment": "Nudist"
+                    },
+
+                    "descriptions": {
+                        "no-equipment": "Cannot use any type of equipment."
+                    }
+                }
+            }
         }
     }
 }

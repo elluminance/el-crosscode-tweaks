@@ -1,0 +1,41 @@
+[{
+    "type": "ENTER",
+    "index": ["entities", 52, "settings"]
+},{
+    "type": "SET_KEY",
+    "index": "startCondition",
+    "content": "(equip.torso == 26) || (newgame.no-equipment && map.beltGet)"
+},{
+    "type": "EXIT",
+    "count": 2
+},{
+    "type": "ENTER",
+    "index": [48, "settings"]
+},{
+    "type": "SET_KEY",
+    "index": "startCondition",
+    "content": "(equip.head == 23) || (newgame.no-equipment && map.headGet)"
+},{
+    "type": "EXIT",
+    "count": 2
+},{
+    "type": "ENTER",
+    "index": [49, "settings"]
+},{
+    "type": "SET_KEY",
+    "index": "startCondition",
+    "content": "(equip.leftArm == 24 && equip.rightArm == 24) || (newgame.no-equipment && map.armsGet)"
+},{
+    "type": "EXIT",
+    "count": 2
+},{
+    "type": "ENTER",
+    "index": [53, "settings"]
+},{
+    "type": "SET_KEY",
+    "index": "startCondition",
+    "content": "(equip.feet == 25) || (newgame.no-equipment && map.feetGet)"
+},{
+    "type": "EXIT",
+    "count": 3
+}]
