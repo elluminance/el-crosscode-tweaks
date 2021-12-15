@@ -51,7 +51,7 @@
                     },
 
                     "descriptions": {
-                        "no-equipment": "Cannot use any type of equipment."
+                        "no-equipment": "Cannot wear any equipment whatsoever."
                     }
                 }
             }
