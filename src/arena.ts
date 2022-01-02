@@ -16,6 +16,15 @@ sc.PlayerModel.inject({
 
 sc.Arena.inject({
     itemCache: {},
+    damageToHeal: 0,
+
+    addScore(scoreType, points) {
+        this.parent(scoreType, points)
+        if(scoreType == "DAMAGE_TAKEN"){
+            // the points "added" upon damage taken will always be a negative value
+            this.damageToHeal -= points;
+        }
+    },
 
     onCombatantHeal(a, b) {
         this.parent(a, b)
@@ -23,13 +32,16 @@ sc.Arena.inject({
             var c = a.params.currentHp,
                 d = a.params.getStat("hp");
             c + b > d && (b = d - c);
+            b = Math.min(this.damageToHeal, b);
+            this.damageToHeal -= b;
             b > 0 && this.addScore("DAMAGE_HEALED", b)
         }
     },
 
-    startRound() {
+    startRound() {        
         // just ensure that the cache is empty
         this.itemCache = {};
+        this.damageToHeal = 0;
         this.parent();
     },
 

@@ -2,6 +2,6 @@ import "./options.js"
 
 import "./arena.js"
 
-import "./dash-fixes.js"
+import "./bug-fixes.js"
 
 import "./newgameplus.js"

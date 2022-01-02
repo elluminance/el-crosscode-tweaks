@@ -1,6 +1,7 @@
 declare namespace sc {
     interface Arena {
         itemCache: {[id: number]: number}
+        damageToHeal: number
     }
     
     var ASSIST_TIMING_WINDOW: {[name: string]: number}

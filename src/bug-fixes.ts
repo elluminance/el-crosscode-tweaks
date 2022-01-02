@@ -38,3 +38,15 @@ sc.Combat.inject({
         } else this.parent(a)
     }
 })
+
+
+sc.PlayerModel.inject({
+    setElementMode(element, forceChange, noEffect){
+        let value = this.parent(element, forceChange, noEffect);
+
+        // fixes element aura not properly updating
+        ig.game.playerEntity?.updateSkinAura();
+
+        return value;
+    }
+})
