@@ -1,5 +1,7 @@
 declare namespace sc {
     interface Arena {
+        cupsInitialized: boolean
+        trackedCups: string[]
         itemCache: {[id: number]: number}
         damageToHeal: number
     }
