@@ -6,6 +6,16 @@ declare namespace sc {
         damageToHeal: number
     }
     
+    interface MapModel {
+        extraChests: {[area: string]: string[]}
+
+        getExtraFoundChests(this: this, area: string): number
+        getExtraAreaChests(this: this, area: string): number
+        getTotalExtraFoundChests(this: this): number
+        getTotalExtraChests(this: this): number
+        registerChests(this: this, areaName: string, ...chestVar: string[]): void
+    }
+
     var ASSIST_TIMING_WINDOW: {[name: string]: number}
 
     namespace OPTIONS_DEFINITION {
