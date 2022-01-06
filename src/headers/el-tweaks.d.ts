@@ -27,4 +27,11 @@ declare namespace sc {
             "el-arena-item-restore": sc.OptionDefinition.CHECKBOX
         }
     }
+
+    interface TrophyIcon {
+        sheet?: string
+        customIndex?: number
+    }
+
+    var CUSTOM_TROPHY_SHEETS: {[key: string]: ig.Image}
 }
