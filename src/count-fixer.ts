@@ -61,10 +61,27 @@ sc.Arena.inject({
 })
 
 sc.MapModel.inject({
-    /* hello fellow modders! looking to add custom chests of your own to track?
+    /*
+     * hello fellow modders! looking to add custom chests of your own to track?
      * look no further than here! :)
      * to have your new chests be tracked, it depends on if your new chests are in
      * pre-existing (i.e. base game) areas, or if they're in new area 
+     * 
+     * if they're in a new, custom area, you don't have to do anything special! 
+     * just mark your areas as tracked, and it will just work on its own! :)
+     * 
+     * if they're in a pre-existing area - a few important notes to make!
+     *  - do *NOT* touch the area's file to add yours to the chest count.
+     *  - the chest you place into a map should be marked as noTrack.
+     *
+     * to have the chest be tracked, it's quite simple.
+     * it's literally as simple as:
+     * 
+     * sc.map.registerChests("area-name", "maps.areaName/mapName.chest_{number}", "maps.areaName/mapName.chest_{number}", ...)
+     * (feel free to have as many chest variables as you want! no, they do not have to be in an array!)
+     * 
+     * for example:
+     * sc.map.registerChests("rhombus-sqr", "maps.rhombusSqr/centerS.chest_888", "maps.rhombusSqr/centerNe.chest_5")
      */
     extraChests: {},
 
@@ -158,8 +175,7 @@ sc.CUSTOM_TROPHY_SHEETS = {}
 sc.TrophyIconGraphic.inject({
     init(icon, stars, points, trophyUnlocked){
         this.parent(icon, stars, points, trophyUnlocked);
-        let iconIndex = trophyUnlocked ? (sc.TROPHY_ICONS[icon] ?? 0).index : 0;
-        if(iconIndex == -1){
+        if(trophyUnlocked && sc.TROPHY_ICONS[icon].index === -1){
             let sheet: ig.Image;
             if(!(sc.TROPHY_ICONS[icon].sheet && (sheet = sc.CUSTOM_TROPHY_SHEETS[sc.TROPHY_ICONS[icon].sheet!]))) return
             if(sc.TROPHY_ICONS[icon].customIndex === undefined || sc.TROPHY_ICONS[icon].customIndex === null) return;

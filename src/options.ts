@@ -85,6 +85,9 @@ sc.CombatantShieldConnection.inject({
         this.parent(a, b, e);
 
         this.perfectGuardTime *= sc.options.get("assist-timing-window") as number
+        if(sc.newgame.get("guard-perfectionist")) {
+            this.perfectGuardTime *= 3
+        }
     }
 })
 

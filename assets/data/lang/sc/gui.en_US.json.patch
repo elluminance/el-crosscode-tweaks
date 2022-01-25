@@ -47,11 +47,13 @@
             "new-game": {
                 "options": {
                     "names": {
-                        "no-equipment": "Nudist"
+                        "no-equipment": "Nudist",
+                        "guard-perfectionist": "Perfectionist"
                     },
 
                     "descriptions": {
-                        "no-equipment": "Cannot wear any equipment whatsoever."
+                        "no-equipment": "Cannot wear any equipment whatsoever.",
+                        "guard-perfectionist": "Improves perfect guards, but imperfect guards instantly cause guard break."
                     }
                 }
             }
