@@ -42,6 +42,8 @@ sc.Arena.inject({
         // just ensure that the cache is empty
         this.itemCache = {};
         this.damageToHeal = 0;
+        // fixes bug related to restarting round just as you die
+        sc.model.player.params.defeated = false;
         this.parent();
     },
 

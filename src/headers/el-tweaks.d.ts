@@ -5,6 +5,12 @@ declare namespace sc {
         itemCache: {[id: number]: number}
         damageToHeal: number
     }
+
+    namespace ArenaScoreTypes {
+        enum KnownScoreTypes {
+            DAMAGE_HEALED
+        }
+    }
     
     interface MapModel {
         extraChests: {[area: string]: string[]}
