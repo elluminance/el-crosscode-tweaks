@@ -7,3 +7,5 @@ import "./bug-fixes.js"
 import "./newgameplus.js"
 
 import "./count-fixer.js"
+
+import "./player_actions.js"
