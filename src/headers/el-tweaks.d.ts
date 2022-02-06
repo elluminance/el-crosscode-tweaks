@@ -41,3 +41,12 @@ declare namespace sc {
 
     var CUSTOM_TROPHY_SHEETS: {[key: string]: ig.Image}
 }
+
+declare namespace ig {
+    namespace Input {
+        interface KnownActions {
+            walk: true;
+            autoThrow: true;
+        }
+    }
+}

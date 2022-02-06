@@ -38,7 +38,8 @@
 
             "controls":{
                 "keys": {
-                    "walk": "Walk"
+                    "walk": "Walk",
+                    "autoThrow": "Auto-Throw"
                 }
             }
         },
