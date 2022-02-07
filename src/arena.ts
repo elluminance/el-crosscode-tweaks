@@ -26,15 +26,23 @@ sc.Arena.inject({
         }
     },
 
-    onCombatantHeal(a, b) {
-        this.parent(a, b)
-        if (this.active && sc.options.get("el-arena-hp-bonus") && a.getCombatantRoot().isPlayer) {
-            var c = a.params.currentHp,
-                d = a.params.getStat("hp");
-            c + b > d && (b = d - c);
-            b = Math.min(this.damageToHeal, b);
-            this.damageToHeal -= b;
-            b > 0 && this.addScore("DAMAGE_HEALED", b)
+    onLevelLoadStart() {
+        this.parent();
+        if(this.active) {
+            // fixes bug related to restarting round just as you die
+            sc.model.player.params.defeated = false;
+        }
+    },
+
+    onCombatantHeal(entity, amountHealed) {
+        this.parent(entity, amountHealed)
+        if (this.active && sc.options.get("el-arena-hp-bonus") && entity.getCombatantRoot().isPlayer) {
+            let currentHp = entity.params.currentHp,
+                maxHp = entity.params.getStat("hp");
+            currentHp + amountHealed > maxHp && (amountHealed = maxHp - currentHp);
+            amountHealed = Math.min(this.damageToHeal, amountHealed);
+            this.damageToHeal -= amountHealed;
+            amountHealed > 0 && this.addScore("DAMAGE_HEALED", amountHealed)
         }
     },
 
@@ -42,8 +50,6 @@ sc.Arena.inject({
         // just ensure that the cache is empty
         this.itemCache = {};
         this.damageToHeal = 0;
-        // fixes bug related to restarting round just as you die
-        sc.model.player.params.defeated = false;
         this.parent();
     },
 

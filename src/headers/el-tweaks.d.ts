@@ -6,14 +6,14 @@ declare namespace sc {
         damageToHeal: number
     }
 
-    namespace ArenaScoreTypes {
-        enum KnownScoreTypes {
-            DAMAGE_HEALED
+    namespace Arena {
+        interface KnownScoreTypes {
+            DAMAGE_HEALED: true;
         }
     }
     
     interface MapModel {
-        extraChests: {[area: string]: string[]}
+        extraChests: Record<string, string[]>;
 
         getExtraFoundChests(this: this, area: string): number
         getExtraAreaChests(this: this, area: string): number
