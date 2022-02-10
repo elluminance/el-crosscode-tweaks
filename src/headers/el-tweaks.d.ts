@@ -40,6 +40,22 @@ declare namespace sc {
     }
 
     var CUSTOM_TROPHY_SHEETS: {[key: string]: ig.Image}
+
+    interface ELItemSpawner extends sc.ModalButtonInteract {
+        transitions: Record<string, ig.GuiHook.Transition>;
+        ninepatch: ig.NinePatch;
+        init(this: this): void;
+        onDialogCallback(this: this): void;
+    }
+    interface ELItemSpawnerConstructor extends ImpactClass<ELItemSpawner> {
+        new (): sc.ELItemSpawner;
+    }
+    var ELItemSpawner: ELItemSpawnerConstructor;
+
+    interface ItemMenu {
+        itemSpawnMenu: sc.ELItemSpawner;
+        hotkeySpawnItems: sc.ButtonGui;
+    }
 }
 
 declare namespace ig {

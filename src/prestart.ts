@@ -9,3 +9,5 @@ import "./newgameplus.js"
 import "./count-fixer.js"
 
 import "./player_actions.js"
+
+import "../src/item-spawner.js"

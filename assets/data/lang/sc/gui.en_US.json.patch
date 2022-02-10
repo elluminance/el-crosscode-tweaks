@@ -57,6 +57,11 @@
                         "guard-perfectionist": "Improves perfect guards, but imperfect guards instantly cause guard break."
                     }
                 }
+            },
+            "elItemSpawner": {
+                "title": "Item Spawning",
+                "close": "Return",
+                "inventoryButton": "Spawn"
             }
         }
     }
