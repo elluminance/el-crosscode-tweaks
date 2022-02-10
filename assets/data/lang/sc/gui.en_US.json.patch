@@ -61,7 +61,8 @@
             "elItemSpawner": {
                 "title": "Item Spawning",
                 "close": "Return",
-                "inventoryButton": "Spawn"
+                "inventoryButton": "Spawn",
+                "filterRarity": "Filter by Rarity"
             }
         }
     }

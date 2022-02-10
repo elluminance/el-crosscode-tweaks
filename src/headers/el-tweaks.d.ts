@@ -56,6 +56,16 @@ declare namespace sc {
         itemSpawnMenu: sc.ELItemSpawner;
         hotkeySpawnItems: sc.ButtonGui;
     }
+
+    interface ELItemSpawnerRarityFilterButton extends ig.FocusGui {
+        img: ig.Image;
+        rarity: number;
+        init(this: this, rarityIndex: number): void;
+    }
+    interface ELItemSpawnerRarityFilterButtonConstructor extends ImpactClass<ELItemSpawnerRarityFilterButton> {
+        new (rarity: number): void;
+    }
+    var ELItemSpawnerRarityFilterButton: ELItemSpawnerRarityFilterButtonConstructor
 }
 
 declare namespace ig {

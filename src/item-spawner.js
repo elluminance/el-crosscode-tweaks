@@ -1,5 +1,3 @@
-console.log("peepee poopoo")
-
 sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     transitions: {
         DEFAULT: {
@@ -35,6 +33,13 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     itemBox: null,
     submitSound: null,
     _curElement: null,
+    submitSound: sc.BUTTON_SOUND.submit, 
+    rarityButtons: [],
+    rarityState: [true, true, true, true, true, true, true],
+    filterGui: null,
+    filterButtongroup: null,
+    filterText: null,
+
     init() {
         this.parent(
             ig.lang.get("sc.gui.menu.elItemSpawner.title"),
@@ -51,13 +56,43 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this._bgRev = this.list.buttonGroup();
         this._bgRev.addPressCallback((button) => {
             if(button.data?.id >= 0) {
-                console.log("Hi!")
                 sc.model.player.addItem(button.data.id, 1, true);
                 button.amount.setNumber(sc.model.player.getItemAmount(button.data.id))
             }
         })
         this.buttonInteract.addParallelGroup(this._bgRev)
         this.content.addChildGui(this.list);
+        
+        this.filterGui = new ig.GuiElementBase;
+        this.filterGui.setPos(14, 70)
+        this.filterText = new sc.TextGui(ig.lang.get("sc.gui.menu.elItemSpawner.filterRarity"),{
+            font: sc.fontsystem.tinyFont
+        })
+        this.filterText.setPos(0, 0)
+        this.filterGui.addChildGui(this.filterText)
+        let line = new sc.LineGui(98);
+        line.setPos(0, 8)
+        this.filterGui.addChildGui(line);
+
+        this.filterButtongroup = new sc.ButtonGroup;
+        let rarityOffset = 0,
+            rarityButton;
+        for(let i = 0; i <= 6; i++) {
+            rarityButton = new sc.ELItemSpawnerFilterButtonRarity(i);
+            rarityButton.setPos(rarityOffset, 10);
+            rarityOffset += rarityButton.hook.size.y;
+            rarityButton.onButtonPress = () => {
+                this.toggleRarityState(i);
+                this._createList()
+                this.submitSound.play();
+            }
+            this.rarityButtons.push(rarityButton);
+            this.filterGui.addChildGui(rarityButton);
+            this.filterButtongroup.addFocusGui(rarityButton);
+        }
+        this.buttonInteract.addParallelGroup(this.filterButtongroup);
+        
+        this.content.addChildGui(this.filterGui)
         this.content.setSize(ig.system.width - 64, ig.system.height - 64);
         this.msgBox.setPos(0, -12);
         this.msgBox.resize();
@@ -82,7 +117,11 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     },
 
     _createList() {
+        this._bgRev.clear();
+        this.list.clear(false);
+
         sc.inventory.items.forEach((item, index) => {
+            if(!this.rarityState[item.rarity]) return;
             let itemName = `\\i[${item.icon + sc.inventory.getRaritySuffix(item.rarity || 0) || "item-default"}]${ig.LangLabel.getText(item.name)}`,
                 itemDesc = ig.LangLabel.getText(item.description),
                 itemLevel = item.type == sc.ITEMS_TYPES.EQUIP ? item.level || 1 : 0,
@@ -90,6 +129,30 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             this.list.addButton(itemButton);
         })
     },
+
+    toggleRarityState(rarity) {
+        this.rarityButtons[rarity].toggled = this.rarityState[rarity] = !this.rarityState[rarity];
+    }
+})
+
+sc.ELItemSpawnerFilterButtonRarity = ig.FocusGui.extend({
+    img: new ig.Image("media/gui/el/item-rarity-toggle.png"),
+    toggled: true,
+    rarity: 0,
+
+    init(rarityIndex) {
+        this.parent();
+        this.rarity = rarityIndex.limit(0, 6);
+        this.hook.size.x = this.hook.size.y = 14;
+    },
+
+    updateDrawables(a) {
+        a.addGfx(this.img, 0, 0, this.rarity * 14, this.toggled ? 14 : 0, 14, 14)
+    },
+
+    canPlayFocusSounds() {
+        return false
+    }
 })
 
 sc.ItemMenu.inject({
