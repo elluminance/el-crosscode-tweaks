@@ -62,7 +62,8 @@
                 "title": "Item Spawning",
                 "close": "Return",
                 "inventoryButton": "Spawn",
-                "filterRarity": "Filter by Rarity"
+                "filterRarity": "Filter by Rarity",
+                "filterItemType": "Filter by Item Type"
             }
         }
     }

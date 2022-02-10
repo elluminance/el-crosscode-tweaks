@@ -1,3 +1,27 @@
+function itemTypeToIndex(item) {
+    switch(item.type) {
+        case sc.ITEMS_TYPES.CONS:
+            return 0;
+        case sc.ITEMS_TYPES.EQUIP:
+            switch(item.equipType) {
+                case sc.ITEMS_EQUIP_TYPES.HEAD:
+                    return 1;
+                case sc.ITEMS_EQUIP_TYPES.ARM:
+                    return 2;
+                case sc.ITEMS_EQUIP_TYPES.TORSO:
+                    return 3;
+                case sc.ITEMS_EQUIP_TYPES.FEET:
+                    return 4;
+            }
+        case sc.ITEMS_TYPES.TRADE:
+            return 5;
+        case sc.ITEMS_TYPES.KEY:
+            return 6;
+        case sc.ITEMS_TYPES.TOGGLE:
+            return 7;
+    }
+}
+
 sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     transitions: {
         DEFAULT: {
@@ -35,10 +59,13 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     _curElement: null,
     submitSound: sc.BUTTON_SOUND.submit, 
     rarityButtons: [],
+    itemTypeButtons: [],
     rarityState: [true, true, true, true, true, true, true],
+    itemTypeState: [true, true, true, true, true, true, true, true],
     filterGui: null,
     filterButtongroup: null,
-    filterText: null,
+    filterRarityText: null,
+    filterTypeText: null,
 
     init() {
         this.parent(
@@ -64,32 +91,66 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.content.addChildGui(this.list);
         
         this.filterGui = new ig.GuiElementBase;
-        this.filterGui.setPos(14, 70)
-        this.filterText = new sc.TextGui(ig.lang.get("sc.gui.menu.elItemSpawner.filterRarity"),{
+        this.filterGui.setPos(10, 30)
+
+        const lineWidth = 112;
+        let yOffset = 0;
+
+        this.filterRarityText = new sc.TextGui(ig.lang.get("sc.gui.menu.elItemSpawner.filterRarity"),{
             font: sc.fontsystem.tinyFont
         })
-        this.filterText.setPos(0, 0)
-        this.filterGui.addChildGui(this.filterText)
-        let line = new sc.LineGui(98);
+        this.filterRarityText.setPos(0, yOffset)
+        yOffset += this.filterRarityText.hook.size.y;
+        this.filterGui.addChildGui(this.filterRarityText)
+        let line = new sc.LineGui(lineWidth);
         line.setPos(0, 8)
         this.filterGui.addChildGui(line);
-
+        yOffset += 2;
         this.filterButtongroup = new sc.ButtonGroup;
-        let rarityOffset = 0,
-            rarityButton;
+        let xOffset = 0,
+            button;
         for(let i = 0; i <= 6; i++) {
-            rarityButton = new sc.ELItemSpawnerFilterButtonRarity(i);
-            rarityButton.setPos(rarityOffset, 10);
-            rarityOffset += rarityButton.hook.size.y;
-            rarityButton.onButtonPress = () => {
+            button = new sc.ELItemSpawnerFilterButtonRarity(i);
+            button.setPos(xOffset, yOffset);
+            xOffset += button.hook.size.x;
+            button.onButtonPress = () => {
                 this.toggleRarityState(i);
                 this._createList()
                 this.submitSound.play();
             }
-            this.rarityButtons.push(rarityButton);
-            this.filterGui.addChildGui(rarityButton);
-            this.filterButtongroup.addFocusGui(rarityButton);
+            this.rarityButtons.push(button);
+            this.filterGui.addChildGui(button);
+            this.filterButtongroup.addFocusGui(button);
         }
+        yOffset += 20;
+        this.filterTypeText = new sc.TextGui(ig.lang.get("sc.gui.menu.elItemSpawner.filterItemType"),{
+            font: sc.fontsystem.tinyFont
+        })
+        this.filterTypeText.setPos(0, yOffset)
+        yOffset += this.filterTypeText.hook.size.y;
+        this.filterGui.addChildGui(this.filterTypeText)
+        line = new sc.LineGui(lineWidth);
+        line.setPos(0, yOffset)
+        this.filterGui.addChildGui(line);
+        yOffset += 2;
+
+        xOffset = 0;
+        // accounts for the fact the button is actually 13 pixels "taller" than it appears
+        yOffset += 13;
+        for(let i = 0; i <= 7; i++) {
+            button = new sc.ELItemSpawnerFilterButtonItemType(i);
+            button.setPos(xOffset, yOffset);
+            xOffset += button.hook.size.x - 1;
+            button.onButtonPress = () => {
+                this.toggleItemTypeState(i);
+                this._createList()
+                this.submitSound.play();
+            }
+            this.itemTypeButtons.push(button);
+            this.filterGui.addChildGui(button);
+            this.filterButtongroup.addFocusGui(button);
+        }
+        yOffset += 14;
         this.buttonInteract.addParallelGroup(this.filterButtongroup);
         
         this.content.addChildGui(this.filterGui)
@@ -120,8 +181,10 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this._bgRev.clear();
         this.list.clear(false);
 
+        let itemList = [];
         sc.inventory.items.forEach((item, index) => {
             if(!this.rarityState[item.rarity]) return;
+            if(!this.itemTypeState[itemTypeToIndex(item)]) return;
             let itemName = `\\i[${item.icon + sc.inventory.getRaritySuffix(item.rarity || 0) || "item-default"}]${ig.LangLabel.getText(item.name)}`,
                 itemDesc = ig.LangLabel.getText(item.description),
                 itemLevel = item.type == sc.ITEMS_TYPES.EQUIP ? item.level || 1 : 0,
@@ -132,26 +195,51 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
 
     toggleRarityState(rarity) {
         this.rarityButtons[rarity].toggled = this.rarityState[rarity] = !this.rarityState[rarity];
+    },
+
+    toggleItemTypeState(type) {
+        this.itemTypeButtons[type].toggled = this.itemTypeState[type] = !this.itemTypeState[type];
     }
 })
 
-sc.ELItemSpawnerFilterButtonRarity = ig.FocusGui.extend({
-    img: new ig.Image("media/gui/el/item-rarity-toggle.png"),
+sc.ELItemSpawnerFilterButton = ig.FocusGui.extend({
     toggled: true,
+    init() {
+        this.parent();
+        this.hook.size.x = this.hook.size.y = 14;
+    },
+
+    canPlayFocusSounds() {
+        return false
+    }
+})
+
+sc.ELItemSpawnerFilterButtonRarity = sc.ELItemSpawnerFilterButton.extend({
+    img: new ig.Image("media/gui/el/item-rarity-toggle.png"),
     rarity: 0,
 
     init(rarityIndex) {
         this.parent();
         this.rarity = rarityIndex.limit(0, 6);
-        this.hook.size.x = this.hook.size.y = 14;
     },
 
     updateDrawables(a) {
         a.addGfx(this.img, 0, 0, this.rarity * 14, this.toggled ? 14 : 0, 14, 14)
     },
+})
 
-    canPlayFocusSounds() {
-        return false
+sc.ELItemSpawnerFilterButtonItemType = sc.ELItemSpawnerFilterButton.extend({
+    img: new ig.Image("media/gui/el/item-type-toggle.png"),
+    index: 0,
+
+    init(itemType) {
+        this.parent();
+        this.index = itemType;
+    },
+
+    updateDrawables(a) {
+        a.addGfx(this.img, 0, -13, this.index * 14, 0, 14, 14)
+        a.addGfx(this.img, 0, 0, this.toggled ? 14 : 0, 14, 14, 14)
     }
 })
 
