@@ -58,6 +58,12 @@
                     }
                 }
             },
+            "sort": {
+                "item-id": "Item ID",
+                "des": {
+                    "item-id": "Sorts the list according to the item's internal ID."
+                }
+            },
             "elItemSpawner": {
                 "title": "Item Spawning",
                 "close": "Return",

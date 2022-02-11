@@ -66,6 +66,10 @@ declare namespace sc {
         new (rarity: number): void;
     }
     var ELItemSpawnerRarityFilterButton: ELItemSpawnerRarityFilterButtonConstructor
+
+    enum SORT_TYPE {
+        ITEM_ID = 22135,
+    }
 }
 
 declare namespace ig {

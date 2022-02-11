@@ -22,6 +22,8 @@ function itemTypeToIndex(item) {
     }
 }
 
+sc.SORT_TYPE.ITEM_ID = 22135;
+
 sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     transitions: {
         DEFAULT: {
@@ -66,6 +68,9 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     filterButtongroup: null,
     filterRarityText: null,
     filterTypeText: null,
+    sortType: sc.SORT_TYPE.ITEM_ID,
+    sortMenu: null,
+    sortButton: null,
 
     init() {
         this.parent(
@@ -74,6 +79,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             [ig.lang.get("sc.gui.menu.elItemSpawner.close")],
             this.onDialogCallback.bind(this)
         );
+        this.hook.size.y -= 20;
         this.submitSound = sc.BUTTON_SOUND.submit;
         this.msgBox.centerBox.hook.localAlpha = 1;
         this.list = new sc.MultiColumnItemListBox(1, 168, sc.LIST_COLUMNS.TWO, 1);
@@ -87,6 +93,15 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
                 button.amount.setNumber(sc.model.player.getItemAmount(button.data.id))
             }
         })
+        this._bgRev.addSelectionCallback(a => {
+            if (a.data) {
+                this._curElement = a;
+                sc.menu.setInfoText(a.data.description ? a.data.description : a.data);
+                if (a.data.id) {
+                    sc.inventory.isBuffID(a.data.id) ? sc.menu.setBuffText(sc.inventory.getBuffString(a.data.id), false, a.data.id) : sc.menu.setBuffText("", false)
+                }
+            }
+        })
         this.buttonInteract.addParallelGroup(this._bgRev)
         this.content.addChildGui(this.list);
         
@@ -96,6 +111,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         const lineWidth = 112;
         let yOffset = 0;
 
+        //#region Filtering
         this.filterRarityText = new sc.TextGui(ig.lang.get("sc.gui.menu.elItemSpawner.filterRarity"),{
             font: sc.fontsystem.tinyFont
         })
@@ -150,9 +166,35 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             this.filterGui.addChildGui(button);
             this.filterButtongroup.addFocusGui(button);
         }
-        yOffset += 14;
-        this.buttonInteract.addParallelGroup(this.filterButtongroup);
+        //#endregion Filtering
+
+        yOffset += 50;
+        this.sortMenu = new sc.SortMenu(this.sortCallback.bind(this));
+        this.sortMenu.addButton("item-id", sc.SORT_TYPE.ITEM_ID, 0);
+        this.sortMenu.addButton("auto", sc.SORT_TYPE.ORDER, 1);
+        this.sortMenu.addButton("name", sc.SORT_TYPE.NAME, 2);
+        this.sortMenu.addButton("amount", sc.SORT_TYPE.AMOUNT, 3);
+        this.sortMenu.addButton("rarity", sc.SORT_TYPE.RARITY, 4);
         
+        this.sortMenu.setAlign(ig.GUI_ALIGN.X_LEFT, ig.GUI_ALIGN.Y_TOP)
+
+        this.sortButton = new sc.ButtonGui(`${ig.lang.get("sc.gui.menu.item.sort-title")}: \\c[3]${ig.lang.get("sc.gui.menu.sort.item-id")}\\c[0]`, this.sortMenu.hook.size.x)
+        this.sortButton.onButtonPress = () => {
+            if(!this.sortMenu.active) {
+                this.showSortMenu()
+            }
+            else {
+                this.hideSortMenu()
+            }
+        }
+        this.sortButton.keepMouseFocus = true;
+        this.sortButton.setPos(10, yOffset)
+        this.content.addChildGui(this.sortButton)
+        this.filterButtongroup.addFocusGui(this.sortButton);
+
+        this.buttonInteract.addParallelGroup(this.filterButtongroup);
+        this.buttonInteract.addParallelGroup(this.sortMenu.buttongroup)
+        this.content.addChildGui(this.sortMenu)
         this.content.addChildGui(this.filterGui)
         this.content.setSize(ig.system.width - 64, ig.system.height - 64);
         this.msgBox.setPos(0, -12);
@@ -173,6 +215,28 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.doStateTransition("HIDDEN");
     },
 
+    showSortMenu() {
+        this.sortMenu.setPos(this.sortButton.hook.pos.x, this.sortButton.hook.pos.y + this.sortButton.hook.size.y);
+        this.sortMenu.active = true;
+        this.sortMenu.doStateTransition("DEFAULT");
+        this.buttonInteract.pushButtonGroup(this.sortMenu.buttongroup)
+    },
+
+    hideSortMenu() {
+        this.sortMenu.active = false;
+        this.sortMenu.doStateTransition("HIDDEN");
+        this.buttonInteract.removeButtonGroup(this.sortMenu.buttongroup)
+    },
+    
+    sortCallback(button) {
+        if(button.data) {
+            this.sortButton.setText(`${ig.lang.get("sc.gui.menu.item.sort-title")}: \\c[3]${button.data.name}\\c[0]`, true);
+            this.sortType = button.data.sortType;
+            this._createList();
+            this.hideSortMenu();
+        }
+    },
+
     update() {
         this.buttonInteract.isActive() && this.buttongroup.isActive() && (sc.control.menuScrollUp() ? this.list.list.scrollY(-20) : sc.control.menuScrollDown() && this.list.list.scrollY(20))
     },
@@ -182,15 +246,23 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.list.clear(false);
 
         let itemList = [];
-        sc.inventory.items.forEach((item, index) => {
-            if(!this.rarityState[item.rarity]) return;
-            if(!this.itemTypeState[itemTypeToIndex(item)]) return;
-            let itemName = `\\i[${item.icon + sc.inventory.getRaritySuffix(item.rarity || 0) || "item-default"}]${ig.LangLabel.getText(item.name)}`,
+        for(let i = 0; i < sc.inventory.items.length; i++) {
+            let item = sc.inventory.getItem(i);
+            if(!this.rarityState[item.rarity]) continue;
+            if(!this.itemTypeState[itemTypeToIndex(item)]) continue;
+            itemList.push(i);
+        }
+        
+        this.sortType != sc.SORT_TYPE.ITEM_ID && sc.model.player.sortItemList(itemList, this.sortType)
+        itemList.forEach(value => {
+            let item = sc.inventory.getItem(value),
+                itemName = `\\i[${item.icon + sc.inventory.getRaritySuffix(item.rarity || 0) || "item-default"}]${ig.LangLabel.getText(item.name)}`,
                 itemDesc = ig.LangLabel.getText(item.description),
                 itemLevel = item.type == sc.ITEMS_TYPES.EQUIP ? item.level || 1 : 0,
-                itemButton = new sc.ItemBoxButton(itemName, 142, 26, sc.model.player.getItemAmount(index), index, itemDesc, void 0, void 0, void 0, void 0, itemLevel);
+                itemButton = new sc.ItemBoxButton(itemName, 142, 26, sc.model.player.getItemAmount(value), value, itemDesc, void 0, void 0, void 0, void 0, itemLevel);
             this.list.addButton(itemButton);
         })
+        
     },
 
     toggleRarityState(rarity) {
@@ -266,7 +338,6 @@ sc.ItemMenu.inject({
         };
         this.hotkeySpawnItems.onButtonPress = () => {
             let gui = new sc.ELItemSpawner();
-            gui.hook.zIndex = 15e4;
             gui.hook.pauseGui = true;
             gui.show();
             ig.gui.addGuiElement(gui);
@@ -283,5 +354,12 @@ sc.ItemMenu.inject({
     commitHotKeysToTopBar(a) {
         sc.menu.addHotkey(() => this.hotkeySpawnItems);
         this.parent(a);
+    }
+})
+
+sc.MainMenu.inject({
+    init() {
+        this.parent();
+        this.info.hook.zIndex = 3e5
     }
 })
