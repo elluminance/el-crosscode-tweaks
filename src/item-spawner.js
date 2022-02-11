@@ -129,6 +129,9 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             button = new sc.ELItemSpawnerFilterButtonRarity(i);
             button.setPos(xOffset, yOffset);
             xOffset += button.hook.size.x;
+            button.data = {
+                desc: ig.lang.get(`sc.gui.menu.elItemSpawner.desc.rarity.${i}`)
+            }
             button.onButtonPress = () => {
                 this.toggleRarityState(i);
                 this._createList()
@@ -162,6 +165,9 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
                 this._createList()
                 this.submitSound.play();
             }
+            button.data = {
+                desc: ig.lang.get(`sc.gui.menu.elItemSpawner.desc.itemType.${i}`)
+            }
             this.itemTypeButtons.push(button);
             this.filterGui.addChildGui(button);
             this.filterButtongroup.addFocusGui(button);
@@ -191,7 +197,11 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.sortButton.setPos(10, yOffset)
         this.content.addChildGui(this.sortButton)
         this.filterButtongroup.addFocusGui(this.sortButton);
-
+        this.filterButtongroup.addSelectionCallback(button => {
+            if(button.data?.desc) {
+                sc.menu.setInfoText(button.data.desc);
+            }
+        })
         this.buttonInteract.addParallelGroup(this.filterButtongroup);
         this.buttonInteract.addParallelGroup(this.sortMenu.buttongroup)
         this.content.addChildGui(this.sortMenu)
@@ -216,6 +226,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     },
 
     showSortMenu() {
+        sc.menu.pushBackCallback(this.hideSortMenu.bind(this));
         this.sortMenu.setPos(this.sortButton.hook.pos.x, this.sortButton.hook.pos.y + this.sortButton.hook.size.y);
         this.sortMenu.active = true;
         this.sortMenu.doStateTransition("DEFAULT");
@@ -223,6 +234,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     },
 
     hideSortMenu() {
+        sc.menu.popBackCallback();
         this.sortMenu.active = false;
         this.sortMenu.doStateTransition("HIDDEN");
         this.buttonInteract.removeButtonGroup(this.sortMenu.buttongroup)
@@ -266,23 +278,64 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     },
 
     toggleRarityState(rarity) {
-        this.rarityButtons[rarity].toggled = this.rarityState[rarity] = !this.rarityState[rarity];
+        this.rarityState[rarity] ^= true;
     },
 
     toggleItemTypeState(type) {
-        this.itemTypeButtons[type].toggled = this.itemTypeState[type] = !this.itemTypeState[type];
+        this.itemTypeState[type] ^= true;
     }
 })
 
 sc.ELItemSpawnerFilterButton = ig.FocusGui.extend({
+    img: null,
     toggled: true,
+    animTimer: 0,
+    toggleTimer: 0,
+
     init() {
         this.parent();
         this.hook.size.x = this.hook.size.y = 14;
     },
+    
+    focusGained() {
+        this.parent();
+        if(this.animTimer <= 0) this.animTimer = 0.035;
+    },
+
+    focusLost() {
+        this.parent();
+        if(this.animTimer <= 0) this.animTimer = 0.035;
+    },
+
+    invokeButtonPress() {
+        this.parent();
+        this.toggled ^= true;
+        if(this.toggleTimer <= 0) this.toggleTimer = 0.07;
+    },
+
+    update() {
+        this.animTimer -= ig.system.tick;
+        this.toggleTimer -= ig.system.tick;
+    },
 
     canPlayFocusSounds() {
         return false
+    },
+
+    updateDrawables(a) {
+        if(!this.img) return;
+
+        if(this.animTimer >= 0) {
+            a.addGfx(this.img, 0, 0, 42, 14, 14, 14);
+        }else if(this.focus) {
+            a.addGfx(this.img, 0, 0, 28, 14, 14, 14);
+        }
+
+        if(this.toggleTimer >= 0) {
+            a.addGfx(this.img, 0, 0, 14, 14, 14, 14);
+        }else if(this.toggled) {
+            a.addGfx(this.img, 0, 0, 0, 14, 14, 14);
+        }
     }
 })
 
@@ -296,7 +349,8 @@ sc.ELItemSpawnerFilterButtonRarity = sc.ELItemSpawnerFilterButton.extend({
     },
 
     updateDrawables(a) {
-        a.addGfx(this.img, 0, 0, this.rarity * 14, this.toggled ? 14 : 0, 14, 14)
+        a.addGfx(this.img, 0, 0, this.rarity * 14, 0, 14, 14);
+        this.parent(a);
     },
 })
 
@@ -310,8 +364,12 @@ sc.ELItemSpawnerFilterButtonItemType = sc.ELItemSpawnerFilterButton.extend({
     },
 
     updateDrawables(a) {
-        a.addGfx(this.img, 0, -13, this.index * 14, 0, 14, 14)
-        a.addGfx(this.img, 0, 0, this.toggled ? 14 : 0, 14, 14, 14)
+        // type icon
+        a.addGfx(this.img, 0, -13, this.index * 14, 0, 14, 14);
+        // checkbox border
+        a.addGfx(this.img, 0, 0, 56, 14, 14, 14);
+
+        this.parent(a)
     }
 })
 

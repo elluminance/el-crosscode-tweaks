@@ -69,7 +69,28 @@
                 "close": "Return",
                 "inventoryButton": "Spawn",
                 "filterRarity": "Filter by Rarity",
-                "filterItemType": "Filter by Item Type"
+                "filterItemType": "Filter by Item Type",
+                "desc": {
+                    "rarity": {
+                        "0": "Filter items that are of \\c[3]common\\c[0] rarity.",
+                        "1": "Filter items that are of \\c[3]uncommon\\c[0] rarity.",
+                        "2": "Filter items that are of \\c[3]rare\\c[0] rarity.",
+                        "3": "Filter items that are of \\c[3]legendary\\c[0] rarity.",
+                        "4": "Filter items that are of \\c[3]unique\\c[0] rarity.",
+                        "5": "Filter items that are of \\c[3]backer\\c[0] rarity.",
+                        "6": "Filter items that are of \\c[3]ascended\\c[0] rarity."
+                    },
+                    "itemType": {
+                        "0": "Filter items that are \\c[3]consumables\\c[0].",
+                        "1": "Filter items that are \\c[3]head equipment\\c[0].",
+                        "2": "Filter items that are \\c[3]weapons\\c[0].",
+                        "3": "Filter items that are \\c[3]torso equipment\\c[0].",
+                        "4": "Filter items that are \\c[3]leg equipment\\c[0].",
+                        "5": "Filter items that are \\c[3]trade items\\c[0].",
+                        "6": "Filter items that are \\c[3]key items\\c[0].",
+                        "7": "Filter items that are \\c[3]add-ons\\c[0]."
+                    }
+                }
             }
         }
     }
