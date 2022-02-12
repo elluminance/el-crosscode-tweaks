@@ -1,3 +1,4 @@
+// this would be a TypeScript file but i honestly just *cannot* put up with TS's nonsense sometimes 
 function itemTypeToIndex(item) {
     switch(item.type) {
         case sc.ITEMS_TYPES.CONS:
@@ -56,9 +57,6 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         }
     }),
     list: null,
-    itemBox: null,
-    submitSound: null,
-    _curElement: null,
     submitSound: sc.BUTTON_SOUND.submit, 
     rarityButtons: [],
     itemTypeButtons: [],
@@ -71,6 +69,9 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     sortType: sc.SORT_TYPE.ITEM_ID,
     sortMenu: null,
     sortButton: null,
+    reversedSortCheckbox: null,
+    reversedSort: false,
+    _bgRev: null,
 
     init() {
         this.parent(
@@ -79,6 +80,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             [ig.lang.get("sc.gui.menu.elItemSpawner.close")],
             this.onDialogCallback.bind(this)
         );
+
         this.hook.size.y -= 20;
         this.submitSound = sc.BUTTON_SOUND.submit;
         this.msgBox.centerBox.hook.localAlpha = 1;
@@ -95,7 +97,6 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         })
         this._bgRev.addSelectionCallback(a => {
             if (a.data) {
-                this._curElement = a;
                 sc.menu.setInfoText(a.data.description ? a.data.description : a.data);
                 if (a.data.id) {
                     sc.inventory.isBuffID(a.data.id) ? sc.menu.setBuffText(sc.inventory.getBuffString(a.data.id), false, a.data.id) : sc.menu.setBuffText("", false)
@@ -107,10 +108,10 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         
         this.filterGui = new ig.GuiElementBase;
         this.filterGui.setPos(10, 30)
+        this.filterGui.setSize(134, 300)
 
         const lineWidth = 112;
         let yOffset = 0;
-
         //#region Filtering
         this.filterRarityText = new sc.TextGui(ig.lang.get("sc.gui.menu.elItemSpawner.filterRarity"),{
             font: sc.fontsystem.tinyFont
@@ -174,7 +175,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         }
         //#endregion Filtering
 
-        yOffset += 50;
+        yOffset += 20;
         this.sortMenu = new sc.SortMenu(this.sortCallback.bind(this));
         this.sortMenu.addButton("item-id", sc.SORT_TYPE.ITEM_ID, 0);
         this.sortMenu.addButton("auto", sc.SORT_TYPE.ORDER, 1);
@@ -183,6 +184,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.sortMenu.addButton("rarity", sc.SORT_TYPE.RARITY, 4);
         
         this.sortMenu.setAlign(ig.GUI_ALIGN.X_LEFT, ig.GUI_ALIGN.Y_TOP)
+        this.sortMenu.hook.zIndex = 10e6;
 
         this.sortButton = new sc.ButtonGui(`${ig.lang.get("sc.gui.menu.item.sort-title")}: \\c[3]${ig.lang.get("sc.gui.menu.sort.item-id")}\\c[0]`, this.sortMenu.hook.size.x)
         this.sortButton.onButtonPress = () => {
@@ -194,17 +196,34 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             }
         }
         this.sortButton.keepMouseFocus = true;
-        this.sortButton.setPos(10, yOffset)
-        this.content.addChildGui(this.sortButton)
+        this.sortButton.setPos(0, yOffset)
+        this.sortButton.setAlign(ig.GUI_ALIGN.X_LEFT, ig.GUI_ALIGN.Y_TOP)
+
+        this.filterGui.addChildGui(this.sortButton)
         this.filterButtongroup.addFocusGui(this.sortButton);
         this.filterButtongroup.addSelectionCallback(button => {
             if(button.data?.desc) {
                 sc.menu.setInfoText(button.data.desc);
             }
         })
+
+        this.reversedSortCheckbox = new sc.ELItemSpawnerSortDirectionButton(false, 30);
+        this.reversedSortCheckbox.setPos(0, (this.sortButton.hook.size.y - this.reversedSortCheckbox.hook.size.y) / 2 + yOffset);
+        this.reversedSortCheckbox.setAlign(ig.GUI_ALIGN.X_RIGHT, ig.GUI_ALIGN.Y_TOP)
+        this.reversedSortCheckbox.data = {
+            desc: ig.lang.get("sc.gui.menu.elItemSpawner.desc.sortReversed")
+        }
+        this.reversedSortCheckbox.onButtonPress = () => {
+            this.reversedSort ^= true;
+            this._createList();
+        }
+
+        this.filterButtongroup.addFocusGui(this.reversedSortCheckbox);
+        this.filterGui.addChildGui(this.reversedSortCheckbox);
+
         this.buttonInteract.addParallelGroup(this.filterButtongroup);
         this.buttonInteract.addParallelGroup(this.sortMenu.buttongroup)
-        this.content.addChildGui(this.sortMenu)
+        this.filterGui.addChildGui(this.sortMenu)
         this.content.addChildGui(this.filterGui)
         this.content.setSize(ig.system.width - 64, ig.system.height - 64);
         this.msgBox.setPos(0, -12);
@@ -266,6 +285,9 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         }
         
         this.sortType != sc.SORT_TYPE.ITEM_ID && sc.model.player.sortItemList(itemList, this.sortType)
+
+        this.reversedSort && itemList.reverse();
+
         itemList.forEach(value => {
             let item = sc.inventory.getItem(value),
                 itemName = `\\i[${item.icon + sc.inventory.getRaritySuffix(item.rarity || 0) || "item-default"}]${ig.LangLabel.getText(item.name)}`,
@@ -291,10 +313,14 @@ sc.ELItemSpawnerFilterButton = ig.FocusGui.extend({
     toggled: true,
     animTimer: 0,
     toggleTimer: 0,
+    index: 0,
 
-    init() {
+    animTimeForToggle: 0.07,
+
+    init(index) {
         this.parent();
         this.hook.size.x = this.hook.size.y = 14;
+        this.index = index;
     },
     
     focusGained() {
@@ -310,7 +336,7 @@ sc.ELItemSpawnerFilterButton = ig.FocusGui.extend({
     invokeButtonPress() {
         this.parent();
         this.toggled ^= true;
-        if(this.toggleTimer <= 0) this.toggleTimer = 0.07;
+        if(this.toggleTimer <= 0) this.toggleTimer = this.animTimeForToggle;
     },
 
     update() {
@@ -341,27 +367,16 @@ sc.ELItemSpawnerFilterButton = ig.FocusGui.extend({
 
 sc.ELItemSpawnerFilterButtonRarity = sc.ELItemSpawnerFilterButton.extend({
     img: new ig.Image("media/gui/el/item-rarity-toggle.png"),
-    rarity: 0,
-
-    init(rarityIndex) {
-        this.parent();
-        this.rarity = rarityIndex.limit(0, 6);
-    },
 
     updateDrawables(a) {
-        a.addGfx(this.img, 0, 0, this.rarity * 14, 0, 14, 14);
+        a.addGfx(this.img, 0, 0, this.index * 14, 0, 14, 14);
         this.parent(a);
     },
 })
 
 sc.ELItemSpawnerFilterButtonItemType = sc.ELItemSpawnerFilterButton.extend({
     img: new ig.Image("media/gui/el/item-type-toggle.png"),
-    index: 0,
-
-    init(itemType) {
-        this.parent();
-        this.index = itemType;
-    },
+    animTimeForToggle: 0.05,
 
     updateDrawables(a) {
         // type icon
@@ -373,9 +388,24 @@ sc.ELItemSpawnerFilterButtonItemType = sc.ELItemSpawnerFilterButton.extend({
     }
 })
 
+sc.ELItemSpawnerSortDirectionButton = sc.CheckboxGui.extend({
+    altGfx: new ig.Image("media/gui/el/sort-direction.png"),
+
+    init(initialState, d, c) {
+        this.parent(initialState, d, c);
+        this.hookGui.setImage(this.altGfx, initialState ? 20 : 0, 0, 20, 20)
+    },
+
+    setPressed(a) {
+        this.parent(a);
+        this.hookGui.offsetX = a ? 20 : 0;
+        this.hookGui.offsetY = 0;
+    }
+})
+
 sc.ItemMenu.inject({
-    itemSpawnMenu: null,
     hotkeySpawnItems: null,
+    itemSpawnMenuState: {},
     init() {
         this.parent();
 
@@ -395,7 +425,7 @@ sc.ItemMenu.inject({
             }
         };
         this.hotkeySpawnItems.onButtonPress = () => {
-            let gui = new sc.ELItemSpawner();
+            let gui = new sc.ELItemSpawner;
             gui.hook.pauseGui = true;
             gui.show();
             ig.gui.addGuiElement(gui);
@@ -410,14 +440,7 @@ sc.ItemMenu.inject({
         this.parent();
     },
     commitHotKeysToTopBar(a) {
-        sc.menu.addHotkey(() => this.hotkeySpawnItems);
+        if (sc.options.get("el-item-spawn-cheat")) sc.menu.addHotkey(() => this.hotkeySpawnItems);
         this.parent(a);
-    }
-})
-
-sc.MainMenu.inject({
-    init() {
-        this.parent();
-        this.info.hook.zIndex = 3e5
     }
 })

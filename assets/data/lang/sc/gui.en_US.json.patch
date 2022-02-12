@@ -36,6 +36,11 @@
                 "description": "Show an effect when successfully executing a perfect dash."
             },
 
+            "el-item-spawn-cheat": {
+                "name": "Item Spawn Menu",
+                "description": "Adds in an item spawn menu to the inventory. \\c[1][Cheat]\\c[0]"
+            },
+
             "controls":{
                 "keys": {
                     "walk": "Walk",
@@ -89,7 +94,8 @@
                         "5": "Filter items that are \\c[3]trade items\\c[0].",
                         "6": "Filter items that are \\c[3]key items\\c[0].",
                         "7": "Filter items that are \\c[3]add-ons\\c[0]."
-                    }
+                    },
+                    "sortReversed": "Sort items in an ascending/descending fashion."
                 }
             }
         }

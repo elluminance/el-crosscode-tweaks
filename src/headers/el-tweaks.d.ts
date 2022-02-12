@@ -43,7 +43,19 @@ declare namespace sc {
 
     interface ELItemSpawner extends sc.ModalButtonInteract {
         transitions: Record<string, ig.GuiHook.Transition>;
+        list: sc.MultiColumnItemListBox;
         ninepatch: ig.NinePatch;
+        submitSound: ig.Sound;
+        rarityState: boolean[];
+        itemTypeState: boolean[];
+        filterGui: ig.GuiElementBase;
+        filterButtongroup: sc.ButtonGroup;
+        filterRarityText: sc.TextGui;
+        filterTypeText: sc.TextGui;
+        sortType: sc.SORT_TYPE;
+        sortButton: sc.ButtonGui;
+        _bgRev: sc.ButtonGroup;
+
         init(this: this): void;
         onDialogCallback(this: this): void;
     }
@@ -57,15 +69,33 @@ declare namespace sc {
         hotkeySpawnItems: sc.ButtonGui;
     }
 
-    interface ELItemSpawnerRarityFilterButton extends ig.FocusGui {
+    //@ts-ignore
+    interface ELItemSpawnerFilterButton extends ig.FocusGui {
         img: ig.Image;
-        rarity: number;
-        init(this: this, rarityIndex: number): void;
+        toggled: boolean;
+        animTimer: number;
+        toggleTimer: number;
+        index: number;
+        init(this: this, index: number): void;
     }
-    interface ELItemSpawnerRarityFilterButtonConstructor extends ImpactClass<ELItemSpawnerRarityFilterButton> {
-        new (rarity: number): void;
+    interface ELItemSpawnerFilterButtonConstructor extends ImpactClass<ELItemSpawnerFilterButton> {}
+    var ELItemSpawnerFilterButton: ELItemSpawnerFilterButtonConstructor
+    
+    interface ELItemSpawnerFilterButtonRarity extends sc.ELItemSpawnerFilterButton {
+
     }
-    var ELItemSpawnerRarityFilterButton: ELItemSpawnerRarityFilterButtonConstructor
+    interface ELItemSpawnerFilterButtonRarityConstructor extends ImpactClass<ELItemSpawnerFilterButtonRarity> {
+
+    }
+    var ELItemSpawnerFilterButtonRarity: ELItemSpawnerFilterButtonRarityConstructor;
+    
+    interface ELItemSpawnerFilterButtonItemType extends sc.ELItemSpawnerFilterButton {
+        init(this: this, index: number): void;
+    }
+    interface ELItemSpawnerFilterButtonItemTypeConstructor extends ImpactClass<ELItemSpawnerFilterButtonItemType> {
+
+    }
+    var ELItemSpawnerFilterButtonItemType: ELItemSpawnerFilterButtonItemTypeConstructor;
 
     enum SORT_TYPE {
         ITEM_ID = 22135,

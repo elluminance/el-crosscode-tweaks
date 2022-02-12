@@ -56,6 +56,13 @@ for(let [key, value] of Object.entries(sc.OPTIONS_DEFINITION)) {
                 hasDivider: false,
                 header: "el-tweaks"
             }
+            options["el-item-spawn-cheat"] = {
+                type: "CHECKBOX",
+                init: false,
+                cat: sc.OPTION_CATEGORY.GENERAL,
+                hasDivider: false,
+                header: "el-tweaks"
+            }
             break;
         case "keys-dash2":
             options["keys-walk"] = {
