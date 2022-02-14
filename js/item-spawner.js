@@ -69,7 +69,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     sortType: sc.SORT_TYPE.ITEM_ID,
     sortMenu: null,
     sortButton: null,
-    reversedSortCheckbox: null,
+    sortOrderCheckbox: null,
     reversedSort: false,
     _bgRev: null,
 
@@ -204,22 +204,23 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.filterButtongroup.addSelectionCallback(button => {
             if(button.data?.desc) {
                 sc.menu.setInfoText(button.data.desc);
+                sc.menu.setBuffText("", false)
             }
         })
 
-        this.reversedSortCheckbox = new sc.ELItemSpawnerSortDirectionButton(false, 30);
-        this.reversedSortCheckbox.setPos(0, (this.sortButton.hook.size.y - this.reversedSortCheckbox.hook.size.y) / 2 + yOffset);
-        this.reversedSortCheckbox.setAlign(ig.GUI_ALIGN.X_RIGHT, ig.GUI_ALIGN.Y_TOP)
-        this.reversedSortCheckbox.data = {
-            desc: ig.lang.get("sc.gui.menu.elItemSpawner.desc.sortReversed")
+        this.sortOrderCheckbox = new sc.ELItemSpawnerSortDirectionButton(false, 30);
+        this.sortOrderCheckbox.setPos(0, (this.sortButton.hook.size.y - this.sortOrderCheckbox.hook.size.y) / 2 + yOffset);
+        this.sortOrderCheckbox.setAlign(ig.GUI_ALIGN.X_RIGHT, ig.GUI_ALIGN.Y_TOP)
+        this.sortOrderCheckbox.data = {
+            desc: ig.lang.get("sc.gui.menu.elItemSpawner.desc.sortOrder")
         }
-        this.reversedSortCheckbox.onButtonPress = () => {
+        this.sortOrderCheckbox.onButtonPress = () => {
             this.reversedSort ^= true;
             this._createList();
         }
 
-        this.filterButtongroup.addFocusGui(this.reversedSortCheckbox);
-        this.filterGui.addChildGui(this.reversedSortCheckbox);
+        this.filterButtongroup.addFocusGui(this.sortOrderCheckbox);
+        this.filterGui.addChildGui(this.sortOrderCheckbox);
 
         this.buttonInteract.addParallelGroup(this.filterButtongroup);
         this.buttonInteract.addParallelGroup(this.sortMenu.buttongroup)

@@ -95,7 +95,7 @@
                         "6": "Filter items that are \\c[3]key items\\c[0].",
                         "7": "Filter items that are \\c[3]add-ons\\c[0]."
                     },
-                    "sortReversed": "Sort items in an ascending/descending fashion."
+                    "sortOrder": "Sort items in an ascending/descending fashion."
                 }
             }
         }
