@@ -100,6 +100,10 @@ declare namespace sc {
     enum SORT_TYPE {
         ITEM_ID = 22135,
     }
+
+    interface ParamHudGui extends sc.Model.Observer {
+        updateParamHud(this: this): void;
+    }
 }
 
 declare namespace ig {

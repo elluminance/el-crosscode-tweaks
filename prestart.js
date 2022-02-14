@@ -11,3 +11,5 @@ import "./dist/count-fixer.js"
 import "./dist/player_actions.js"
 
 import "./js/item-spawner.js"
+
+import "./dist/uncapped-stats.js"
