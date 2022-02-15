@@ -102,6 +102,13 @@ declare namespace sc {
     }
 
     interface ParamHudGui extends sc.Model.Observer {
+        targetSizes: {
+            hp: number;
+            atk: number;
+            def: number;
+            foc: number;
+        },
+        updateTimer: number;
         updateParamHud(this: this): void;
     }
 

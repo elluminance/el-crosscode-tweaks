@@ -3,6 +3,14 @@ function getDigits(value: number): number {
 }
 
 sc.ParamHudGui.inject({
+    targetSizes: {
+        hp: 62,
+        atk: 54,
+        def: 54,
+        foc: 54
+    },
+    updateTimer: 0.1,
+
     init() {
         this.parent();
         this.hp._number.setMaxNumber(99999999);
@@ -15,26 +23,51 @@ sc.ParamHudGui.inject({
     },
 
     updateParamHud() {
-        let xOffset = this.hp.hook.pos.x;
+        
         let digits = 0;
         digits = getDigits(sc.model.player.params.getStat("hp")) - 4;
-        this.hp.hook.size.x = 62 + 8 * digits.limit(0, 4);
-        xOffset += this.hp.hook.size.x - 14;
+        this.targetSizes.hp = 62 + 8 * digits.limit(0, 4);
         
-        this.atk.hook.pos.x = xOffset;
         digits = getDigits(sc.model.player.params.getStat("attack")) - 3;
-        this.atk.hook.size.x = 54 + 8 * digits.limit(0, 4);
-        xOffset += this.atk.hook.size.x - 14;
+        this.targetSizes.atk = 54 + 8 * digits.limit(0, 4);
         
-        this.def.hook.pos.x = xOffset;
         digits = getDigits(sc.model.player.params.getStat("defense")) - 3;
-        this.def.hook.size.x = 54 + 8 * digits.limit(0, 4);
-        xOffset += this.def.hook.size.x - 14;
+        this.targetSizes.def = 54 + 8 * digits.limit(0, 4);
         
-        this.foc.hook.pos.x = xOffset;
         digits = getDigits(sc.model.player.params.getStat("focus")) - 3;
-        this.foc.hook.size.x = 54 + 8 * digits.limit(0, 4);
-        xOffset += this.foc.hook.size.x - 14;
+        this.targetSizes.foc = 54 + 8 * digits.limit(0, 4);
+    },
+
+    update() {
+        this.parent();
+        this.updateTimer -= ig.system.tick;
+        if(this.updateTimer <= 0) {
+            this.updateTimer = 0.01;
+
+            let xOffset = this.hp.hook.pos.x;
+            if(this.hp.hook.size.x != this.targetSizes.hp) {
+                this.hp.hook.size.x = this.hp.hook.size.x + ((2).limit(0, Math.abs(this.hp.hook.size.x - this.targetSizes.hp)) * (this.hp.hook.size.x < this.targetSizes.hp ? 1 : -1))
+            }
+            xOffset += this.hp.hook.size.x - 14;
+
+            this.atk.hook.pos.x = xOffset;
+            if(this.atk.hook.size.x != this.targetSizes.atk) {
+                this.atk.hook.size.x = this.atk.hook.size.x + ((2).limit(0, Math.abs(this.atk.hook.size.x - this.targetSizes.atk)) * (this.atk.hook.size.x < this.targetSizes.atk ? 1 : -1))
+            }
+            xOffset += this.atk.hook.size.x - 14;
+
+            this.def.hook.pos.x = xOffset;
+            if(this.def.hook.size.x != this.targetSizes.def) {
+                this.def.hook.size.x = this.def.hook.size.x + ((2).limit(0, Math.abs(this.def.hook.size.x - this.targetSizes.def)) * (this.def.hook.size.x < this.targetSizes.def ? 1 : -1))
+            }
+            xOffset += this.def.hook.size.x - 14;
+
+            this.foc.hook.pos.x = xOffset;
+            if(this.foc.hook.size.x != this.targetSizes.foc) {
+                this.foc.hook.size.x = this.foc.hook.size.x + ((2).limit(0, Math.abs(this.foc.hook.size.x - this.targetSizes.foc)) * (this.foc.hook.size.x < this.targetSizes.foc ? 1 : -1))
+            }
+            xOffset += this.foc.hook.size.x - 14;
+        }
     },
 
     modelChanged(model, message) {
