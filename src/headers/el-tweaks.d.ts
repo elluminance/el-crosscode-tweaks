@@ -104,6 +104,10 @@ declare namespace sc {
     interface ParamHudGui extends sc.Model.Observer {
         updateParamHud(this: this): void;
     }
+
+    interface HpHudGui {
+        uncappedHpBar: ig.Image;
+    }
 }
 
 declare namespace ig {
