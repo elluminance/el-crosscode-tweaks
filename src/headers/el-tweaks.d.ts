@@ -6,10 +6,8 @@ declare namespace sc {
         damageToHeal: number
     }
 
-    namespace Arena {
-        interface KnownScoreTypes {
-            DAMAGE_HEALED: true;
-        }
+    interface ARENA_SCORE_TYPES {
+        DAMAGE_HEALED: ArenaScoreType;
     }
     
     interface MapModel {

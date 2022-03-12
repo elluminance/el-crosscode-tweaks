@@ -23,7 +23,6 @@ sc.ParamHudGui.inject({
     },
 
     updateParamHud() {
-        
         let digits = 0;
         digits = getDigits(sc.model.player.params.getStat("hp")) - 4;
         this.targetSizes.hp = 62 + 8 * digits.limit(0, 4);

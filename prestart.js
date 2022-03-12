@@ -8,7 +8,7 @@ import "./dist/newgameplus.js"
 
 import "./dist/count-fixer.js"
 
-import "./dist/player_actions.js"
+import "./dist/player-actions.js"
 
 import "./js/item-spawner.js"
 
