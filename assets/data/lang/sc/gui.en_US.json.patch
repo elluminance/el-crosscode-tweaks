@@ -75,6 +75,7 @@
                 "inventoryButton": "Spawn",
                 "filterRarity": "Filter by Rarity",
                 "filterItemType": "Filter by Item Type",
+                "search": "Search By Name",
                 "desc": {
                     "rarity": {
                         "0": "Filter items that are of \\c[3]common\\c[0] rarity.",

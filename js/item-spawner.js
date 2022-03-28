@@ -75,6 +75,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     filterButtongroup: null,
     filterRarityText: null,
     filterTypeText: null,
+    inputField: null,
     sortType: sc.SORT_TYPE.ITEM_ID,
     sortMenu: null,
     sortButton: null,
@@ -119,20 +120,51 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.filterGui.setPos(10, 30)
         this.filterGui.setSize(134, 300)
 
+        
+
         const lineWidth = 112;
         let yOffset = 0;
+        let line;
         //#region Filtering
+        this.filterButtongroup = new sc.ButtonGroup;
+
+        if(ig.GuiTextInputField) {
+            this.searchActive = true;
+            
+            this.searchText = new sc.TextGui(ig.lang.get("sc.gui.menu.elItemSpawner.search"), {
+                font: sc.fontsystem.tinyFont
+            })
+            this.searchText.setPos(0, yOffset);
+            this.filterGui.addChildGui(this.searchText)
+            yOffset += this.searchText.hook.size.y;
+
+            line = new sc.LineGui(lineWidth);
+            line.setPos(0, yOffset)
+            this.filterGui.addChildGui(line);
+            yOffset += 3;
+
+            this.inputField = new ig.GuiTextInputField(lineWidth, 20);
+            this.inputField.onCharacterInput = () => {
+                this._createList();
+            }
+            
+            this.inputField.setPos(0, yOffset);
+            yOffset += this.inputField.hook.size.y + 6;
+            this.filterGui.addChildGui(this.inputField)
+            this.filterButtongroup.addFocusGui(this.inputField);
+        }
+        
+        //#region rarity
         this.filterRarityText = new sc.TextGui(ig.lang.get("sc.gui.menu.elItemSpawner.filterRarity"),{
             font: sc.fontsystem.tinyFont
         })
         this.filterRarityText.setPos(0, yOffset)
         yOffset += this.filterRarityText.hook.size.y;
         this.filterGui.addChildGui(this.filterRarityText)
-        let line = new sc.LineGui(lineWidth);
-        line.setPos(0, 8)
+        line = new sc.LineGui(lineWidth);
+        line.setPos(0, yOffset)
         this.filterGui.addChildGui(line);
         yOffset += 2;
-        this.filterButtongroup = new sc.ButtonGroup;
         let xOffset = 0,
             button;
         for(let i = 0; i <= 7; i++) {
@@ -157,6 +189,9 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             this.filterButtongroup.addFocusGui(button);
         }
         yOffset += 20;
+        //#endregion rarity
+
+        //#region item type
         this.filterTypeText = new sc.TextGui(ig.lang.get("sc.gui.menu.elItemSpawner.filterItemType"),{
             font: sc.fontsystem.tinyFont
         })
@@ -187,8 +222,10 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             this.filterGui.addChildGui(button);
             this.filterButtongroup.addFocusGui(button);
         }
+        //#endregion item type
         //#endregion Filtering
 
+        //#region Sorting
         yOffset += 20;
         this.sortMenu = new sc.SortMenu(this.sortCallback.bind(this));
         this.sortMenu.addButton("item-id", sc.SORT_TYPE.ITEM_ID, 0);
@@ -212,9 +249,10 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.sortButton.keepMouseFocus = true;
         this.sortButton.setPos(0, yOffset)
         this.sortButton.setAlign(ig.GUI_ALIGN.X_LEFT, ig.GUI_ALIGN.Y_TOP)
-
         this.filterGui.addChildGui(this.sortButton)
         this.filterButtongroup.addFocusGui(this.sortButton);
+        //#endregion Sorting
+
         this.filterButtongroup.addSelectionCallback(button => {
             if(button.data?.desc) {
                 sc.menu.setInfoText(button.data.desc);
@@ -297,6 +335,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             let rarity = (0 <= item.rarity && item.rarity <= 6) ? item.rarity : 'other' 
             if(!this.rarityState[rarity]) continue;
             if(!this.itemTypeState[itemTypeToIndex(item)]) continue;
+            if(this.searchActive && !ig.LangLabel.getText(item.name).toLowerCase().includes(this.inputField.getValueAsString().toLowerCase())) continue;
             itemList.push(i);
         }
         
