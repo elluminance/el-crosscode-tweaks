@@ -168,7 +168,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         let xOffset = 0,
             button;
         for(let i = 0; i <= 7; i++) {
-            if(i == 7 && !sc.inventory.items.some(value => value.rarity > 6 || value.rarity < 0)) {
+            if(i == 7 && !sc.inventory.items.some(({rarity}) => ![0,1,2,3,4,5,6].includes(rarity))) {
                 this.rarityState.other = false;
                 break;
             };
@@ -332,7 +332,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         let itemList = [];
         for(let i = 0; i < sc.inventory.items.length; i++) {
             let item = sc.inventory.getItem(i);
-            let rarity = (0 <= item.rarity && item.rarity <= 6) ? item.rarity : 'other' 
+            let rarity = ([0,1,2,3,4,5,6].includes(item.rarity)) ? item.rarity : 'other' 
             if(!this.rarityState[rarity]) continue;
             if(!this.itemTypeState[itemTypeToIndex(item)]) continue;
             if(this.searchActive && !ig.LangLabel.getText(item.name).toLowerCase().includes(this.inputField.getValueAsString().toLowerCase())) continue;

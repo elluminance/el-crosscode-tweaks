@@ -85,7 +85,7 @@
                         "4": "Filter items that are of \\c[3]unique\\c[0] rarity.",
                         "5": "Filter items that are of \\c[3]backer\\c[0] rarity.",
                         "6": "Filter items that are of \\c[3]ascended\\c[0] rarity.",
-                        "other": "Filter items that are of \\c[3]other\\c[0] rarities."
+                        "other": "Filter items that are of other rarities."
                     },
                     "itemType": {
                         "0": "Filter items that are \\c[3]consumables\\c[0].",
