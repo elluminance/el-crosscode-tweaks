@@ -60,7 +60,16 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     submitSound: sc.BUTTON_SOUND.submit, 
     rarityButtons: [],
     itemTypeButtons: [],
-    rarityState: [true, true, true, true, true, true, true],
+    rarityState: {
+        0: true,
+        1: true,
+        2: true,
+        3: true,
+        4: true,
+        5: true,
+        6: true,
+        other: true
+    },
     itemTypeState: [true, true, true, true, true, true, true, true],
     filterGui: null,
     filterButtongroup: null,
@@ -126,8 +135,13 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.filterButtongroup = new sc.ButtonGroup;
         let xOffset = 0,
             button;
-        for(let i = 0; i <= 6; i++) {
+        for(let i = 0; i <= 7; i++) {
+            if(i == 7 && !sc.inventory.items.some(value => value.rarity > 6 || value.rarity < 0)) {
+                this.rarityState.other = false;
+                break;
+            };
             button = new sc.ELItemSpawnerFilterButtonRarity(i);
+            if(i == 7) i = "other";
             button.setPos(xOffset, yOffset);
             xOffset += button.hook.size.x;
             button.data = {
@@ -280,7 +294,8 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         let itemList = [];
         for(let i = 0; i < sc.inventory.items.length; i++) {
             let item = sc.inventory.getItem(i);
-            if(!this.rarityState[item.rarity]) continue;
+            let rarity = (0 <= item.rarity && item.rarity <= 6) ? item.rarity : 'other' 
+            if(!this.rarityState[rarity]) continue;
             if(!this.itemTypeState[itemTypeToIndex(item)]) continue;
             itemList.push(i);
         }
