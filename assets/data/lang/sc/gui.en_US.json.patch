@@ -75,7 +75,9 @@
                 "inventoryButton": "Spawn",
                 "filterRarity": "Filter by Rarity",
                 "filterItemType": "Filter by Item Type",
-                "search": "Search By Name",
+                "search": "Search by Name",
+                "groupByType": "Group by Type:",
+
                 "desc": {
                     "rarity": {
                         "0": "Filter items that are of \\c[3]common\\c[0] rarity.",
@@ -97,7 +99,8 @@
                         "6": "Filter items that are \\c[3]key items\\c[0].",
                         "7": "Filter items that are \\c[3]add-ons\\c[0]."
                     },
-                    "sortOrder": "Sort items in an ascending/descending fashion."
+                    "sortOrder": "Sort items in an ascending/descending fashion.",
+                    "groupByType": "Have items be grouped by their item type."
                 }
             }
         }

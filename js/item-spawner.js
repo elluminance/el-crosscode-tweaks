@@ -82,6 +82,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     sortOrderCheckbox: null,
     reversedSort: false,
     _bgRev: null,
+    groupByType: true,
 
     init() {
         this.parent(
@@ -251,14 +252,6 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.sortButton.setAlign(ig.GUI_ALIGN.X_LEFT, ig.GUI_ALIGN.Y_TOP)
         this.filterGui.addChildGui(this.sortButton)
         this.filterButtongroup.addFocusGui(this.sortButton);
-        //#endregion Sorting
-
-        this.filterButtongroup.addSelectionCallback(button => {
-            if(button.data?.desc) {
-                sc.menu.setInfoText(button.data.desc);
-                sc.menu.setBuffText("", false)
-            }
-        })
 
         this.sortOrderCheckbox = new sc.ELItemSpawnerSortDirectionButton(false, 30);
         this.sortOrderCheckbox.setPos(0, (this.sortButton.hook.size.y - this.sortOrderCheckbox.hook.size.y) / 2 + yOffset);
@@ -270,6 +263,37 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             this.reversedSort ^= true;
             this._createList();
         }
+
+        yOffset += this.sortButton.hook.size.y + 4;
+        //#endregion Sorting
+
+
+        this.groupByTypeText = new sc.TextGui(ig.lang.get("sc.gui.menu.elItemSpawner.groupByType"));
+        this.groupByTypeText.setPos(0, yOffset);
+        this.filterGui.addChildGui(this.groupByTypeText);
+        
+        this.groupByTypeButton = new sc.CheckboxGui(true);
+        this.groupByTypeButton.setAlign(ig.GUI_ALIGN.X_RIGHT, ig.GUI_ALIGN.Y_TOP);
+        this.groupByTypeButton.setPos(4, yOffset);
+        this.groupByTypeButton.data = {
+            desc: ig.lang.get("sc.gui.menu.elItemSpawner.desc.groupByType")
+        }
+        this.groupByTypeButton.onButtonPress = () => {
+            this.groupByType ^= true;
+            this._createList();
+        }
+        this.filterGui.addChildGui(this.groupByTypeButton);
+        this.filterButtongroup.addFocusGui(this.groupByTypeButton);
+        
+        yOffset += this.groupByTypeButton.hook.size.y + 4;
+
+        this.filterButtongroup.addSelectionCallback(button => {
+            if(button.data?.desc) {
+                sc.menu.setInfoText(button.data.desc);
+                sc.menu.setBuffText("", false)
+            }
+        })
+
 
         this.filterButtongroup.addFocusGui(this.sortOrderCheckbox);
         this.filterGui.addChildGui(this.sortOrderCheckbox);
@@ -343,12 +367,14 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
 
         this.reversedSort && itemList.reverse();
 
+        this.groupByType && itemList.sort((a, b) => itemTypeToIndex(sc.inventory.items[a]) - itemTypeToIndex(sc.inventory.items[b]))
+
         itemList.forEach(value => {
             let item = sc.inventory.getItem(value),
                 itemName = `\\i[${item.icon + sc.inventory.getRaritySuffix(item.rarity || 0) || "item-default"}]${ig.LangLabel.getText(item.name)}`,
                 itemDesc = ig.LangLabel.getText(item.description),
                 itemLevel = item.type == sc.ITEMS_TYPES.EQUIP ? item.level || 1 : 0,
-                itemButton = new sc.ItemBoxButton(itemName, 142, 26, sc.model.player.getItemAmount(value), value, itemDesc, void 0, void 0, void 0, void 0, itemLevel);
+                itemButton = new sc.ItemBoxButton(itemName, 142, 26, sc.model.player.getItemAmountWithEquip(value), value, itemDesc, void 0, void 0, void 0, void 0, itemLevel);
             this.list.addButton(itemButton);
         })
         
