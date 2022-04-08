@@ -60,17 +60,8 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     submitSound: sc.BUTTON_SOUND.submit, 
     rarityButtons: [],
     itemTypeButtons: [],
-    rarityState: {
-        0: true,
-        1: true,
-        2: true,
-        3: true,
-        4: true,
-        5: true,
-        6: true,
-        other: true
-    },
-    itemTypeState: [true, true, true, true, true, true, true, true],
+    rarityState: Array(7).fill(true),
+    itemTypeState: Array(8).fill(true),
     filterGui: null,
     filterButtongroup: null,
     filterRarityText: null,
@@ -101,7 +92,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.list.setPos(0, 32);
         this._bgRev = this.list.buttonGroup();
         this._bgRev.addPressCallback((button) => {
-            if(button.data?.id >= 0) {
+            if(button.data && button.data.id >= 0) {
                 sc.model.player.addItem(button.data.id, 1, true);
                 button.amount.setNumber(sc.model.player.getItemAmount(button.data.id))
             }
@@ -173,6 +164,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
                 this.rarityState.other = false;
                 break;
             };
+            this.rarityState.other = true;
             button = new sc.ELItemSpawnerFilterButtonRarity(i);
             if(i == 7) i = "other";
             button.setPos(xOffset, yOffset);
@@ -288,7 +280,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         yOffset += this.groupByTypeButton.hook.size.y + 4;
 
         this.filterButtongroup.addSelectionCallback(button => {
-            if(button.data?.desc) {
+            if(button.data && button.data.desc) {
                 sc.menu.setInfoText(button.data.desc);
                 sc.menu.setBuffText("", false)
             }
