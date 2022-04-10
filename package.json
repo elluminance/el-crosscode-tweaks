@@ -3,7 +3,7 @@
 	"version": "0.4.1",
 	"description": "Adds in many small changes designed to improve CrossCode.",
 
-    "prestart": "prestart.js",
+    "prestart": "dist/prestart.js",
 
     "ccmodDependencies": {},
 	
