@@ -1,15 +1,17 @@
-import "./options.js"
+import "./prestart/options.js"
 
-import "./arena.js"
+import "./prestart/arena.js"
 
-import "./bug-fixes.js"
+import "./prestart/bug-fixes.js"
 
-import "./newgameplus.js"
+import "./prestart/newgameplus.js"
 
-import "./count-fixer.js"
+import "./prestart/count-fixer.js"
 
-import "./player-actions.js"
+import "./prestart/player-actions.js"
 
-import "./item-spawner.js"
+import "./prestart/item-spawner.js"
 
-import "./uncapped-stats.js"
+import "./prestart/uncapped-stats.js"
+
+import "./prestart/mod-utils.js"

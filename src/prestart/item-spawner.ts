@@ -108,7 +108,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.list.setPos(0, 32);
         this._bgRev = this.list.buttonGroup();
         this._bgRev.addPressCallback((button: any) => {
-            if(button.data && button.data.id >= 0) {
+            if(button.data?.id >= 0) {
                 sc.model.player.addItem(button.data.id, 1, true);
                 button.amount.setNumber(sc.model.player.getItemAmount(button.data.id))
             }
@@ -299,7 +299,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         yOffset += this.groupByTypeButton.hook.size.y + 4;
 
         this.filterButtongroup.addSelectionCallback((button: any) => {
-            if(button.data && button.data.desc) {
+            if(button.data?.desc) {
                 sc.menu.setInfoText(button.data.desc);
                 sc.menu.setBuffText("", false)
             }

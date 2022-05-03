@@ -4,6 +4,7 @@
 	"description": "Adds in many small changes designed to improve CrossCode.",
 
     "prestart": "dist/prestart.js",
+    "poststart": "dist/prestart.js",
 
     "ccmodDependencies": {},
 	
