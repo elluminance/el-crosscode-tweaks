@@ -3,6 +3,15 @@
         "arena": {
             "scoreTypes": {
                 "DAMAGE_HEALED": "HP Recovered" 
+            },
+
+            "challenges": {
+                "descriptions": {
+                    "NO_HEAT": "Using Heat is disabled.",
+                    "NO_COLD": "Using Cold is disabled.",
+                    "NO_SHOCK": "Using Shock is disabled.",
+                    "NO_WAVE": "Using Wave is disabled."
+                }
             }
         },
 

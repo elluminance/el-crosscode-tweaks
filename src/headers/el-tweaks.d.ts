@@ -165,6 +165,27 @@ declare global {
             registerMenu(menuName: string, menuClass: new () => sc.BaseMenu, langName: string, altName?: string): boolean
         }
         var modUtils: ModUtils;
+
+        interface ArenaChallengeBaseConstructor {
+            new (icon: string, callback?: (state?: boolean) => void): ArenaChallengeBase
+        }
+        interface ArenaChallengePlayerBaseConstructor {
+            new (core: keyof typeof sc.PLAYER_CORE, icon: string): ArenaChallengePlayerBase
+        }
+
+        interface ArenaChallengeIcon {
+            src: string;
+            x: number;
+            y: number;
+            tinyX: number;
+            tinyY: number;
+        }
+
+        let ARENA_CHALLENGE_ICONS: Record<string, ArenaChallengeIcon>;
+
+        interface ArenaChallengeEntry {
+            altGfx: ig.Image;
+        }
     }
 
     namespace ig {

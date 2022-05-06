@@ -67,3 +67,70 @@ sc.Arena.inject({
         this.itemCache = {}
     },
 })
+
+sc.ARENA_CHALLENGE_ICONS = {
+    NO_HEAT: {
+        src: "media/gui/el/elemental-arena-challenge.png",
+        x: 0,
+        y: 0,
+        tinyX: 0,
+        tinyY: 18
+    },
+    NO_COLD: {
+        src: "media/gui/el/elemental-arena-challenge.png",
+        x: 18,
+        y: 0,
+        tinyX: 10,
+        tinyY: 18
+    },
+    NO_SHOCK: {
+        src: "media/gui/el/elemental-arena-challenge.png",
+        x: 36,
+        y: 0,
+        tinyX: 10,
+        tinyY: 18
+    },
+    NO_WAVE: {
+        src: "media/gui/el/elemental-arena-challenge.png",
+        x: 54,
+        y: 0,
+        tinyX: 10,
+        tinyY: 18
+    },
+}
+
+Object.assign(sc.ARENA_CHALLENGES, {
+    NO_HEAT: new sc.ArenaChallengePlayerBase("ELEMENT_HEAT", "NO_HEAT"),
+    NO_COLD: new sc.ArenaChallengePlayerBase("ELEMENT_COLD", 1),
+    NO_SHOCK: new sc.ArenaChallengePlayerBase("ELEMENT_SHOCK", 1),
+    NO_WAVE: new sc.ArenaChallengePlayerBase("ELEMENT_WAVE", 1),
+})
+
+sc.ArenaChallengeEntry.inject({
+    init(challengeName, width, tiny, global) {
+        this.parent(challengeName, width, tiny, global);
+
+        if(typeof this.icon == "string") {
+            let iconSrc = sc.ARENA_CHALLENGE_ICONS[this.icon].src;
+            iconSrc && (this.altGfx = new ig.Image(iconSrc))
+        }
+    },
+
+    updateDrawables(renderer) {
+        if(typeof this.icon == "string") {
+            let icon = sc.ARENA_CHALLENGE_ICONS[this.icon];
+            if(icon) {
+                if(!this.tiny) {
+                    renderer.addGfx(this.altGfx, 0, 0, icon.x, icon.y, 18, 18)
+                    this.global && renderer.addGfx(this.gfx, 0, 0, 128, 48, 18, 18)
+                } else {
+                    renderer.addGfx(this.altGfx, 0, 0, icon.tinyX, icon.tinyY, 10, 10)
+                    this.global && renderer.addGfx(this.gfx, 0, 0, 146, 48, 10, 10)
+                }
+                // if the icon isn't found, it just use the default icon through the parent method
+                return;
+            }
+        }
+        this.parent(renderer)
+    }
+})
