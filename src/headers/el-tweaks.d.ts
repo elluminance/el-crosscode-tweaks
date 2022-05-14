@@ -11,6 +11,13 @@ declare global {
             damageToHeal: number
         }
 
+        interface ARENA_CHALLENGES {
+            NO_HEAT: sc.ArenaChallengePlayerBase
+            NO_COLD: sc.ArenaChallengePlayerBase
+            NO_SHOCK: sc.ArenaChallengePlayerBase
+            NO_WAVE: sc.ArenaChallengePlayerBase
+        }
+
         interface ARENA_SCORE_TYPES {
             DAMAGE_HEALED: ArenaScoreType;
         }
@@ -153,14 +160,6 @@ declare global {
             uncappedHpBar: ig.Image;
         }
 
-        namespace ModUtils {
-            interface Commands {
-                addItem(id: sc.ItemID, amount: number, hideMsg?: boolean): void;
-                addCredits(amount: number): void;
-                teleport(mapName: string, destination: ig.TeleportPosition): void;
-                reloadPlayerConfigs(): void;
-            }
-        }
         interface ModUtils extends ig.Vars.Accessor {
             registerMenu(menuName: string, menuClass: new () => sc.BaseMenu, langName: string, altName?: string): boolean
         }
@@ -198,6 +197,6 @@ declare global {
     }
 
     interface Window {
-        cmd: sc.ModUtils.Commands
+        cmd: Record<string, Function>
     }
 }

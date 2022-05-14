@@ -22,7 +22,8 @@ sc.Arena.inject({
         this.parent(scoreType, points)
         if(scoreType == "DAMAGE_TAKEN"){
             // the points "added" upon damage taken will always be a negative value
-            this.damageToHeal -= points;
+            // also accounts for the fact that PVP battles will not account for the 
+            this.damageToHeal -= points * (this.hasChallenge("PVP_BATTLE") ? 0.6 : 1);
         }
     },
 
@@ -41,8 +42,9 @@ sc.Arena.inject({
                 maxHp = entity.params.getStat("hp");
             currentHp + amountHealed > maxHp && (amountHealed = maxHp - currentHp);
             amountHealed = Math.min(this.damageToHeal, amountHealed);
+            
             this.damageToHeal -= amountHealed;
-            amountHealed > 0 && this.addScore("DAMAGE_HEALED", amountHealed)
+            amountHealed > 0 && this.addScore("DAMAGE_HEALED", Math.round(amountHealed))
         }
     },
 

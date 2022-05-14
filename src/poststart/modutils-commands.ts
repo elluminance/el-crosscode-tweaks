@@ -5,15 +5,15 @@
  * i discourage using them in code, though i guess nothing's stopping you...
 */
 window.cmd = {
-    addItem: (id, amount = 1, hideMsg) => {
+    addItem: (id: number, amount: number = 1, hideMsg: boolean) => {
         if(sc.inventory.getItem(id)){
             sc.model.player.addItem(id, amount, hideMsg)
         } else {
             console.warn(`Item ${id} does not exist!`)
         }
     },
-    addCredits: (amount) => sc.model.player.addCredit(amount),
-    teleport: (mapName, destination) => ig.game.teleport(mapName, destination),
+    addCredits: (amount: number) => sc.model.player.addCredit(amount),
+    teleport: (mapName: string, destination: ig.TeleportPosition) => ig.game.teleport(mapName, destination),
     /*
      * will reload all player configs to reflect any changes
      * for example, if you're tweaking an art, you don't need to reload the game
@@ -27,5 +27,6 @@ window.cmd = {
                 sc.model.player.setConfig(new sc.PlayerConfig(sc.model.player.name))
             }
         })
-    }
+    },
+    reloadEffectSheets: () => Object.values(ig.EffectSheet.cache).forEach(sheet => sheet.reload())
 }
