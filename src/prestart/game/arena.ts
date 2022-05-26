@@ -6,17 +6,23 @@ sc.ARENA_SCORE_TYPES.DAMAGE_HEALED = {
 }
 
 sc.PlayerModel.inject({
-    useItem(a) {
-        if(this.items[a] && sc.arena.active){
-            sc.arena.itemCache[a] ? (sc.arena.itemCache[a] += 1) : (sc.arena.itemCache[a] = 1)
-        }
-        return this.parent(a)
-    }
+    
 })
+
+type CupList = Record<string, {order: number}>;
 
 sc.Arena.inject({
     itemCache: {},
     damageToHeal: 0,
+    trackedCups: [
+        "rookie-cup",
+        "seeker-cup",
+        "boss-cup",
+        "faction-cup-1",
+        "faction-cup-2",
+        "rookie-team-cup",
+        "faction-team-cup-1",
+    ],
 
     addScore(scoreType, points) {
         this.parent(scoreType, points)
@@ -68,6 +74,56 @@ sc.Arena.inject({
         // and clear the item cache
         this.itemCache = {}
     },
+
+    getTotalArenaCompletion(){
+        var a: number, b: number;
+        a = b = 0;
+        this.trackedCups.forEach(cupName => {a += this.getCupCompletion(cupName); b++;})
+        return a / b;
+    },
+
+    getTotalDefaultTrophies: function(a, c) {
+        var d = 0, e = 0;
+        this.trackedCups.forEach((f: string) => {
+            var g = this.getCupTrophy(f);
+            if (this.isCupUnlocked(f))
+                if (a == 0) {
+                    d += g;
+                    e += 5
+                } else {
+                    g >= a && d++;
+                    e++
+                }
+        })
+        return c ? e : d
+    },
+
+    getTotalDefaultCups(sorted){
+        let cups: CupList = {};
+        this.trackedCups.forEach(key => {
+            /* 
+             * if the cup is not loaded, skip it.
+             * prevents bug where it would show stats for
+             * cups like "~ancient-cup" in red.
+            */
+            if(this.cups[key].name) {
+                let order = sc.arena.cups[key].order || 1e7;
+                if(this.isCupCustom(key)) order += 1e7;
+                cups[key] = {order}
+            }
+        })
+        if(sorted){
+            let sortedCups: CupList = {}
+            Object.keys(cups)
+            .sort((a, b) => (cups[a].order - cups[b].order))
+            .forEach(key => {
+                if(this.isCupUnlocked(key) && cups[key]) sortedCups[key] = cups[key];
+            })
+            
+            return sortedCups;
+        }
+        return cups
+    }
 })
 
 sc.ARENA_CHALLENGE_ICONS = {
@@ -89,23 +145,23 @@ sc.ARENA_CHALLENGE_ICONS = {
         src: "media/gui/el/elemental-arena-challenge.png",
         x: 36,
         y: 0,
-        tinyX: 10,
+        tinyX: 20,
         tinyY: 18
     },
     NO_WAVE: {
         src: "media/gui/el/elemental-arena-challenge.png",
         x: 54,
         y: 0,
-        tinyX: 10,
+        tinyX: 30,
         tinyY: 18
     },
 }
 
 Object.assign(sc.ARENA_CHALLENGES, {
     NO_HEAT: new sc.ArenaChallengePlayerBase("ELEMENT_HEAT", "NO_HEAT"),
-    NO_COLD: new sc.ArenaChallengePlayerBase("ELEMENT_COLD", 1),
-    NO_SHOCK: new sc.ArenaChallengePlayerBase("ELEMENT_SHOCK", 1),
-    NO_WAVE: new sc.ArenaChallengePlayerBase("ELEMENT_WAVE", 1),
+    NO_COLD: new sc.ArenaChallengePlayerBase("ELEMENT_COLD", "NO_COLD"),
+    NO_SHOCK: new sc.ArenaChallengePlayerBase("ELEMENT_SHOCK", "NO_SHOCK"),
+    NO_WAVE: new sc.ArenaChallengePlayerBase("ELEMENT_WAVE", "NO_WAVE"),
 })
 
 sc.ArenaChallengeEntry.inject({
@@ -119,20 +175,16 @@ sc.ArenaChallengeEntry.inject({
     },
 
     updateDrawables(renderer) {
-        if(typeof this.icon == "string") {
-            let icon = sc.ARENA_CHALLENGE_ICONS[this.icon];
-            if(icon) {
-                if(!this.tiny) {
-                    renderer.addGfx(this.altGfx, 0, 0, icon.x, icon.y, 18, 18)
-                    this.global && renderer.addGfx(this.gfx, 0, 0, 128, 48, 18, 18)
-                } else {
-                    renderer.addGfx(this.altGfx, 0, 0, icon.tinyX, icon.tinyY, 10, 10)
-                    this.global && renderer.addGfx(this.gfx, 0, 0, 146, 48, 10, 10)
-                }
-                // if the icon isn't found, it just use the default icon through the parent method
-                return;
+        let icon: sc.ArenaChallengeIcon | undefined;
+        if(typeof this.icon == "string") icon = sc.ARENA_CHALLENGE_ICONS[this.icon];
+        if(icon) {
+            if(!this.tiny) {
+                renderer.addGfx(this.altGfx, 0, 0, icon.x, icon.y, 18, 18)
+                this.global && renderer.addGfx(this.gfx, 0, 0, 128, 48, 18, 18)
+            } else {
+                renderer.addGfx(this.altGfx, 0, 0, icon.tinyX, icon.tinyY, 10, 10)
+                this.global && renderer.addGfx(this.gfx, 0, 0, 146, 48, 10, 10)
             }
-        }
-        this.parent(renderer)
+        } else this.parent(renderer)
     }
 })

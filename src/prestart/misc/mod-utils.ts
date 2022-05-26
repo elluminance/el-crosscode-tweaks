@@ -24,7 +24,7 @@ sc.modUtils = {
     */
     registerMenu(menuName, menuClass, langName, altName = undefined) {
         if (menuName in sc.MENU_SUBMENU) {
-            ig.warn(`Warning: Submenu with id ${menuName} already taken!`);
+            console.warn(`Warning: Submenu with id ${menuName} already taken!`);
             return false;
         }
 

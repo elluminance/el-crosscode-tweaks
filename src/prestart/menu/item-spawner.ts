@@ -117,7 +117,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             if (a.data) {
                 sc.menu.setInfoText(a.data.description ? a.data.description : a.data);
                 if (a.data.id) {
-                    sc.inventory.isBuffID(a.data.id) ? sc.menu.setBuffText(sc.inventory.getBuffString(a.data.id), false, a.data.id) : sc.menu.setBuffText("", false)
+                    sc.inventory.isBuffID(a.data.id) ? sc.menu.setBuffText(sc.inventory.getBuffString(a.data.id)!, false, a.data.id) : sc.menu.setBuffText("", false)
                 }
             }
         })

@@ -90,29 +90,7 @@ sc.OPTIONS_DEFINITION = options
 sc.GameModel.inject({
     // i mean... does a reduced window really count as "assisting"?
     isAssistMode() {
-        return this.parent() || sc.options.get("assist-timing-window") as number > 1
+        return this.parent() || sc.options.get("assist-timing-window") > 1
     }
 })
 
-// assist for perfect guard
-sc.CombatantShieldConnection.inject({
-    init(a, b, e){
-        this.parent(a, b, e);
-
-        this.perfectGuardTime *= sc.options.get("assist-timing-window") as number
-        if(sc.newgame.get("guard-perfectionist")) {
-            this.perfectGuardTime *= 3
-        }
-    }
-})
-
-sc.Control.inject({
-    moveDir(b, d, f){
-        // honestly... i'm surprised it was this simple.
-        return this.parent(b, d, f) * (ig.input.state("walk") ? 0.5 : 1) 
-    },
-
-    autoThrown() {
-        return (!this.autoControl && ig.input.state("autoThrow")) || this.parent();
-    }
-})
