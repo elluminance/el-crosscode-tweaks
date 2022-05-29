@@ -1,4 +1,5 @@
-import "./el-tweaks-shop"
+import "./el-tweaks-shop";
+import "./el-tweaks-color-picker";
 
 export { }
 
