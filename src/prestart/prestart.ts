@@ -8,6 +8,7 @@ import "./game/arena.js"
 import "./game/combat.js"
 import "./game/map-model.js"
 import "./game/new-game-plus.js"
+import "./game/shop.js"
 
 import "./menu/item-spawner.js"
 import "./menu/trophy.js"

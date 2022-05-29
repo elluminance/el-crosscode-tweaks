@@ -1,3 +1,5 @@
+import "./el-tweaks-shop"
+
 export { }
 
 declare global {
