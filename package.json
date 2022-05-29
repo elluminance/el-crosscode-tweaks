@@ -1,7 +1,7 @@
 {
 	"name": "el-tweaks",
-	"version": "0.4.1",
-	"description": "Adds in many small changes designed to improve CrossCode.",
+	"version": "0.5.0",
+	"description": "A coremod full of useful functionality for modders, as well as many tweaks for players.",
 
     "prestart": "dist/prestart/prestart.js",
     "poststart": "dist/poststart/poststart.js",
