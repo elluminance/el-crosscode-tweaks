@@ -28,8 +28,6 @@ declare global {
                     gfx: ig.Image;
                     srcX: number;
                     srcY: number;
-                    w: number;
-                    h: number;
                 },
 
                 get(): number;
@@ -42,7 +40,7 @@ declare global {
         interface ModUtils {
             currencies: Record<string, ModUtils.CurrencyEntry>;
 
-            registerCurrency(name: string, imgPath: string, srcX: number, srcY: number, w: number, h: number, varPathOverride?: string): boolean;
+            registerCurrency(name: string, imgPath: string, srcX: number, srcY: number, varPathOverride?: string): boolean;
         }
 
         interface MenuModel {

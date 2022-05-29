@@ -17,11 +17,11 @@ ig.EVENT_STEP.OPEN_SHOP.inject({
 sc.ShopConfirmEntry.inject({
     updateDrawables(b) {
         if (sc.menu.customCurrency) {
-            let { gfx, srcX, srcY, w, h } = sc.menu.customCurrency.image
+            let { gfx, srcX, srcY } = sc.menu.customCurrency.image
             b.addGfx(this.gfx, 132, 6, 560, 416, 8, 8);
             b.addGfx(this.gfx, 164, 7, 568, 416, 8, 8);
 
-            b.addGfx(gfx, 232, 4, srcX, srcY, w, h);
+            b.addGfx(gfx, 232, 4, srcX, srcY, 12, 12);
         } else this.parent(b)
     }
 })
@@ -29,8 +29,8 @@ sc.ShopConfirmEntry.inject({
 sc.ShopCartEntry.inject({
     updateDrawables(b) {
         if (sc.menu.customCurrency && !this.hideSymbol) {
-            let { gfx, srcX, srcY, w, h } = sc.menu.customCurrency.image
-            b.addGfx(gfx, this.hook.size.x - 15, -2, srcX, srcY, w, h)
+            let { gfx, srcX, srcY } = sc.menu.customCurrency.image
+            b.addGfx(gfx, this.hook.size.x - 15, -2, srcX, srcY, 12, 12)
         }
         else this.parent(b)
     }

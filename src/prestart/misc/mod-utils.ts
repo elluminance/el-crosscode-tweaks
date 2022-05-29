@@ -47,14 +47,12 @@ sc.modUtils = {
      * Registers a custom currency for the purposes of use in shops.
      * 
      * @param {string} name the currency's internal name, used in the langLabel and default var path
-     * @param {string} imgPath the path to the image file holding the currency icon
+     * @param {string} imgPath the path to the image file holding the 12x12 currency icon
      * @param {number} srcX the X position of the currency's icon
      * @param {number} srcY the Y position of the currency's icon
-     * @param {number} w the width of the currency's icon
-     * @param {number} h the height of the currency's icon
      * @param {string} [varPathOverride] an optional parameter to override the default var path of "currency.name"
      */
-    registerCurrency(name, imgPath, srcX, srcY, w, h, varPathOverride) {
+    registerCurrency(name, imgPath, srcX, srcY, varPathOverride) {
         if(name in this.currencies) {
             console.warn(`Warning: currency with name ${name} already in use`);
             return false;
@@ -65,7 +63,7 @@ sc.modUtils = {
             varPath,
             image: {
                 gfx: new ig.Image(imgPath),
-                srcX, srcY, w, h
+                srcX, srcY
             },
 
             get() {
