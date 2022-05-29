@@ -9,7 +9,7 @@
     "ccmodDependencies": {},
 	
     "devDependencies": {
-        "typescript": "^3.9.0",
+        "typescript": "^4.5.5",
         "ultimate-crosscode-typedefs": "el20202/ultimate-crosscode-typedefs"
     },
     "scripts": {
