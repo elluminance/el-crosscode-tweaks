@@ -11,11 +11,11 @@ sc.EL_ModalColorPicker = sc.ModalButtonInteract.extend({
     colorSquare: null,
     
     init(varPath, label, callback) {
-        let text = label ? ig.LangLabel.getText(label) : ig.lang.get(label || "sc.gui.colorPicker.title");
+        let text = label ? ig.LangLabel.getText(label) : ig.lang.get(label || "sc.gui.menu.colorPicker.title");
         this.parent(
             text,
             null,
-            [ig.lang.get("sc.gui.colorPicker.exit")],
+            [ig.lang.get("sc.gui.menu.colorPicker.exit")],
             callback || (() => {})
         )
         this.textGui.setAlign(ig.GUI_ALIGN.X_CENTER, ig.GUI_ALIGN.Y_TOP)
@@ -83,7 +83,7 @@ sc.EL_ModalColorPicker.Slider = ig.GuiElementBase.extend({
         this.parent();
         this.setSize(180, 24)
 
-        this.nameText = new sc.TextGui(ig.lang.get(`sc.gui.colorPicker.colors.${color}`));
+        this.nameText = new sc.TextGui(ig.lang.get(`sc.gui.menu.colorPicker.colors.${color}`));
         this.nameText.setAlign(ig.GUI_ALIGN.X_LEFT, ig.GUI_ALIGN.Y_CENTER)
         this.addChildGui(this.nameText);
         

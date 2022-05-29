@@ -111,6 +111,16 @@
                     "sortOrder": "Sort items in an ascending/descending fashion.",
                     "groupByType": "Have items be grouped by their item type."
                 }
+            },
+            "colorPicker": {
+                "title": "Color Picker",
+                "exit": "Exit",
+    
+                "colors": {
+                    "red": "Red",
+                    "green": "Green",
+                    "blue": "Blue"
+                }
             }
         }
     }
