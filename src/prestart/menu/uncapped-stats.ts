@@ -13,10 +13,10 @@ sc.ParamHudGui.inject({
 
     init() {
         this.parent();
-        this.hp._number.setMaxNumber(99999999);
-        this.atk._number.setMaxNumber(9999999);
-        this.def._number.setMaxNumber(9999999);
-        this.foc._number.setMaxNumber(9999999);
+        this.hp._number.setMaxNumber(999999999);
+        this.atk._number.setMaxNumber(999999999);
+        this.def._number.setMaxNumber(999999999);
+        this.foc._number.setMaxNumber(999999999);
 
         sc.Model.addObserver(sc.model.player.params, this);
         this.updateParamHud()
@@ -25,16 +25,16 @@ sc.ParamHudGui.inject({
     updateParamHud() {
         let digits = 0;
         digits = getDigits(sc.model.player.params.getStat("hp")) - 4;
-        this.targetSizes.hp = 62 + 8 * digits.limit(0, 4);
+        this.targetSizes.hp = 62 + 8 * digits.limit(0, 5);
         
         digits = getDigits(sc.model.player.params.getStat("attack")) - 3;
-        this.targetSizes.atk = 54 + 8 * digits.limit(0, 4);
+        this.targetSizes.atk = 54 + 8 * digits.limit(0, 6);
         
         digits = getDigits(sc.model.player.params.getStat("defense")) - 3;
-        this.targetSizes.def = 54 + 8 * digits.limit(0, 4);
+        this.targetSizes.def = 54 + 8 * digits.limit(0, 6);
         
         digits = getDigits(sc.model.player.params.getStat("focus")) - 3;
-        this.targetSizes.foc = 54 + 8 * digits.limit(0, 4);
+        this.targetSizes.foc = 54 + 8 * digits.limit(0, 6);
     },
 
     update() {

@@ -1,6 +1,6 @@
 {
 	"name": "el-tweaks",
-	"version": "0.5.0",
+	"version": "0.5.2",
 	"description": "A coremod full of useful functionality for modders, as well as many tweaks for players.",
 
     "prestart": "dist/prestart/prestart.js",
