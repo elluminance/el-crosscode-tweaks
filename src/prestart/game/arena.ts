@@ -29,7 +29,7 @@ sc.Arena.inject({
         if(scoreType == "DAMAGE_TAKEN"){
             // the points "added" upon damage taken will always be a negative value
             // also accounts for the fact that PVP battles will not account for the 
-            this.damageToHeal -= points * (this.hasChallenge("PVP_BATTLE") ? 0.6 : 1);
+            this.damageToHeal -= points! * (this.hasChallenge("PVP_BATTLE") ? 0.6 : 1);
         }
     },
 
