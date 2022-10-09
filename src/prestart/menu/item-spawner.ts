@@ -73,7 +73,8 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         }
     }),
     list: null,
-    submitSound: sc.BUTTON_SOUND.submit, 
+    submitSound: sc.BUTTON_SOUND.submit,
+    itemButtons: [], 
     rarityButtons: [],
     itemTypeButtons: [],
     rarityState: Array(7).fill(true),
@@ -309,6 +310,23 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.filterButtongroup.addFocusGui(this.sortOrderCheckbox);
         this.filterGui.addChildGui(this.sortOrderCheckbox);
 
+        this.itemButtons.length = sc.inventory.items.length;
+        for(let i = 0; i < sc.inventory.items.length; i++) {
+            let item = sc.inventory.getItem(i)!,
+                itemName = `\\i[${item.icon + sc.inventory.getRaritySuffix(item.rarity || 0) || "item-default"}]${ig.LangLabel.getText(item.name)}`,
+                itemDesc = ig.LangLabel.getText(item.description),
+                itemLevel = item.type == sc.ITEMS_TYPES.EQUIP ? item.level || 1 : 0;
+
+            this.itemButtons[i] = new sc.ItemBoxButton(
+                itemName, // item name
+                142, 26, // width, height
+                sc.model.player.getItemAmount(i),
+                i, itemDesc, //item id, description
+                void 0, void 0, void 0, void 0, 
+                itemLevel
+            );
+        }
+
         this.buttonInteract.addParallelGroup(this.filterButtongroup);
         this.buttonInteract.addParallelGroup(this.sortMenu.buttongroup)
         this.filterGui.addChildGui(this.sortMenu)
@@ -386,15 +404,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
 
         this.groupByType && itemList.sort((a, b) => itemTypeToIndex(sc.inventory.items[a]) - itemTypeToIndex(sc.inventory.items[b]))
 
-        itemList.forEach(value => {
-            let item = sc.inventory.getItem(value)!,
-                itemName = `\\i[${item.icon + sc.inventory.getRaritySuffix(item.rarity || 0) || "item-default"}]${ig.LangLabel.getText(item.name)}`,
-                itemDesc = ig.LangLabel.getText(item.description),
-                itemLevel = item.type == sc.ITEMS_TYPES.EQUIP ? item.level || 1 : 0,
-                itemButton = new sc.ItemBoxButton(itemName, 142, 26, sc.model.player.getItemAmountWithEquip(value), value, itemDesc, void 0, void 0, void 0, void 0, itemLevel);
-            this.list.addButton(itemButton);
-        })
-        
+        for(let value of itemList) this.list.addButton(this.itemButtons[value]);
     },
 
     toggleRarityState(rarity) {
@@ -415,7 +425,7 @@ sc.ELItemSpawner.FilterButton = ig.FocusGui.extend({
     toggleTimer: 0,
     index: 0,
 
-    animTimeForToggle: 0.07,
+    animTimeForToggle: 0.035,
 
     init(index) {
         this.parent();

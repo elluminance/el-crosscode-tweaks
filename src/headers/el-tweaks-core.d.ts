@@ -71,6 +71,7 @@ declare global {
             _bgRev: sc.ButtonGroup;
             rarityButtons: ig.FocusGui[];
             itemTypeButtons: ig.FocusGui[];
+            itemButtons: sc.ItemBoxButton[];
             inputField: any;
             sortMenu: sc.SortMenu;
             sortOrderCheckbox: sc.CheckboxGui;
