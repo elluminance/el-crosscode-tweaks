@@ -38,13 +38,32 @@ declare global {
             name: string;
             condition: ig.VarCondition;
 
-            getJumpLabelName(this: this): string | null;
         }
         interface GOTO_LABEL_WHILE_CONSTRUCTOR extends ImpactClass<GOTO_LABEL_WHILE> {
             new (settings: GOTO_LABEL_WHILE.Settings): GOTO_LABEL_WHILE;
         }
         var GOTO_LABEL_WHILE: GOTO_LABEL_WHILE_CONSTRUCTOR
 
+        namespace SWITCH_CASE {
+            type CaseName = `_case_${string | number}`;
+
+            interface Settings {
+                var: string;
+                cases: {[branch: string | number]: unknown};
+                [branch: CaseName]: unknown;
+            }
+        }
+        interface SWITCH_CASE extends ActionStepBase {
+            cases: SWITCH_CASE.CaseName[];
+            branches: Record<SWITCH_CASE.CaseName, ig.ActionStepBase>;
+            var: string;
+            namesToBranches: Record<string | number, SWITCH_CASE.CaseName>;
+            hasDefault: boolean;
+        }
+        interface SWITCH_CASE_CONSTRUCTOR extends ImpactClass<SWITCH_CASE> {
+            new (settings: SWITCH_CASE.Settings): SWITCH_CASE;
+        }
+        let SWITCH_CASE: SWITCH_CASE_CONSTRUCTOR;
 
         namespace SET_ATTRIB_CURRENT_POS {
             interface Settings {

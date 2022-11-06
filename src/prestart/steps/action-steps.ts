@@ -53,6 +53,38 @@ ig.ACTION_STEP.GOTO_LABEL_WHILE = ig.ActionStepBase.extend({
     }
 })
 
+ig.ACTION_STEP.SWITCH_CASE = ig.ActionStepBase.extend({
+    cases: [],
+    var: "",
+    namesToBranches: {},
+    hasDefault: false,
+
+    init(settings) {
+        this.var = settings.var;
+        
+        for(let [name, steps] of Object.entries(settings.cases)) {
+            if(name == "_default") this.hasDefault = true;
+            let new_name: ig.ACTION_STEP.SWITCH_CASE.CaseName = `_case_${name}`;
+
+            settings[new_name] = steps;
+            this.cases.push(new_name);
+            this.namesToBranches[name] = new_name;
+        }
+    },
+    getBranchNames() {
+        return this.cases;
+    },
+    getNext() {
+        let result = ig.vars.get(this.var) as string | number;
+        
+        if(result in this.namesToBranches) {
+            return this.branches[this.namesToBranches[result]];
+        }else if(this.hasDefault) return this.branches["_case__default"];
+
+        return this._nextStep!;
+    }
+})
+
 ig.ACTION_STEP.SET_TEMP_TARGET.inject({
     init(settings) {
         this.parent(settings);
