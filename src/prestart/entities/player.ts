@@ -18,7 +18,7 @@ sc.PlayerModel.inject({
 
 ig.ENTITY.Player.inject({
     onPerfectDash(){
-        if(!this.dashPerfect && sc.options.get("el-dash-effect")){
+        if(!this.dashPerfect && !sc.newgame.get("witch-time") && sc.options.get("el-dash-effect")){
             sc.combat.showPerfectDashEffect(this)
             this.dashPerfect = true;
         }
