@@ -16,6 +16,7 @@ import "./menu/item-spawner.js"
 import "./menu/trophy.js"
 import "./menu/uncapped-stats.js"
 
+import "./misc/icons.js"
 import "./misc/mod-utils.js"
 
 import "./steps/action-steps.js"

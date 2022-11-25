@@ -5,10 +5,6 @@ sc.ARENA_SCORE_TYPES.DAMAGE_HEALED = {
     asBonus: true
 }
 
-sc.PlayerModel.inject({
-    
-})
-
 type CupList = Record<string, {order: number}>;
 
 sc.Arena.inject({
@@ -186,5 +182,13 @@ sc.ArenaChallengeEntry.inject({
                 this.global && renderer.addGfx(this.gfx, 0, 0, 146, 48, 10, 10)
             }
         } else this.parent(renderer)
+    }
+})
+
+sc.ArenaSummary.Entry.inject({
+    init(a,b,d,g,h,i,j,k) {
+        if(i) a = a.replace("\\i[times]", "\\i[timesGreen]")
+        this.parent(a,b,d,g,h,i,j,k);
+
     }
 })
