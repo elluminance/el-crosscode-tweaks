@@ -1,3 +1,5 @@
+if(!versions["cc-uncapped-stats"]) {
+
 function getDigits(value: number): number {
     return Math.floor(Math.log10(Math.abs(value))) + 1;
 }
@@ -108,14 +110,12 @@ sc.EquipStatusContainer.inject({
 sc.StatusViewMainParameters.inject({
     init() {
         this.parent();
-        this.baseParams.hp.changeValueGui.setMaxNumber(99999)
-        this.baseParams.atk.changeValueGui.setMaxNumber(9999)
-        this.baseParams.def.changeValueGui.setMaxNumber(9999)
-        this.baseParams.foc.changeValueGui.setMaxNumber(9999)
+        this.baseParams.hp.changeValueGui.setMaxNumber(99999);
+        this.baseParams.atk.changeValueGui.setMaxNumber(9999);
+        this.baseParams.def.changeValueGui.setMaxNumber(9999);
+        this.baseParams.foc.changeValueGui.setMaxNumber(9999);
     }
 })
-
-let x = 0;
 
 sc.StatusParamBar.inject({
     init(name, description, size, lineID, iconID, usePercent,  skillHidden, noPercent, longNumber) {
@@ -141,15 +141,20 @@ sc.TradeToggleStats.inject({
         this.parent();
         
         this.baseParams.hp.currentValueGui.setMaxNumber(99999);
+        this.baseParams.hp.currentValueGui.hook.pos.x += 4
+        this.baseParams.hp.arrowGui.hook.pos.x -= 2;
+        
         this.baseParams.atk.currentValueGui.setMaxNumber(9999);
-        this.baseParams.def.currentValueGui.setMaxNumber(9999);
-        this.baseParams.foc.currentValueGui.setMaxNumber(9999);
+        this.baseParams.atk.currentValueGui.hook.pos.x += 4
+        this.baseParams.atk.arrowGui.hook.pos.x -= 2;
 
-        Object.values(this.baseParams).forEach(param => {
-            param.currentValueGui.hook.pos.x += 4
-            param.percentCurrentGui && (param.percentCurrentGui.hook.pos.x -= 4);
-            param.arrowGui.hook.pos.x -= 2;
-        })
+        this.baseParams.def.currentValueGui.setMaxNumber(9999);
+        this.baseParams.def.currentValueGui.hook.pos.x += 4
+        this.baseParams.def.arrowGui.hook.pos.x -= 2;
+
+        this.baseParams.foc.currentValueGui.setMaxNumber(9999);
+        this.baseParams.foc.currentValueGui.hook.pos.x += 4
+        this.baseParams.foc.arrowGui.hook.pos.x -= 2;
     }
 })
 
@@ -164,3 +169,6 @@ sc.ItemStatusDefaultBar.inject({
         }
     }
 })
+} else {
+    console.error("EL's Tweaks provides all functionality of Uncapped Stats. Please uninstall Uncapped Stats.")
+}

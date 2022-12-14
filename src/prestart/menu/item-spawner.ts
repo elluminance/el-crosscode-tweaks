@@ -250,11 +250,10 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
 
         this.sortButton = new sc.ButtonGui(`${ig.lang.get("sc.gui.menu.item.sort-title")}: \\c[3]${ig.lang.get("sc.gui.menu.sort.item-id")}\\c[0]`, this.sortMenu.hook.size.x)
         this.sortButton.onButtonPress = () => {
-            if(!this.sortMenu.active) {
-                this.showSortMenu()
-            }
-            else {
+            if(this.sortMenu.active) {
                 this.hideSortMenu()
+            } else {
+                this.showSortMenu()
             }
         }
         this.sortButton.keepMouseFocus = true;
@@ -327,6 +326,14 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
             );
         }
 
+        this.back.onButtonPress = () => {
+            if(this.sortMenu.active) {
+                this.hideSortMenu()
+            } else {
+                this.hide();
+            }
+        }
+
         this.buttonInteract.addParallelGroup(this.filterButtongroup);
         this.buttonInteract.addParallelGroup(this.sortMenu.buttongroup)
         this.filterGui.addChildGui(this.sortMenu)
@@ -339,7 +346,6 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     onDialogCallback() {},
     
     show() {
-        //@ts-ignore
         this.parent()
         this.hook.zIndex = 15e4;
         this.doStateTransition("DEFAULT");
@@ -347,7 +353,6 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     },
     
     hide() {
-        //@ts-ignore
         this.parent()
         this.doStateTransition("HIDDEN");
     },
@@ -383,7 +388,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     update() {
         this.buttonInteract.isActive() && this.buttongroup.isActive() && (sc.control.menuScrollUp() ? this.list.list.scrollY(-20) : sc.control.menuScrollDown() && this.list.list.scrollY(20))
     },
-
+    
     _createList() {
         this._bgRev.clear();
         this.list.clear(false);

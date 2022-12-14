@@ -14,6 +14,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
   * [Arena Tweaks](#arena-tweaks)
   * [Assist Mode Changes](#assist-mode)
   * [NG+ Perks](#ng-perks)
+  * [Uncapped Stats](#uncapped-stats)
   * [Bug Fixes/Minor Additions](#bug-fixesother-miscellaneous-additions)
 * **[Additions for Modders](#for-modders)**
 &nbsp;
@@ -63,17 +64,80 @@ Makes it so you cannot wear any equipment. Can you beat the game *naked*?
 *Where to access the menu, once enabled*
 
 ![](/readme-imgs/item-spawn-menu.png)
-*The menu itself. Note that not all elements may be present depending on what mods you have installed.*
+*The menu itself. Note that not all menu elements may be present depending on what mods you have installed.*
 
 An item spawn menu, allowing you to add any item in the game to your inventory. 
 
 Item search functionality requires [CCInventorySearch](https://github.com/conorlawton/CCInventorySearch) (or any other mod adding the text input element) to be installed.
 
+## Uncapped Stats
+*Before*
+![](/readme-imgs/uncapped-stats-before.png)
+*After*
+![](/readme-imgs/uncapped-stats-after.png)
+
+Removes the visual stat cap present in many circumstances - allowing you to see what your stats really are! Allows the stat display to go up to 999999999, though it's incredibly unlikely for that limit ever to be reached.
+
+**Warning**: If the standalone [Uncapped Stats](https://github.com/EL20202/cc-uncapped-stats) is installed, the this part of the mod will not function. Please remove the standalone version if installing this mod, as the standalone version will not be updated!
+
 ## Bug Fixes/Other Miscellaneous Additions
 
-***todo***
+* **Flash Step Fix** - In vanilla, due to a bug the modifier *Flash Step* has negligible benefits to the user. This fixes said bug.
+* **Element Aura Arena Bugfix** - Fixes the element aura not refreshing properly on starting a new round.
+* **Arena Death Softlock Bugfix** - Fixes a potential softlock when restarting an arena round immediately after dying.
+
 
 ---
 # For Modders
+## Action Steps
+Many new action steps that are designed to simplify the creation of various actions - both player and enemy!
 
-***todo***
+**Note:** The examples will use comments as a way of filling in missing/"unneeded" data to illustrate how to use the action steps - though they WILL NOT work with comments in actual practice. Remember that JSON does not support comments, I'm merely using them here for demonstration purposes only.
+
+Table of Contents:
+* Flow Control:
+  * [EL_ELEMENT_IF](#el_element_if)
+  * [GOTO_LABEL_WHILE](#goto_label_while)
+  * [SWITCH_CASE](#switch_case)
+* Others
+
+### EL_ELEMENT_IF
+Allows branching based on the element of the user. Note that this has only been tested on player configs - no guarantees it will work with enemies that can change elements!
+
+*Example:*
+```json
+{
+  "type": "EL_ELEMENT_IF",
+  "neutral": [
+    /*other steps here if user is in neutral*/
+  ],
+  "heat": [
+    /*other steps here if user is in heat*/
+  ],
+  "cold": [
+    /*other steps here if user is in cold*/
+  ],
+  "shock": [
+    /*other steps here if user is in shock*/
+  ],
+  "wave": [
+    /*other steps here if user is in wave*/
+  ]
+}
+```
+
+### GOTO_LABEL_WHILE
+Jumps to a named label if a condition is met. This works the same as the event step version - there was just no action step variant is all! That is corrected by this.
+
+```json
+{
+  "type": "GOTO_LABEL_WHILE",
+  "name": "end",
+  "condition": "tmp.condition"
+},
+/*...*/
+{
+  "type": "LABEL",
+  "name": "end"
+}
+```
