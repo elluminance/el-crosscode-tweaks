@@ -124,31 +124,31 @@ sc.Arena.inject({
 
 sc.ARENA_CHALLENGE_ICONS = {
     NO_HEAT: {
-        src: "media/gui/el/elemental-arena-challenge.png",
-        x: 0,
+        src: "media/gui/el/el-tweaks-gui.png",
+        x: 112,
         y: 0,
-        tinyX: 0,
+        tinyX: 112,
         tinyY: 18
     },
     NO_COLD: {
-        src: "media/gui/el/elemental-arena-challenge.png",
-        x: 18,
+        src: "media/gui/el/el-tweaks-gui.png",
+        x: 130,
         y: 0,
-        tinyX: 10,
+        tinyX: 130,
         tinyY: 18
     },
     NO_SHOCK: {
-        src: "media/gui/el/elemental-arena-challenge.png",
-        x: 36,
+        src: "media/gui/el/el-tweaks-gui.png",
+        x: 148,
         y: 0,
-        tinyX: 20,
+        tinyX: 148,
         tinyY: 18
     },
     NO_WAVE: {
-        src: "media/gui/el/elemental-arena-challenge.png",
-        x: 54,
+        src: "media/gui/el/el-tweaks-gui.png",
+        x: 148,
         y: 0,
-        tinyX: 30,
+        tinyX: 148,
         tinyY: 18
     },
 }

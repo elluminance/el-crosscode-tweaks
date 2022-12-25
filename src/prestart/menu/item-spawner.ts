@@ -41,7 +41,7 @@ sc.SORT_TYPE.ITEM_ID = 22135;
 
 
 
-sc.ELItemSpawner = sc.ModalButtonInteract.extend({
+el.ItemSpawnerGui = sc.ModalButtonInteract.extend({
     transitions: {
         DEFAULT: {
             state: {
@@ -182,7 +182,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
                 break;
             };
             this.rarityState.other = true;
-            button = new sc.ELItemSpawner.FilterButton.Rarity(i);
+            button = new el.ItemSpawnerGui.FilterButton.Rarity(i);
             //@ts-ignore
             if(i == 7) i = "other";
             button.setPos(xOffset, yOffset);
@@ -218,7 +218,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         // accounts for the fact the button is actually 13 pixels "taller" than it appears
         yOffset += 13;
         for(let i = 0; i <= 7; i++) {
-            button = new sc.ELItemSpawner.FilterButton.ItemType(i);
+            button = new el.ItemSpawnerGui.FilterButton.ItemType(i);
             button.setPos(xOffset, yOffset);
             xOffset += button.hook.size.x - 1;
             button.onButtonPress = () => {
@@ -262,7 +262,7 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
         this.filterGui.addChildGui(this.sortButton)
         this.filterButtongroup.addFocusGui(this.sortButton);
 
-        this.sortOrderCheckbox = new sc.ELItemSpawner.SortDirectionButton(false, 30);
+        this.sortOrderCheckbox = new el.ItemSpawnerGui.SortDirectionButton(false, 30);
         this.sortOrderCheckbox.setPos(0, (this.sortButton.hook.size.y - this.sortOrderCheckbox.hook.size.y) / 2 + yOffset);
         this.sortOrderCheckbox.setAlign(ig.GUI_ALIGN.X_RIGHT, ig.GUI_ALIGN.Y_TOP)
         this.sortOrderCheckbox.data = {
@@ -423,12 +423,14 @@ sc.ELItemSpawner = sc.ModalButtonInteract.extend({
     }
 })
 
-sc.ELItemSpawner.FilterButton = ig.FocusGui.extend({
-    img: null,
+el.ItemSpawnerGui.FilterButton = ig.FocusGui.extend({
+    img: new ig.Image("media/gui/el/el-tweaks-gui.png"),
     toggled: true,
     animTimer: 0,
     toggleTimer: 0,
     index: 0,
+    offX: 0,
+    offY: 0,
 
     animTimeForToggle: 0.035,
 
@@ -470,55 +472,56 @@ sc.ELItemSpawner.FilterButton = ig.FocusGui.extend({
         if(!this.img) return;
 
         if(this.animTimer >= 0) {
-            a.addGfx(this.img, 0, 0, 42, 14, 14, 14);
+            a.addGfx(this.img, 0, 0, this.offX + 42, this.offY + 14, 14, 14);
         }else if(this.focus) {
-            a.addGfx(this.img, 0, 0, 28, 14, 14, 14);
+            a.addGfx(this.img, 0, 0, this.offX + 28, this.offY + 14, 14, 14);
         }
 
         if(this.toggleTimer >= 0) {
-            a.addGfx(this.img, 0, 0, 14, 14, 14, 14);
+            a.addGfx(this.img, 0, 0, this.offX + 14, this.offY + 14, 14, 14);
         }else if(this.toggled) {
-            a.addGfx(this.img, 0, 0, 0, 14, 14, 14);
+            a.addGfx(this.img, 0, 0, this.offX + 0, this.offY + 14, 14, 14);
         }
     }
 })
 
-sc.ELItemSpawner.FilterButton.Rarity = sc.ELItemSpawner.FilterButton.extend({
-    img: new ig.Image("media/gui/el/item-rarity-toggle.png"),
+el.ItemSpawnerGui.FilterButton.Rarity = el.ItemSpawnerGui.FilterButton.extend({
+    offX: 0,
+    offY: 28,
 
     updateDrawables(a) {
-        a.addGfx(this.img, 0, 0, this.index * 14, 0, 14, 14);
+        a.addGfx(this.img, 0, 0, this.offX + this.index * 14, this.offY + 0, 14, 14);
         this.parent(a);
     },
 })
 
-sc.ELItemSpawner.FilterButton.ItemType = sc.ELItemSpawner.FilterButton.extend({
-    img: new ig.Image("media/gui/el/item-type-toggle.png"),
+el.ItemSpawnerGui.FilterButton.ItemType = el.ItemSpawnerGui.FilterButton.extend({
     animTimeForToggle: 0.05,
+    offX: 0,
+    offY: 0,
 
     updateDrawables(a) {
         // type icon
-        a.addGfx(this.img, 0, -13, this.index * 14, 0, 14, 14);
+        a.addGfx(this.img, 0, -13, this.offX + this.index * 14, this.offY + 0, 14, 14);
         // checkbox border
-        a.addGfx(this.img, 0, 0, 56, 14, 14, 14);
+        a.addGfx(this.img, 0, 0, this.offX + 56, this.offY + 14, 14, 14);
 
         this.parent(a)
     }
 })
 
-sc.ELItemSpawner.SortDirectionButton = sc.CheckboxGui.extend({
-    altGfx: new ig.Image("media/gui/el/sort-direction.png"),
+el.ItemSpawnerGui.SortDirectionButton = sc.CheckboxGui.extend({
+    altGfx: new ig.Image("media/gui/el/el-tweaks-gui.png"),
 
     init(initialState, d, c) {
         this.parent(initialState, d, c);
-        this.hookGui.setImage(this.altGfx, initialState ? 20 : 0, 0, 20, 20)
+        this.hookGui.setImage(this.altGfx, initialState ? 20 : 0, 56, 20, 20)
     },
 
     setPressed(a) {
-        //@ts-ignore
         this.parent(a);
         this.hookGui.offsetX = a ? 20 : 0;
-        this.hookGui.offsetY = 0;
+        this.hookGui.offsetY = 56;
     }
 })
 
@@ -543,7 +546,7 @@ sc.ItemMenu.inject({
             }
         };
         this.hotkeySpawnItems.onButtonPress = () => {
-            let gui = new sc.ELItemSpawner;
+            let gui = new el.ItemSpawnerGui;
             gui.hook.pauseGui = true;
             gui.show();
             ig.gui.addGuiElement(gui);

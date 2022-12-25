@@ -5,7 +5,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 
 ***Note: Support will not be provided unless you are using the [latest release](https://github.com/EL20202/el-crosscode-tweaks/releases/latest).***
 
-*Readme is accurate up to version 0.5.4. See changelog for more details.*
+*Readme is guaranteed accurate up to version 0.5.6. See changelog for more details.*
 
 &nbsp;
 
@@ -17,6 +17,8 @@ Contains additions/fixes that are helpful to both normal players and modders ali
   * [Uncapped Stats](#uncapped-stats)
   * [Bug Fixes/Minor Additions](#bug-fixesother-miscellaneous-additions)
 * **[Additions for Modders](#for-modders)**
+  * [Action Steps](#action-steps)
+  * [Color Picker](#color-picker)
 &nbsp;
 
 &nbsp;
@@ -64,7 +66,7 @@ Makes it so you cannot wear any equipment. Can you beat the game *naked*?
 *Where to access the menu, once enabled*
 
 ![](/readme-imgs/item-spawn-menu.png)
-*The menu itself. Note that not all menu elements may be present depending on what mods you have installed.*
+*The menu itself. Note that not all menu elements may be present depending on what other mods you have installed.*
 
 An item spawn menu, allowing you to add any item in the game to your inventory. 
 
@@ -72,8 +74,11 @@ Item search functionality requires [CCInventorySearch](https://github.com/conorl
 
 ## Uncapped Stats
 *Before*
+
 ![](/readme-imgs/uncapped-stats-before.png)
+
 *After*
+
 ![](/readme-imgs/uncapped-stats-after.png)
 
 Removes the visual stat cap present in many circumstances - allowing you to see what your stats really are! Allows the stat display to go up to 999999999, though it's incredibly unlikely for that limit ever to be reached.
@@ -105,7 +110,7 @@ Table of Contents:
 Allows branching based on the element of the user. Note that this has only been tested on player configs - no guarantees it will work with enemies that can change elements!
 
 *Example:*
-```json
+```jsonc
 {
   "type": "EL_ELEMENT_IF",
   "neutral": [
@@ -129,7 +134,7 @@ Allows branching based on the element of the user. Note that this has only been 
 ### GOTO_LABEL_WHILE
 Jumps to a named label if a condition is met. This works the same as the event step version - there was just no action step variant is all! That is corrected by this.
 
-```json
+```jsonc
 {
   "type": "GOTO_LABEL_WHILE",
   "name": "end",
@@ -141,3 +146,21 @@ Jumps to a named label if a condition is met. This works the same as the event s
   "name": "end"
 }
 ```
+
+## Color Picker
+![](./readme-imgs/color-picker.png)
+
+Adds a simple color picker for whatever color-picking needs you want. Originally just made to allow customizing an aura's color, but I thought - you never know, someone else might need one too!
+
+To open up the color picker through an event - simply have the below event step in some relevant event:
+```jsonc
+{
+  "type": "OPEN_EL_COLOR_PICKER",
+  "varPath": "el.colors.test",
+  "title": {
+      "en_US": "Color Picker"
+  }
+}
+```
+The `title` will be a langlabel of the gui popup, and if left blank it will default to just "Color Picker". `varPath` dictates which variable the color will be stored, and the variable will look something like this: `{"red": 243, "green": 143, "blue": 6, "colorString": "#F38F06"}`. All color components will be in the range of 0-255, inclusive.
+

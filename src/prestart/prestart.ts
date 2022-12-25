@@ -10,6 +10,7 @@ import "./game/map-model.js"
 import "./game/new-game-plus.js"
 import "./game/player-config.js"
 import "./game/shop.js"
+import "./game/stats.js"
 
 import "./menu/color-picker.js"
 import "./menu/item-spawner.js"

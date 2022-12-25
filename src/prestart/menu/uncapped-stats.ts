@@ -79,7 +79,7 @@ sc.ParamHudGui.inject({
 })
 
 sc.HpHudGui.inject({
-    uncappedHpBar: new ig.Image("media/gui/el/hp-bar.png"),
+    uncappedHpBar: new ig.Image("media/gui/el/el-tweaks-gui.png"),
 
     init(b) {
         this.parent(b);
@@ -87,7 +87,7 @@ sc.HpHudGui.inject({
         this.hpNumber.setPos(7, 1)
     },
     updateDrawables(b) {
-        b.addGfx(this.uncappedHpBar, 0, 0, 0, 0, this.hook.size.x, this.hook.size.y)
+        b.addGfx(this.uncappedHpBar, 0, 0, 40, 56, this.hook.size.x, this.hook.size.y)
     }
 })
 
