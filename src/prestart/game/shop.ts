@@ -42,10 +42,10 @@ sc.ShopMenu.inject({
             sc.menu.customCurrency.sub(sc.menu.getTotalCost())
 
             let value = 0;
-            sc.menu.shopCart.forEach(element => {
+            for(let element of sc.menu.shopCart) {
                 value += element.amount;
                 sc.model.player.addItem(element.id, element.amount, true)
-            })
+            }
             sc.stats.addMap("items", "buy", value)
             return false
         } else return this.parent()
@@ -55,11 +55,11 @@ sc.ShopMenu.inject({
         if (sc.menu.customCurrency) {
             sc.menu.customCurrency.add(sc.menu.getTotalCost());
             let c = false, value = 0;
-            sc.menu.shopCart.forEach(element => {
+            for(let element of sc.menu.shopCart) {
                 value += element.amount
                 sc.model.player.removeItem(element.id, element.amount);
                 sc.model.player.getItemAmount(element.id) <= 0 && !c && (c = true)
-            })
+            }
             sc.stats.addMap("items", "sell", value);
 
             return c

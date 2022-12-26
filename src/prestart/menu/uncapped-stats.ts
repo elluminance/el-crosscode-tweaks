@@ -95,15 +95,20 @@ sc.EquipStatusContainer.inject({
     init() {
         this.parent();
         this.baseParams.hp.currentValueGui.setMaxNumber(99999);
-        this.baseParams.atk.currentValueGui.setMaxNumber(9999);
-        this.baseParams.def.currentValueGui.setMaxNumber(9999);
-        this.baseParams.foc.currentValueGui.setMaxNumber(9999);
+        this.baseParams.hp.currentValueGui.hook.pos.x -= 4;
+        this.baseParams.hp.arrowGui.hook.pos.x -= 2;
+        
+        this.baseParams.atk.currentValueGui.setMaxNumber(99999);
+        this.baseParams.atk.currentValueGui.hook.pos.x -= 4;
+        this.baseParams.atk.arrowGui.hook.pos.x -= 2;
 
-        Object.values(this.baseParams).forEach(param => {
-            param.currentValueGui.hook.pos.x -= 4
-            param.percentCurrentGui && (param.percentCurrentGui.hook.pos.x -= 4);
-            param.arrowGui.hook.pos.x -= 2;
-        })
+        this.baseParams.def.currentValueGui.setMaxNumber(99999);
+        this.baseParams.def.currentValueGui.hook.pos.x -= 4;
+        this.baseParams.def.arrowGui.hook.pos.x -= 2;
+
+        this.baseParams.foc.currentValueGui.setMaxNumber(99999);
+        this.baseParams.foc.currentValueGui.hook.pos.x -= 4;
+        this.baseParams.foc.arrowGui.hook.pos.x -= 2;
     }
 })
 

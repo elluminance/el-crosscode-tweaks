@@ -28,7 +28,7 @@ sc.MapModel.inject({
         if(!this.extraChests[area]) return 0;
         let count = 0;
 
-        this.extraChests[area].forEach(key => void(count += ig.vars.get(key) ? 1 : 0))
+        for(let key of this.extraChests[area]) count += ig.vars.get(key) ? 1 : 0;
 
         return count;
     },
@@ -41,14 +41,15 @@ sc.MapModel.inject({
     // returns the total amount of modded chests that have been found
     getTotalExtraFoundChests() {
         let count = 0;
-        Object.keys(this.extraChests).forEach(area => {count += this.getExtraFoundChests(area)})
+        for(let area of Object.keys(this.extraChests)) count += this.getExtraFoundChests(area);
+
         return count;
     },
 
     // returns the total number of modded chests overall
     getTotalExtraChests(){
         let count = 0;
-        Object.values(this.extraChests).forEach(areaChests => void(count += areaChests.length))
+        for(let areaChests of Object.values(this.extraChests)) count += areaChests.length;
         return count;
     },
 

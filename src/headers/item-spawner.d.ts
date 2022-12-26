@@ -1,3 +1,5 @@
+import "./other-mods"
+
 export {};
 
 declare global {
@@ -19,7 +21,7 @@ declare global {
             rarityButtons: ig.FocusGui[];
             itemTypeButtons: ig.FocusGui[];
             itemButtons: sc.ItemBoxButton[];
-            inputField: any;
+            inputField?: ig.GuiTextInputField;
             sortMenu: sc.SortMenu;
             sortOrderCheckbox: sc.CheckboxGui;
             reversedSort: boolean;

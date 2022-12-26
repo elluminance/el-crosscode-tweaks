@@ -74,15 +74,15 @@ sc.Arena.inject({
     getTotalArenaCompletion(){
         var a: number, b: number;
         a = b = 0;
-        this.trackedCups.forEach(cupName => {a += this.getCupCompletion(cupName); b++;})
+        for(let cupName of this.trackedCups) {a += this.getCupCompletion(cupName); b++;}
         return a / b;
     },
 
     getTotalDefaultTrophies: function(a, c) {
         var d = 0, e = 0;
-        this.trackedCups.forEach((f: string) => {
-            var g = this.getCupTrophy(f);
-            if (this.isCupUnlocked(f))
+        for(let cup of this.trackedCups) {
+            var g = this.getCupTrophy(cup);
+            if (this.isCupUnlocked(cup))
                 if (a == 0) {
                     d += g;
                     e += 5
@@ -90,13 +90,13 @@ sc.Arena.inject({
                     g >= a && d++;
                     e++
                 }
-        })
+        }
         return c ? e : d
     },
 
     getTotalDefaultCups(sorted){
         let cups: CupList = {};
-        this.trackedCups.forEach(key => {
+        for(let key of this.trackedCups) {
             /* 
              * if the cup is not loaded, skip it.
              * prevents bug where it would show stats for
@@ -107,14 +107,13 @@ sc.Arena.inject({
                 if(this.isCupCustom(key)) order += 1e7;
                 cups[key] = {order}
             }
-        })
+        }
+
         if(sorted){
             let sortedCups: CupList = {}
-            Object.keys(cups)
-            .sort((a, b) => (cups[a].order - cups[b].order))
-            .forEach(key => {
+            for(let key of Object.keys(cups).sort((a, b) => (cups[a].order - cups[b].order))) {
                 if(this.isCupUnlocked(key) && cups[key]) sortedCups[key] = cups[key];
-            })
+            }
             
             return sortedCups;
         }

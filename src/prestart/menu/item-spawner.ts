@@ -23,19 +23,6 @@ function itemTypeToIndex(item: sc.Inventory.Item) {
     }
 }
 
-declare namespace ig {
-    namespace GuiTextInputField {
-        interface InputFieldType {}
-    }
-    interface GuiTextInputField extends ig.FocusGui {
-        
-    }
-    interface GuiTextInputFieldConstructor extends ImpactClass<GuiTextInputField> {
-        new (width: number, height: number, inputField_type?: GuiTextInputField.InputFieldType): ig.GuiTextInputField
-    }
-    var GuiTextInputField: GuiTextInputFieldConstructor
-}
-
 //@ts-expect-error
 sc.SORT_TYPE.ITEM_ID = 22135;
 
@@ -153,7 +140,7 @@ el.ItemSpawnerGui = sc.ModalButtonInteract.extend({
             yOffset += 3;
 
             this.inputField = new ig.GuiTextInputField(lineWidth, 20);
-            this.inputField.onCharacterInput = () => {
+            this.inputField!.onCharacterInput = () => {
                 this._createList();
             }
             
@@ -394,12 +381,13 @@ el.ItemSpawnerGui = sc.ModalButtonInteract.extend({
         this.list.clear(false);
 
         let itemList = [];
+        let query = this.inputField?.getValueAsString().toLowerCase();
         for(let i = 0; i < sc.inventory.items.length; i++) {
             let item = sc.inventory.items[i];
             let rarity = ([0,1,2,3,4,5,6].includes(item.rarity)) ? item.rarity as number : 'other' 
             if(!this.rarityState[rarity as any as number]) continue;
             if(!this.itemTypeState[itemTypeToIndex(item)]) continue;
-            if(this.searchActive && !ig.LangLabel.getText(item.name).toLowerCase().includes(this.inputField.getValueAsString().toLowerCase())) continue;
+            if(this.searchActive && !ig.LangLabel.getText(item.name).toLowerCase().includes(query!)) continue;
             itemList.push(i);
         }
         

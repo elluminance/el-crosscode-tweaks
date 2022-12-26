@@ -30,7 +30,7 @@ el.ModalColorPicker = sc.ModalButtonInteract.extend({
             null,
             [ig.lang.get("sc.gui.menu.colorPicker.exit")],
             () => {
-                if(this.varPath) ig.vars.set(this.varPath, this.colors as any);
+                if(this.varPath) ig.vars.set(this.varPath, this.colors);
                 callback?.();
             }
         )
@@ -40,7 +40,7 @@ el.ModalColorPicker = sc.ModalButtonInteract.extend({
         let maxValue = use255 ? 255 : 15;
 
         this.varPath = varPath;
-        let storedColors: el.ModalColorPicker.Color = ig.vars.get(this.varPath) as any;
+        let storedColors: el.ModalColorPicker.Color = ig.vars.get(this.varPath);
         //ensure that the values are set properly
         this.colors = storedColors ?? {
             red: maxValue,
@@ -51,7 +51,7 @@ el.ModalColorPicker = sc.ModalButtonInteract.extend({
         };
 
         if(!storedColors) {
-            varPath && ig.vars.set(varPath, this.colors as any)
+            varPath && ig.vars.set(varPath, this.colors)
         }
         
         //assume it's an old style color if this is missing

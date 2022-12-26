@@ -22,20 +22,20 @@ window.cmd = {
      * every time you make one little change.
      */
     reloadPlayerConfigs(reloadEffects = true) {
-        Object.values(sc.party.models).forEach(value => {
-            value.config.debugReload = true;
-            value.config.reload();
-        })
+        for(let member of Object.values(sc.party.models)) {
+            member.config.debugReload = true;
+            member.config.reload();
+        }
 
         if(reloadEffects) this.reloadEffectSheets();
     },
     reloadEffectSheets() {
-        Object.values(ig.EffectSheet.cache).forEach(sheet => {
+        for(let sheet of Object.values(ig.EffectSheet.cache)) {
             //sometimes has errors so i'll just... ignore them. :)
             try {
                 sheet.reload()
             } catch {};
-        })
+        }
     },
     reloadEnemyType(enemyName: string, reloadEffects: boolean = true) {
         let enemyType = sc.EnemyType.cache[enemyName];
