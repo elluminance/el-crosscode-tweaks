@@ -26,12 +26,12 @@ ig.ENTITY.Player.inject({
     },
 
     handleStateStart(playerState, inputState) {
-        if (playerState.startState == 3 && !this.model.getAction(sc.PLAYER_ACTION.ATTACK)) this.attackCounter = 3
+        if (playerState.startState === 3 && !this.model.getAction(sc.PLAYER_ACTION.ATTACK)) this.attackCounter = 3
         this.parent(playerState, inputState)
     },
     
     onPreDamageModification(a, b, c, d, e, shieldResult) {
-        if (shieldResult == sc.SHIELD_RESULT.PERFECT && sc.newgame.get("guard-perfectionist")) {
+        if (shieldResult === sc.SHIELD_RESULT.PERFECT && sc.newgame.get("guard-perfectionist")) {
             this.perfectGuardCooldown = 0;
             for (let index = this.shieldsConnections.length; index--;) this.shieldsConnections[index].resetPerfectGuardTime()
         }

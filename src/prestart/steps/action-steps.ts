@@ -63,7 +63,7 @@ ig.ACTION_STEP.SWITCH_CASE = ig.ActionStepBase.extend({
         this.var = settings.var;
         
         for(let [name, steps] of Object.entries(settings.cases)) {
-            if(name == "_default") this.hasDefault = true;
+            if(name === "_default") this.hasDefault = true;
             let new_name: ig.ACTION_STEP.SWITCH_CASE.CaseName = `_case_${name}`;
 
             settings[new_name] = steps;
@@ -89,7 +89,7 @@ ig.ACTION_STEP.SET_TEMP_TARGET.inject({
     init(settings) {
         this.parent(settings);
         //@ts-expect-error
-        if (settings.kind == "LAST_HIT") {
+        if (settings.kind === "LAST_HIT") {
             this.kind = function (combatant) {
                 return combatant.combo.hitCombatants.last();
             }
@@ -120,7 +120,7 @@ ig.ACTION_STEP.SET_CLOSE_TEMP_TARGET.inject({
     init(settings) {
         this.parent(settings);
 
-        if(settings.searchType == "CUSTOM" && settings.customSearchType) {
+        if(settings.searchType === "CUSTOM" && settings.customSearchType) {
             this.searchType = settings.customSearchType;
         }
     }

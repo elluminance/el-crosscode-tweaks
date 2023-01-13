@@ -91,7 +91,7 @@ sc.ShopCart.inject({
         let currency = sc.menu.customCurrency;
         if (currency) {
             var a = (b as unknown as number) || 0;
-            if (b == undefined) {
+            if (b === undefined) {
                 for (let cart = sc.menu.shopCart, d = cart.length; d--;) a = a + cart[d].price * cart[d].amount;
                 this.value.setNumber(-a)
             }
@@ -111,7 +111,7 @@ sc.ShopCart.inject({
                 this.rest.number.setColor(sc.GUI_NUMBER_COLOR.RED);
                 this.checkout.setActive(false)
             } else {
-                sc.menu.shopCart.length == 0 ? this.checkout.setActive(false) : this.enabled && this.checkout.setActive(true);
+                sc.menu.shopCart.length === 0 ? this.checkout.setActive(false) : this.enabled && this.checkout.setActive(true);
                 this.rest.number.setColor(sc.GUI_NUMBER_COLOR.WHITE)
             }
         } else this.parent(b)
@@ -169,7 +169,7 @@ sc.ShopListMenu.inject({
                 item = sc.inventory.getItem(itemID)!;
                 itemAmount = sc.model.player.getItemAmountWithEquip(itemID);
                 itemEquipLevel = 0;
-                item.type == sc.ITEMS_TYPES.EQUIP && (itemEquipLevel = item.level || 1);
+                item.type === sc.ITEMS_TYPES.EQUIP && (itemEquipLevel = item.level || 1);
 
                 itemCost = Math.floor(b[k].price || (item.cost / (sc.menu.shopSellMode ? 2 : 1)));
                 itemQuantity = sc.menu.getItemQuantity(itemID, itemCost);
@@ -178,7 +178,7 @@ sc.ShopListMenu.inject({
                 button = new sc.ShopItemButton(itemName, itemID, itemDesc, itemAmount, itemCost, itemEquipLevel);
                 itemQuantity >= 0 && button.setCountNumber(itemQuantity, true);
                 let maxOwn = b[k].maxOwn ?? ig.database.get("shops")[sc.menu.shopID!].maxOwn;
-                if (!sc.menu.shopSellMode && (maxOwn != undefined)) {
+                if (!sc.menu.shopSellMode && (maxOwn !== undefined)) {
                     c = sc.stats.getMap("items", itemID as string)
                     maxVal = (button.data as any).maxOwn = b[k].maxOwn!;
                 } else maxVal = 99;
@@ -222,11 +222,11 @@ sc.ShopListMenu.inject({
                 e = a.price,
                 itemsInCart = sc.menu.getItemQuantity(c, e),
                 buyableItems = sc.ShopHelper.getMaxBuyable(c, itemsInCart, e, (a.data as any).maxOwn || ig.database.get("shops")[sc.menu.shopID!].maxOwn || 99);
-            if (!(itemsInCart == 0 && changeValue == -1) && !(itemsInCart == buyableItems && changeValue == 1)) {
+            if (!(itemsInCart === 0 && changeValue === -1) && !(itemsInCart === buyableItems && changeValue === 1)) {
                 changeValue = Math.min(changeValue, buyableItems) as -1 | 1
                 this.playSound(changeValue, true);
                 sc.menu.updateCart(c, itemsInCart + changeValue, e);
-                a.setCountNumber(itemsInCart + changeValue, itemsInCart == 0);
+                a.setCountNumber(itemsInCart + changeValue, itemsInCart === 0);
                 this.updateListEntries()
 
             }

@@ -84,7 +84,7 @@ sc.MapWorldMap.inject({
 
         totalChests += sc.map.getExtraAreaChests(a.key)
 
-        if (totalChests != 0) {
+        if (totalChests !== 0) {
             chestString = chestCount >= totalChests ? ` \\c[3][${chestCount}/${totalChests}]\\c[0]` : ` [${chestCount}/${totalChests}]`
         }
         this.areaName.setText(ig.LangLabel.getText(area.name) + chestString);

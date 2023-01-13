@@ -22,7 +22,7 @@ sc.Arena.inject({
 
     addScore(scoreType, points) {
         this.parent(scoreType, points)
-        if(scoreType == "DAMAGE_TAKEN"){
+        if(scoreType === "DAMAGE_TAKEN"){
             // the points "added" upon damage taken will always be a negative value
             // also accounts for the fact that PVP battles will not account for the 
             this.damageToHeal -= points! * (this.hasChallenge("PVP_BATTLE") ? 0.6 : 1);
@@ -83,7 +83,7 @@ sc.Arena.inject({
         for(let cup of this.trackedCups) {
             var g = this.getCupTrophy(cup);
             if (this.isCupUnlocked(cup))
-                if (a == 0) {
+                if (a === 0) {
                     d += g;
                     e += 5
                 } else {
@@ -163,7 +163,7 @@ sc.ArenaChallengeEntry.inject({
     init(challengeName, width, tiny, global) {
         this.parent(challengeName, width, tiny, global);
 
-        if(typeof this.icon == "string") {
+        if(typeof this.icon === "string") {
             let iconSrc = sc.ARENA_CHALLENGE_ICONS[this.icon].src;
             iconSrc && (this.altGfx = new ig.Image(iconSrc))
         }
@@ -171,7 +171,7 @@ sc.ArenaChallengeEntry.inject({
 
     updateDrawables(renderer) {
         let icon: sc.ArenaChallengeIcon | undefined;
-        if(typeof this.icon == "string") icon = sc.ARENA_CHALLENGE_ICONS[this.icon];
+        if(typeof this.icon === "string") icon = sc.ARENA_CHALLENGE_ICONS[this.icon];
         if(icon) {
             if(!this.tiny) {
                 renderer.addGfx(this.altGfx, 0, 0, icon.x, icon.y, 18, 18)

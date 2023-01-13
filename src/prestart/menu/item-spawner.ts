@@ -164,14 +164,14 @@ el.ItemSpawnerGui = sc.ModalButtonInteract.extend({
         let xOffset = 0,
             button;
         for(let i: number = 0; i <= 7; i++) {
-            if(i == 7 && !sc.inventory.items.some(({rarity}) => ![0,1,2,3,4,5,6].includes(rarity))) {
+            if(i === 7 && !sc.inventory.items.some(({rarity}) => ![0,1,2,3,4,5,6].includes(rarity))) {
                 this.rarityState.other = false;
                 break;
             };
             this.rarityState.other = true;
             button = new el.ItemSpawnerGui.FilterButton.Rarity(i);
             //@ts-ignore
-            if(i == 7) i = "other";
+            if(i === 7) i = "other";
             button.setPos(xOffset, yOffset);
             xOffset += button.hook.size.x;
             button.data = {
@@ -301,7 +301,7 @@ el.ItemSpawnerGui = sc.ModalButtonInteract.extend({
             let item = sc.inventory.getItem(i)!,
                 itemName = `\\i[${item.icon + sc.inventory.getRaritySuffix(item.rarity || 0) || "item-default"}]${ig.LangLabel.getText(item.name)}`,
                 itemDesc = ig.LangLabel.getText(item.description),
-                itemLevel = item.type == sc.ITEMS_TYPES.EQUIP ? item.level || 1 : 0;
+                itemLevel = item.type === sc.ITEMS_TYPES.EQUIP ? item.level || 1 : 0;
 
             this.itemButtons[i] = new sc.ItemBoxButton(
                 itemName, // item name
@@ -391,7 +391,7 @@ el.ItemSpawnerGui = sc.ModalButtonInteract.extend({
             itemList.push(i);
         }
         
-        this.sortType != sc.SORT_TYPE.ITEM_ID && sc.model.player.sortItemList(itemList, this.sortType)
+        this.sortType !== sc.SORT_TYPE.ITEM_ID && sc.model.player.sortItemList(itemList, this.sortType)
 
         this.reversedSort && itemList.reverse();
 

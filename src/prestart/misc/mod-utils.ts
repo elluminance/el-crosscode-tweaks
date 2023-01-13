@@ -10,7 +10,7 @@ sc.modUtils = {
                 case "version":
                     return versions[b[1]]
                 case "name":
-                    let mod = activeMods.find(mod => mod.name == b[1]);
+                    let mod = activeMods.find(mod => mod.name === b[1]);
                     return mod && (mod.displayName || mod.name)
             }
         }

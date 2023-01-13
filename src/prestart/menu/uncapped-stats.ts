@@ -46,25 +46,25 @@ sc.ParamHudGui.inject({
             this.updateTimer = 0.01;
 
             let xOffset = this.hp.hook.pos.x;
-            if(this.hp.hook.size.x != this.targetSizes.hp) {
+            if(this.hp.hook.size.x !== this.targetSizes.hp) {
                 this.hp.hook.size.x = this.hp.hook.size.x + ((2).limit(0, Math.abs(this.hp.hook.size.x - this.targetSizes.hp)) * (this.hp.hook.size.x < this.targetSizes.hp ? 1 : -1))
             }
             xOffset += this.hp.hook.size.x - 14;
 
             this.atk.hook.pos.x = xOffset;
-            if(this.atk.hook.size.x != this.targetSizes.atk) {
+            if(this.atk.hook.size.x !== this.targetSizes.atk) {
                 this.atk.hook.size.x = this.atk.hook.size.x + ((2).limit(0, Math.abs(this.atk.hook.size.x - this.targetSizes.atk)) * (this.atk.hook.size.x < this.targetSizes.atk ? 1 : -1))
             }
             xOffset += this.atk.hook.size.x - 14;
 
             this.def.hook.pos.x = xOffset;
-            if(this.def.hook.size.x != this.targetSizes.def) {
+            if(this.def.hook.size.x !== this.targetSizes.def) {
                 this.def.hook.size.x = this.def.hook.size.x + ((2).limit(0, Math.abs(this.def.hook.size.x - this.targetSizes.def)) * (this.def.hook.size.x < this.targetSizes.def ? 1 : -1))
             }
             xOffset += this.def.hook.size.x - 14;
 
             this.foc.hook.pos.x = xOffset;
-            if(this.foc.hook.size.x != this.targetSizes.foc) {
+            if(this.foc.hook.size.x !== this.targetSizes.foc) {
                 this.foc.hook.size.x = this.foc.hook.size.x + ((2).limit(0, Math.abs(this.foc.hook.size.x - this.targetSizes.foc)) * (this.foc.hook.size.x < this.targetSizes.foc ? 1 : -1))
             }
             xOffset += this.foc.hook.size.x - 14;
@@ -72,7 +72,7 @@ sc.ParamHudGui.inject({
     },
 
     modelChanged(model, message) {
-        if(model == sc.model.player.params && message == sc.COMBAT_PARAM_MSG.STATS_CHANGED) {
+        if(model === sc.model.player.params && message === sc.COMBAT_PARAM_MSG.STATS_CHANGED) {
             this.updateParamHud()
         }
     }
@@ -167,7 +167,7 @@ sc.ItemStatusDefaultBar.inject({
     init(text, type, buff, width, barHeight, position) {
         this.parent(text, type, buff, width, barHeight, position);
 
-        if(this.type == sc.MENU_BAR_TYPE.HP) {
+        if(this.type === sc.MENU_BAR_TYPE.HP) {
             this.maxNumber.setMaxNumber(99999)
             this.maxNumber.hook.pos.x -= 4;
             this.currentNumber.setMaxNumber(99999)
