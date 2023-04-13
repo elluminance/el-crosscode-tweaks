@@ -50,6 +50,16 @@
                 "description": "Adds in an item spawn menu to the inventory. \\c[1][Cheat]\\c[0]"
             },
 
+            "el-uncapped-stats-enable": {
+                "name": "Uncapped Stats",
+                "description": "Allows stat displays to go beyond their original visual cap."
+            },
+
+            "el-uncapped-stats-extra-digits": {
+                "name": "\\c[3][US]\\c[0] Additional Digits",
+                "description": "If Uncapped Stats is enabled, show this many more digits in the HUD."
+            },
+
             "controls":{
                 "keys": {
                     "walk": "Walk",

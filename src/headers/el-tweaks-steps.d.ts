@@ -85,4 +85,19 @@ declare global {
             }
         }
     }
+
+    namespace ig.EFFECT_ENTRY {
+        namespace SET_SHADOW  {
+            type Settings = ig.ACTION_STEP.SET_SHADOW.Settings ;
+        }
+        interface SET_SHADOW extends ig.EffectStepBase {
+            size: number;
+            shadowType: ig.COLL_SHADOW_TYPE;
+            shadowScaleY: number;
+        }
+        interface SET_SHADOW_CONSTRUCTOR extends ImpactClass<SET_SHADOW> {
+            new (settings: SET_SHADOW.Settings): SET_SHADOW;
+        }
+        let SET_SHADOW: SET_SHADOW_CONSTRUCTOR
+    }
 }

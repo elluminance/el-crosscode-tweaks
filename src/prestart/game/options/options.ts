@@ -8,6 +8,15 @@ sc.ASSIST_TIMING_WINDOW = {
     HIGH4: 2
 };
 
+el.UNCAPPED_STAT_DIGITS = {
+    DIGITS1: 1,
+    DIGITS2: 2,
+    DIGITS3: 3,
+    DIGITS4: 4,
+    DIGITS5: 5,
+    DIGITS6: 6,
+}
+
 // a tiny bit hacky, but hey, it works!
 let options: {[key: string]: sc.OptionDefinition} = {};
 
@@ -60,6 +69,24 @@ for(let [key, value] of Object.entries(sc.OPTIONS_DEFINITION)) {
                 type: "CHECKBOX",
                 init: false,
                 cat: sc.OPTION_CATEGORY.GENERAL,
+                hasDivider: false,
+                header: "el-tweaks"
+            }
+
+            options["el-uncapped-stats-enable"] = {
+                type: "CHECKBOX",
+                init: true,
+                cat: sc.OPTION_CATEGORY.GENERAL,
+                hasDivider: false,
+                header: "el-tweaks"
+            }
+            options["el-uncapped-stats-extra-digits"] = {
+                type: "OBJECT_SLIDER",
+                data: el.UNCAPPED_STAT_DIGITS,
+                init: el.UNCAPPED_STAT_DIGITS.DIGITS_4,
+                cat: sc.OPTION_CATEGORY.GENERAL,
+                fill: true,
+                showPercentage: false,
                 hasDivider: false,
                 header: "el-tweaks"
             }

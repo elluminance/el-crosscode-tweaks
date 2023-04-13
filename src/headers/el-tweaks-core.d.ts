@@ -41,11 +41,14 @@ declare global {
 
         namespace OPTIONS_DEFINITION {
             interface KnownTypesMap {
-                "assist-timing-window": sc.OptionDefinition.OBJECT_SLIDER
-                "el-flash-step-fix": sc.OptionDefinition.CHECKBOX
-                "el-dash-effect": sc.OptionDefinition.CHECKBOX
-                "el-arena-hp-bonus": sc.OptionDefinition.CHECKBOX
-                "el-arena-item-restore": sc.OptionDefinition.CHECKBOX
+                "assist-timing-window": sc.OptionDefinition.OBJECT_SLIDER;
+                "el-flash-step-fix": sc.OptionDefinition.CHECKBOX;
+                "el-dash-effect": sc.OptionDefinition.CHECKBOX;
+                "el-arena-hp-bonus": sc.OptionDefinition.CHECKBOX;
+                "el-arena-item-restore": sc.OptionDefinition.CHECKBOX;
+                
+                "el-uncapped-stats-enable": sc.OptionDefinition.CHECKBOX;
+                "el-uncapped-stats-extra-digits": sc.OptionDefinition.OBJECT_SLIDER;
             }
         }
 
@@ -64,9 +67,11 @@ declare global {
                 atk: number;
                 def: number;
                 foc: number;
+
+                skip: boolean;
             },
             updateTimer: number;
-            updateParamHud(this: this): void;
+            updateParamHud(this: this, skip?: boolean): void;
         }
 
         interface HpHudGui {
@@ -109,6 +114,10 @@ declare global {
         }
 
 
+    }
+
+    namespace el {
+        let UNCAPPED_STAT_DIGITS: Record<string, number>;
     }
 
     interface Window {
