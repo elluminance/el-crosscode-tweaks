@@ -58,9 +58,7 @@ window.cmd = {
         
         pos ??= {...ig.game.playerEntity.coll.pos}
 
-        //when an enemy is first loading, the size information isn't immediately available.
-        //so to "counter" this - simply delay execution if size isn't defined.
-        setTimeout(() => {            
+        enemyInfo.enemyType.load(() => {
             pos!.x -=  enemyInfo.enemyType.size.x / 2;
             pos!.y -=  enemyInfo.enemyType.size.y / 2;
     
@@ -70,6 +68,14 @@ window.cmd = {
                 {enemyInfo: enemyInfo.getSettings()},
                 true
             )
-        }, enemyInfo.enemyType.size ? 0 : 50);
+        })
     },
+
+    reloadMap() {
+        let teleportPos = new ig.TeleportPosition();
+        let {pos, level, baseZPos, size} = ig.game.playerEntity.coll;
+        let {face} = ig.game.playerEntity;
+        teleportPos.setFromData(null, pos, face, level, baseZPos, size);
+        ig.game.teleport(ig.game.mapName, teleportPos)
+    }
 }
