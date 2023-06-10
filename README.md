@@ -5,7 +5,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 
 ***Note: Support will not be provided unless you are using the [latest release](https://github.com/EL20202/el-crosscode-tweaks/releases/latest).***
 
-*Readme is guaranteed accurate up to version 0.5.6. See changelog for more details.*
+*Readme is guaranteed accurate up to version 0.5.7. See changelog for more details.*
 
 &nbsp;
 
@@ -87,9 +87,9 @@ Removes the visual stat cap present in many circumstances - allowing you to see 
 
 ## Bug Fixes/Other Miscellaneous Additions
 
-* **Flash Step Fix** - In vanilla, due to a bug the modifier *Flash Step* has negligible benefits to the user. This fixes said bug.
-* **Element Aura Arena Bugfix** - Fixes the element aura not refreshing properly on starting a new round.
-* **Arena Death Softlock Bugfix** - Fixes a potential softlock when restarting an arena round immediately after dying.
+* **Flash Step Fix**: Prior to CrossCode version 1.4.2-3, the modifier *Flash Step* had neglible effect on dash invincibility. This mod offers a fix to those who are playing older versions.
+* **Element Aura Arena Bugfix**: Fixes the element aura not refreshing properly on starting a new round.
+* **Arena Death Softlock Bugfix**: Fixes a potential softlock when restarting an arena round immediately after dying.
 
 
 ---

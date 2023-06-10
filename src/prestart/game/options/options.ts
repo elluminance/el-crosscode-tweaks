@@ -37,18 +37,21 @@ for(let [key, value] of Object.entries(sc.OPTIONS_DEFINITION)) {
             }
             break;
         case "game-sense":
-            options["el-flash-step-fix"] = {
-                type: "CHECKBOX",
-                init: true,
-                cat: sc.OPTION_CATEGORY.GENERAL,
-                hasDivider: true,
-                header: "el-tweaks"
+            let isVer142_3 = el.isCCVersionAtLeast("1.4.2-3");
+            if(!isVer142_3) {
+                options["el-flash-step-fix"] = {
+                    type: "CHECKBOX",
+                    init: true,
+                    cat: sc.OPTION_CATEGORY.GENERAL,
+                    hasDivider: true,
+                    header: "el-tweaks"
+                }
             }
             options["el-dash-effect"] = {
                 type: "CHECKBOX",
                 init: true,
                 cat: sc.OPTION_CATEGORY.GENERAL,
-                hasDivider: false,
+                hasDivider: isVer142_3,
                 header: "el-tweaks"
             },
             options["el-arena-hp-bonus"] = {

@@ -3,7 +3,7 @@ import "./el-tweaks-color-picker";
 import "./el-tweaks-steps";
 import "./item-spawner";
 
-export { }
+export { };
 
 declare global {
     var versions: Record<string, string>;
@@ -118,6 +118,8 @@ declare global {
 
     namespace el {
         let UNCAPPED_STAT_DIGITS: Record<string, number>;
+
+        function isCCVersionAtLeast(verString: string): boolean;
     }
 
     interface Window {
