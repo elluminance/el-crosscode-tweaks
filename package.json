@@ -1,6 +1,7 @@
 {
 	"name": "el-tweaks",
-	"version": "0.5.7",
+    "displayName": "EL's Tweaks",
+	"version": "0.5.8",
 	"description": "A coremod full of useful functionality for modders, as well as many tweaks for players.",
 
     "plugin": "./dist/plugin.js",

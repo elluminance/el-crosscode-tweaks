@@ -5,7 +5,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 
 ***Note: Support will not be provided unless you are using the [latest release](https://github.com/EL20202/el-crosscode-tweaks/releases/latest).***
 
-*Readme is guaranteed accurate up to version 0.5.7. See changelog for more details.*
+*Readme is guaranteed accurate up to version 0.5.8. See changelog for more details.*
 
 &nbsp;
 
@@ -19,6 +19,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 * **[Additions for Modders](#for-modders)**
   * [Action Steps](#action-steps)
   * [Color Picker](#color-picker)
+  * [Commands](#commands)
 &nbsp;
 
 &nbsp;
@@ -90,7 +91,7 @@ Removes the visual stat cap present in many circumstances - allowing you to see 
 * **Flash Step Fix**: Prior to CrossCode version 1.4.2-3, the modifier *Flash Step* had neglible effect on dash invincibility. This mod offers a fix to those who are playing older versions.
 * **Element Aura Arena Bugfix**: Fixes the element aura not refreshing properly on starting a new round.
 * **Arena Death Softlock Bugfix**: Fixes a potential softlock when restarting an arena round immediately after dying.
-
+* **Ball Autofiring**: By holding the `F` key, you can automatically fire balls using mouse and keyboard - something previously exclusive to controller controls. (***NOTE***: requires [input-api](https://github.com/CCDirectLink/input-api) to function properly.)
 
 ---
 # For Modders
@@ -163,4 +164,87 @@ To open up the color picker through an event - simply have the below event step 
 }
 ```
 The `title` will be a langlabel of the gui popup, and if left blank it will default to just "Color Picker". `varPath` dictates which variable the color will be stored, and the variable will look something like this: `{"red": 243, "green": 143, "blue": 6, "colorString": "#F38F06"}`. All color components will be in the range of 0-255, inclusive.
+
+## Custom Trophy Icons
+*TODO*
+
+## Custom Chest Tracking
+*TODO*
+
+## Custom Shop Currencies
+*TODO*
+
+
+## Commands
+This tweak pack contains a variety of commands which are designed to help modders with deving - designed to be easy to use through the console.
+
+**Table of Contents**:
+- [Adding Items](#cmdadditemid-amount-hidemsg)
+- [Adding Credits](#cmdaddcreditsamount)
+- [Teleporting](#cmdteleportmapname-destination)
+- [Reloading Player Configs](#cmdreloadplayerconfigsreloadeffects)
+- [Reloading Effect Sheets](#cmdreloadeffectsheets)
+- [Reloading an Enemy Type](#cmdreloadenemytypeenemyname-reloadeffects)
+- [Spawning Enemies](#cmdspawnenemyenemyname-leveloverride-settings-pos)
+- [Reloading the Current Map](#cmdreloadmap)
+- [Resetting Map Variables](#cmdresetmapvarsincludetmp)
+- [Resetting Temp Variables](#cmdresettmpvars)
+
+### `cmd.addItem(id, amount?, hideMsg?)`
+A safe version of `sc.model.player.addItem(...)`, not allowing you to add invalid items to the inventory (which can cause crashes).
+
+Parameters:
+- `id`: The item ID of the item you're trying to add. Can be a numeric ID or a string.
+- `amount`: How many items to add to the inventory. Defaults to 1.
+- `hideMsg`: Whether or not to show the message in the corner that you got a new item. Defaults to false.
+
+### `cmd.addCredits(amount)`
+Gives money to the player - should be self explanatory.
+
+Parameters:
+- `amount`: How many credits to add.
+
+### `cmd.teleport(mapName, destination?)`
+A shorthand version of `ig.game.teleport()`.
+
+Parameters:
+- `mapName`: The name of the map in question that you're teleporting to.
+- `destination`: An object containing information about where to place the player upon teleportation. (todo: elaborate on this)
+
+### `cmd.reloadPlayerConfigs(reloadEffects?)`
+A way to quickly reload all player/party member configs, so you don't have to reload the game to see a change in effect. By default, will also reload all effects.
+
+Parameters:
+- `reloadEffects`: Whether or not to reload the effect sheets as well. Defaults to true.
+
+### `cmd.reloadEffectSheets()`
+Will cause all effects to be reloaded, allowing you to see any changes to effect sheets to be reflected without reloading the game.
+
+### `cmd.reloadEnemyType(enemyName, reloadEffects?)`
+Will cause a specific enemy file to be reloaded from disk, allowing any changes to be reflected in-game without having to restart. By default, reloads all effects as well.
+
+Parameters:
+- `enemyName`: The path to the enemy type that will be reloaded.
+- `reloadEffects`: Whether or not to reload the effect sheets as well. Defaults to true.
+
+### `cmd.spawnEnemy(enemyName, levelOverride?, settings?, pos?)`
+Spawns the enemy specified by `enemyName`, defaulting to the player's position. Enemy level can be conveniently overridden if desired, as well as any other miscellaneous settings that you desire to change.
+
+Parameters:
+- `enemyName`: The path to the enemy that will be spawned.
+- `levelOverride`: The level the enemy should be spawned in as - defaulting to their standard level if not specified and/or left as `undefined`/`null`.
+- `settings`: An object containing the information related to the enemy type. 
+- `pos`: A vec3 containing the position to spawn the enemy, defaulting to the player's position.
+
+### `cmd.reloadMap()`
+Reloads the current map the player is in, spawning you at the exact same position as you were pre-reloading.
+
+### `cmd.resetMapVars(includeTmp?)`
+Clears all the variables associated with the current map, and if specified the temporary variables in the current map as well.
+
+Parameters:
+- `includeTmp`: Whether or not to include the `tmp` namespace in map clearing as well.
+
+### `cmd.resetTmpVars()`
+Clears all temporary variables which are found in the `tmp` namespace.
 

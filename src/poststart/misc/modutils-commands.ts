@@ -5,7 +5,7 @@
  * i discourage using them in code, though i guess nothing's stopping you...
 */
 window.cmd = {
-    addItem: (id: number, amount: number = 1, hideMsg: boolean) => {
+    addItem: (id: sc.ItemID, amount: number = 1, hideMsg: boolean) => {
         if(sc.inventory.getItem(id)){
             sc.model.player.addItem(id, amount, hideMsg)
         } else {
@@ -52,7 +52,9 @@ window.cmd = {
         settings ??= {};
         
         settings!.type = enemyName;
-        settings!.level = levelOverride;
+
+        if(levelOverride != undefined || levelOverride != null)
+            settings!.level = levelOverride;
         
         let enemyInfo = new sc.EnemyInfo(settings!);
         
@@ -77,5 +79,16 @@ window.cmd = {
         let {face} = ig.game.playerEntity;
         teleportPos.setFromData(null, pos, face, level, baseZPos, size);
         ig.game.teleport(ig.game.mapName, teleportPos)
+    },
+
+    resetMapVars(includeTmp: boolean = false) {
+        ig.vars.storage.map = {};
+        if(includeTmp) ig.vars.storage.tmp = {};
+        ig.game.varsChangedDeferred();
+    },
+
+    resetTmpVars() {
+        ig.vars.storage.tmp = {};
+        ig.game.varsChangedDeferred();
     }
 }
