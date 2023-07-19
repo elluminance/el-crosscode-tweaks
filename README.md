@@ -5,7 +5,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 
 ***Note: Support will not be provided unless you are using the [latest release](https://github.com/EL20202/el-crosscode-tweaks/releases/latest).***
 
-*Readme is guaranteed accurate up to version 0.5.8. See changelog for more details.*
+*Readme is guaranteed accurate up to version 0.5.9. See changelog for more details.*
 
 &nbsp;
 
@@ -102,9 +102,13 @@ Many new action steps that are designed to simplify the creation of various acti
 
 Table of Contents:
 * Flow Control:
-  * [EL_ELEMENT_IF](#el_element_if)
-  * [GOTO_LABEL_WHILE](#goto_label_while)
-  * [SWITCH_CASE](#switch_case)
+  * [`EL_ELEMENT_IF`](#el_element_if)
+  * [`GOTO_LABEL_WHILE`](#goto_label_while)
+  * [`SWITCH_CASE`](#switch_case)
+  * [`WHILE_TRUE`](#while_true)
+  * [`FOR_VAR`](#for_var)
+  * [`FOR_ATTRIB`](#for_attrib)
+  * [`FOR_PARTY_MEMBERS`](#for_party_members)
 * Others
 
 ### EL_ELEMENT_IF
@@ -147,6 +151,101 @@ Jumps to a named label if a condition is met. This works the same as the event s
   "name": "end"
 }
 ```
+
+### SWITCH_CASE
+Allows you to have switch which branch of steps is executed depending on a var's value. If a case named `_default` is present, that will be selected if there is no match.
+
+***Important thing to keep in mind*** - if you're testing for number, due to how both JSON and JS work - you *must* represent the number as a string. Don't worry - it will otherwise work as you expect. 
+```jsonc
+{
+  "type": "SWITCH_CASE",
+  "var": "tmp.somevarhere", //the variable you are testing.
+  "cases": {
+    "1": [{
+      /*steps here*/
+    }],
+    "2": [{
+      /*steps here*/
+    }],
+    "3": [{
+      /*steps here*/
+    }]
+  }
+}
+```
+
+### WHILE_TRUE
+Will repeatedly execute steps until the condition is no longer met.
+```jsonc
+{
+  "type": "WHILE_TRUE",
+  "condition": "tmp.something <= 2",
+  "steps": [{
+    /*step*/
+  },{
+    /*step*/
+  },{
+    /*step*/
+  }]
+}
+```
+
+### FOR_VAR
+Will loop over a finite set of values, setting a variable to the relevant value on every loop.
+
+```jsonc
+{
+  "type": "FOR_VAR",
+  "values": [1,2,3,4,5],
+  "varName": "tmp.something",
+  "steps": [{
+    /*step*/
+  },{
+    /*step*/
+  },{
+    /*step*/
+  }]
+}
+```
+
+### FOR_ATTRIB
+Works functionally the same as `FOR_VAR`, but instead of setting a var it will set an attribute on the entity in question.
+
+```jsonc
+{
+  "type": "FOR_ATTRIB",
+  "values": [1,2,3,4,5],
+  "attrib": "something",
+  "steps": [{
+    /*step*/
+  },{
+    /*step*/
+  },{
+    /*step*/
+  }]
+}
+```
+
+### FOR_PARTY_MEMBERS
+Will loop through all party members (and optionally the player) and set the entity's temp target to them.
+
+```jsonc
+{
+  "type": "FOR_PARTY_MEMBERS",
+  "includePlayer": true,
+  "steps": [{
+    /*step*/
+  },{
+    /*step*/
+  },{
+    /*step*/
+  }]
+}
+```
+
+## Event Steps
+A few new event steps are added for ease of making custom events.
+For [`SWITCH_CASE`](#switch_case), [`WHILE_TRUE`](#while_true), and [`FOR_VAR`](#for_var) - see their Action Step counterparts, as the syntax and functionality is identical.
 
 ## Color Picker
 ![](./readme-imgs/color-picker.png)

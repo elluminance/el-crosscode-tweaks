@@ -95,6 +95,119 @@ ig.ACTION_STEP.SWITCH_CASE = ig.ActionStepBase.extend({
     }
 })
 
+ig.ACTION_STEP.__LoopEnd = ig.ActionStepBase.extend({
+    init(settings) {
+        this.parentStep = settings.parentStep;
+    },
+    getNext(target) {
+        return this.parentStep.getLoopStep(target);
+    }
+})
+
+ig.ACTION_STEP.FOR_VAR = ig.ActionStepBase.extend({
+    init(settings) {
+        this.varName = settings.varName;
+        this.values = settings.values;
+        this.index = 0;
+
+        settings.steps.push({
+            type: "__LoopEnd",
+            parentStep: this
+        })
+    },
+    getBranchNames() {
+        return ["steps"];
+    },
+    start() {
+        this.index = 0;
+    },
+    getNext(target) {
+        if(this.varName) ig.vars.set(this.varName, this.values[this.index]);
+        return this.index >= this.values.length ? this._nextStep : this.branches!["steps"];
+    },
+    getLoopStep(target) {
+        this.index++;
+        return this.getNext(target!);
+    },
+})
+
+ig.ACTION_STEP.FOR_ATTRIB = ig.ActionStepBase.extend({
+    init(settings) {
+        this.attrib = settings.attrib;
+        this.values = settings.values;
+        this.index = 0;
+
+        settings.steps.push({
+            type: "__LoopEnd",
+            parentStep: this
+        })
+    },
+    getBranchNames() {
+        return ["steps"];
+    },
+    start(target) {
+        this.index = 0;
+    },
+    getNext(target) {
+        if(this.attrib) target.setAttribute(this.attrib, this.values[this.index]);
+        return this.index >= this.values.length ? this._nextStep : this.branches!["steps"];
+    },
+    getLoopStep(target) {
+        this.index++;
+        return this.getNext(target!);
+    },
+})
+
+ig.ACTION_STEP.WHILE_TRUE = ig.ActionStepBase.extend({
+    init(settings) {
+        this.condition = new ig.VarCondition(settings.condition || "false");
+
+        settings.steps.push({
+            type: "__LoopEnd",
+            parentStep: this
+        })
+    },
+    getBranchNames() {
+        return ["steps"];
+    },
+    getNext() {
+        return this.condition.evaluate() ? this.branches!["steps"] : this._nextStep;
+    },
+    getLoopStep() {
+        return this.getNext();
+    },
+})
+
+ig.ACTION_STEP.FOR_PARTY_MEMBERS = ig.ActionStepBase.extend({
+    init(settings) {
+        this.includePlayer = settings.includePlayer ?? true;
+        this.index = 0;
+
+        settings.steps.push({
+            type: "__LoopEnd",
+            parentStep: this
+        })
+    },
+    getBranchNames() {
+        return ["steps"];
+    },
+    start(target) {
+        this.values = Object.values(sc.party.partyEntities);
+        if(this.includePlayer) this.values.push(ig.game.playerEntity);
+        this.index = 0;
+    },
+    getNext(target) {
+        if(target instanceof ig.ENTITY.Combatant) {
+            target.tmpTarget = this.values[this.index];
+        }
+        return this.index >= this.values.length ? this._nextStep : this.branches!["steps"];
+    },
+    getLoopStep(target) {
+        this.index++;
+        return this.getNext(target!);
+    },
+})
+
 ig.ACTION_STEP.SET_TEMP_TARGET.inject({
     init(settings) {
         this.parent(settings);

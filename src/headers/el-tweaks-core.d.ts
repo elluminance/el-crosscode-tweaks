@@ -120,6 +120,10 @@ declare global {
         let UNCAPPED_STAT_DIGITS: Record<string, number>;
 
         function isCCVersionAtLeast(verString: string): boolean;
+
+        interface LoopStep {
+            getLoopStep(this: this, target?: ig.ActorEntity): Optional<ig.StepBase>
+        }
     }
 
     interface Window {

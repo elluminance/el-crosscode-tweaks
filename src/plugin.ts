@@ -7,7 +7,7 @@ export default class implements LegacyPluginClass {
 
     preload() {
         //@ts-ignore
-        if(!window.el) window.el = {};
+        window.el ??= {};
     }
 
     prestart() {

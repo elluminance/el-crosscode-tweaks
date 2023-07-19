@@ -22,3 +22,4 @@ import "./misc/mod-utils.js"
 
 import "./steps/action-steps.js"
 import "./steps/effect-entries.js"
+import "./steps/event-steps.js"
