@@ -19,6 +19,11 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 * **[Additions for Modders](#for-modders)**
   * [Action Steps](#action-steps)
   * [Color Picker](#color-picker)
+  * [Custom Trophy Icons](#custom-trophy-icons)
+  * [Modded Chests Tracking](#modded-chest-tracking)
+  * [Custom Currencies](#custom-shop-currencies)
+  * [Other Shop Additions](#other-shop-additions)
+  * [Arena Additions](#arena-additions)
   * [Commands](#commands)
 &nbsp;
 
@@ -110,6 +115,7 @@ Table of Contents:
   * [`FOR_ATTRIB`](#for_attrib)
   * [`FOR_PARTY_MEMBERS`](#for_party_members)
 * Others
+  * [`SET_ATTRIB_CURRENT_POS`](#set_attrib_current_pos)
 
 ### EL_ELEMENT_IF
 Allows branching based on the element of the user. Note that this has only been tested on player configs - no guarantees it will work with enemies that can change elements!
@@ -243,6 +249,16 @@ Will loop through all party members (and optionally the player) and set the enti
 }
 ```
 
+### SET_ATTRIB_CURRENT_POS
+Sets an entity attribute to be the entity's current position.
+
+```jsonc
+{
+  "type": "SET_ATTRIB_CURRENT_POS",
+  "attrib": "attribute_name"
+}
+```
+
 ## Event Steps
 A few new event steps are added for ease of making custom events.
 For [`SWITCH_CASE`](#switch_case), [`WHILE_TRUE`](#while_true), and [`FOR_VAR`](#for_var) - see their Action Step counterparts, as the syntax and functionality is identical.
@@ -265,14 +281,177 @@ To open up the color picker through an event - simply have the below event step 
 The `title` will be a langlabel of the gui popup, and if left blank it will default to just "Color Picker". `varPath` dictates which variable the color will be stored, and the variable will look something like this: `{"red": 243, "green": 143, "blue": 6, "colorString": "#F38F06"}`. All color components will be in the range of 0-255, inclusive.
 
 ## Custom Trophy Icons
-*TODO*
+To have your own custom trophy icons - it's quite simple! To start, make an image and put it in some place reasonable to be used for your trophy icons. Once you have that done, you can simply do this:
 
-## Custom Chest Tracking
-*TODO*
+```js
+sc.CUSTOM_TROPHY_SHEETS["your-mod-name-here"] = new ig.Image("media/gui/trophies/your-mod-name-here.png")
+```
+
+After you have done that, now you can assign your icons to `sc.TROPHY_ICONS`.
+
+```js
+sc.TROPHY_ICONS.YOUR_MOD_COOL_TROPHY = {
+  cat: "GENERAL",
+  hidden: false,
+  index: -1, //indicates that you are using a custom trophy.
+  sheet: "your-mod-name-here", //same as what you put in sc.CUSTOM_TROPHY_SHEETS
+  customIndex: 2 //whatever index it is on your trophy sheet.
+}
+```
+
+## Modded Chest Tracking
+If you add custom chests to your mod to pre-existing areas, you may want them to be tracked in the areas in question (things like the chest counter and all that) - this mod makes it quite simple!
+
+To register a custom chest, you just need to do something like this:
+
+```js
+sc.MapModel.inject({
+  init() {
+    this.parent(); //do not touch this line.
+
+    this.registerChests(
+      "autumn", //the area name the new chest is in
+      //the rest of the parameters are strings associated with variables to track chest progress. 
+      //can be pointing to the default chest_mapID format, or some other variable entirely. either work. 
+      "maps.autumn/path-1.chest_206", //default chest variable
+      "maps.autumn/path-1.my-cool-mods-custom-chest", //some other map var
+      "cool_mod.autumn-chest-1" //some other var entirely
+    )
+  }
+})
+```
+After this, you don't need to do *anything* else. This simple call will do everything you want it to do.
 
 ## Custom Shop Currencies
-*TODO*
+To create a new currency for use in shops - it's quite simple. To start, create an 11x11 icon to represent your currency. Once you have done that - you simply call this function:
 
+```js
+sc.modUtils.registerCurrency(
+  "currencyName", //the internal name of the new currency you created.
+  "media/gui/some-file-here.png", //the path to the file where your currency icon is.
+  offX, offY //where the top left corner of your icon is.
+)
+```
+You will also want to create a lang entry for the currency in the path `sc.gui.shop.currencyName`.
+
+After you have done that - you can now access your currency with:
+```js
+sc.modUtils.currencies["currencyName"].name //the name of the currency.
+sc.modUtils.currencies["currencyName"].get() //the current value
+sc.modUtils.currencies["currencyName"].set(value) //set how much of the currency the player has.
+sc.modUtils.currencies["currencyName"].add(value) //gives the player so much of the currency.
+sc.modUtils.currencies["currencyName"].sub(value) //takes away some of the currency.
+```
+
+To get the value of it in a variable, you can use the path `currency.currencyName` to see how much the player currently has.
+
+To use the currency in a shop, you do this in your shop's entry in `database.json`:
+```jsonc
+{
+  "your-shop-here": {
+    "name": {
+      "en_US": "Your Shop Name Here"
+    },
+    "shopType": "BUY_AND_SELL",
+    // ^- all vanilla stuff
+    // v- new
+    "currency": "currencyName",
+    //more stuff below...
+  }
+}
+```
+
+## Other Shop Additions
+Along with [custom currencies](#custom-shop-currencies), there is another key addition to shops - the ability to define custom shop sell pages! It is roughly the same format as the buy pages - just this time, it's for selling stuff! This was designed with custom currencies in mind, but it works fine with vanilla credits as well. 
+```jsonc
+{
+  "your-shop-here": {
+    "name": {
+      "en_US": "Your Shop Name Here"
+    },
+    "shopType": "BUY_AND_SELL",
+    // ^- all vanilla stuff
+    // v- new
+    "sellPages": [
+      {
+        "title": {
+          "en_US": "Page 1"
+        },
+        "content": [
+          {
+            "item": 1,
+            "price": 200
+          },
+          {
+            "item": 2,
+            "price": 500
+          },
+          {
+            "item": "my-cool-custom-item",
+            "price": 500000
+          }
+        ]
+      },
+      {
+        "title": {
+          "en_US": "Page 2"
+        },
+        "content": [
+          {
+            "item": "my-cooler-custom-item",
+            "price": 5000000
+          }
+        ]
+      },
+      {
+        "title": {
+          "en_US": "Page 3"
+        },
+        //you can also just specify an item type to list everything in that category.
+        "itemType": "ARM"
+      }
+    ],
+    //more stuff below...
+  }
+}
+```
+
+## Arena Additions
+There are two main additions to the arena for modders:
+
+### Custom Cup Tracking
+To make your cup be tracked in the statistics menu, just do this:
+
+```js
+sc.Arena.inject({
+  init() {
+    this.parent();
+    //other stuff... perhaps registering your cup?
+    this.trackedCups.push("your-cup-name-here");
+  }
+})
+```
+
+### Custom Arena Challenge Icons
+To add your own custom arena challenges and associated icons - it's very simple! 
+
+```js
+//First, add a new icon entry here.
+sc.ARENA_CHALLENGE_ICONS.YOUR_ICON_NAME_HERE = {
+  src: "media/gui/your-mod-icon-sheet-here.png",
+  //an 18x18 icon
+  x: 112,
+  y: 0,
+  //a scaled down 10x10 version of the icon
+  tinyX: 112,
+  tinyY: 18
+}
+
+//Next, when you're adding your new challenge - when it comes to the icon, put in the name of the icon you created. For example:
+sc.ARENA_CHALLENGES.MY_CHALLENGE = new sc.ArenaChallengeBase("YOUR_ICON_NAME_HERE")
+```
+
+This allows you to add in your own custom arena challenges with their own custom icons! For convenience's sake - there are 4 new challenges that come bundled with the mod. `NO_HEAT`, `NO_COLD`, `NO_SHOCK`, and `NO_WAVE` - which disable those elements in an arena round.
 
 ## Commands
 This tweak pack contains a variety of commands which are designed to help modders with deving - designed to be easy to use through the console.

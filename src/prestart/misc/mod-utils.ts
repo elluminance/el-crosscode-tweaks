@@ -77,7 +77,8 @@ sc.modUtils = {
                 sc.stats.addMap("player", `currency-${this.name}`, value);
             },
             sub(value) {
-                ig.vars.sub(this.varPath, value);
+                ig.vars.sub(this.varPath, Math.min(ig.vars.get(this.varPath), value));
+
             }
         }
         return true;

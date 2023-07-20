@@ -132,7 +132,7 @@ sc.ShopListMenu.inject({
             sc.menu.sellFactor = currentPage.sellFactor ?? 2;
             if (currentPage.itemType) {
                 let itemIDs: sc.ItemID[];
-                if (currentPage.itemType in ["ARM", "TORSO", "HEAD", "FEET"]) {
+                if (["ARM", "TORSO", "HEAD", "FEET"].includes(currentPage.itemType)) {
                     itemIDs = sc.model.player.getEquipSubList(currentPage.itemType as sc.ITEMS_EQUIP_TYPES, false, sortType)
                 } else {
                     itemIDs = sc.model.player.getItemSubList(currentPage.itemType as keyof typeof sc.ITEMS_TYPES, sortType)
