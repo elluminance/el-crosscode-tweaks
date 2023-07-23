@@ -103,6 +103,11 @@ declare global {
         interface ArenaChallengeEntry {
             altGfx: ig.Image;
         }
+
+        interface NEW_GAME_OPTIONS {
+            "no-equipment": NewGameOption;
+            "guard-perfectionist": NewGameOption;
+        }
     }
 
     namespace ig {

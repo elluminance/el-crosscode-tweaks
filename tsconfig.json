@@ -1,13 +1,16 @@
 {
-    "include": ["src", "node_modules/ultimate-crosscode-typedefs/crosscode-ccloader-all.d.ts"],
+    "include": [
+      "src",
+      "node_modules/ultimate-crosscode-typedefs/crosscode-ccloader-all.d.ts"
+    ],
     "compilerOptions": {
       "outDir": "dist",
-      "sourceMap": true,
+      "inlineSourceMap": true,
+      "inlineSources": true,
       "strict": true,
       "module": "ESNext",
       "target": "ES2019",
       "allowJs": true,
       "forceConsistentCasingInFileNames": true,
-      "incremental": true
     }
   }

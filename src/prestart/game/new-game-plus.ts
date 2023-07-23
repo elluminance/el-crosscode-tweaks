@@ -21,3 +21,11 @@ sc.StartMenu.inject({
     }
 })
 
+sc.NewGamePlusModel.inject({
+    applyStoreData(atRhombus) {
+        this.parent(atRhombus);
+
+        if(this.active && this.options["rhombus-start"])
+            sc.stats.statsEnabled = true;
+    }
+})
