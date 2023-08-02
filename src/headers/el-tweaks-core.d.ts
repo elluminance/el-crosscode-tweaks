@@ -9,6 +9,21 @@ declare global {
     var versions: Record<string, string>;
     var activeMods: any[]
     namespace sc {
+        namespace AreaLoadable {
+            interface CustomMap {
+                mapData: number[][];
+
+                offX: number;
+                offY: number;
+
+                customName?: string;
+            }
+
+            interface Map {
+                customMap?: CustomMap;
+            }
+        }
+
         interface Arena {
             cupsInitialized: boolean
             trackedCups: string[]

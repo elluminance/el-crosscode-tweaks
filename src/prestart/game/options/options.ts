@@ -86,7 +86,7 @@ for(let [key, value] of Object.entries(sc.OPTIONS_DEFINITION)) {
             options["el-uncapped-stats-extra-digits"] = {
                 type: "OBJECT_SLIDER",
                 data: el.UNCAPPED_STAT_DIGITS,
-                init: el.UNCAPPED_STAT_DIGITS.DIGITS_4,
+                init: el.UNCAPPED_STAT_DIGITS.DIGITS3,
                 cat: sc.OPTION_CATEGORY.GENERAL,
                 fill: true,
                 showPercentage: false,

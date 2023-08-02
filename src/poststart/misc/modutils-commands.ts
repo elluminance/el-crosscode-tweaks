@@ -81,6 +81,13 @@ window.cmd = {
         ig.game.teleport(ig.game.mapName, teleportPos)
     },
 
+    reloadAreas() {
+        for(let area of Object.values(sc.AreaLoadable.cache)) {
+            area.debugReload = true;
+            area.reload();
+        }
+    },
+
     resetMapVars(includeTmp: boolean = false) {
         ig.vars.storage.map = {};
         if(includeTmp) ig.vars.storage.tmp = {};
@@ -90,5 +97,5 @@ window.cmd = {
     resetTmpVars() {
         ig.vars.storage.tmp = {};
         ig.game.varsChangedDeferred();
-    }
+    },
 }

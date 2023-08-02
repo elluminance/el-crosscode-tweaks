@@ -5,7 +5,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 
 ***Note: Support will not be provided unless you are using the [latest release](https://github.com/EL20202/el-crosscode-tweaks/releases/latest).***
 
-*Readme is guaranteed accurate up to version 0.5.9. See changelog for more details.*
+*Readme is guaranteed accurate up to version 0.6.0. See changelog for more details.*
 
 &nbsp;
 
@@ -24,6 +24,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
   * [Custom Currencies](#custom-shop-currencies)
   * [Other Shop Additions](#other-shop-additions)
   * [Arena Additions](#arena-additions)
+  * [Custom Map Utilities](#custom-map-utilities)
   * [Commands](#commands)
 &nbsp;
 
@@ -96,6 +97,7 @@ Removes the visual stat cap present in many circumstances - allowing you to see 
 * **Flash Step Fix**: Prior to CrossCode version 1.4.2-3, the modifier *Flash Step* had neglible effect on dash invincibility. This mod offers a fix to those who are playing older versions.
 * **Element Aura Arena Bugfix**: Fixes the element aura not refreshing properly on starting a new round.
 * **Arena Death Softlock Bugfix**: Fixes a potential softlock when restarting an arena round immediately after dying.
+* **Skip Beginning Fix**: Fixes stat tracking not working at first if you use the NG+ perk "Skip Beginning". 
 * **Ball Autofiring**: By holding the `F` key, you can automatically fire balls using mouse and keyboard - something previously exclusive to controller controls. (***NOTE***: requires [input-api](https://github.com/CCDirectLink/input-api) to function properly.)
 
 ---
@@ -453,6 +455,98 @@ sc.ARENA_CHALLENGES.MY_CHALLENGE = new sc.ArenaChallengeBase("YOUR_ICON_NAME_HER
 
 This allows you to add in your own custom arena challenges with their own custom icons! For convenience's sake - there are 4 new challenges that come bundled with the mod. `NO_HEAT`, `NO_COLD`, `NO_SHOCK`, and `NO_WAVE` - which disable those elements in an arena round.
 
+## Custom Map Utilities
+
+Allows modders to much more easily add in custom maps to existing areas.
+
+**Important Note**: This is not necessary if you're making your own custom area! This is intended solely for adding onto preexisting areas.
+
+To get started, begin creating a patch file for the area in question. For this example, let's assume you have created a map in Rhombus Square.
+
+File: `assets/data/areas/rhombus-sqr.json.patch`
+```jsonc
+[{
+    "type": "ENTER",
+    //substitute the second number with the appropriate value.
+    "index": ["floors", 1, "maps"] 
+},{
+    "type": "ADD_ARRAY_ELEMENT",
+    "content": {
+        //all vanilla stuff, nothing new here.
+        "path": "rhombus-sqr.my-cool-map",
+        "name": {
+            "en_US": "My Really Cool Map",
+            "langUid": 10000
+        },
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "dungeon": "",
+
+        //new stuff!
+        "customMap": {
+            //a 2D array detailing what your map will look like.
+            //see below for details.
+            "mapData": [
+                [0, 1, 1, 1, 0],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [0, 1, 1, 1, 0]
+            ],
+
+            //where your map's top left corner should be placed.
+            "offX": 18,
+            "offY": 35,
+
+            //a way to refer to your map in icons, connections, etc.
+            "customName": "my-very-cool-map"
+        }
+    }
+},
+/* To be continued below... */
+]
+```
+
+The `mapData` array will basically show what your map will look like. A `1` indicates that there is a tile there. A `0` (or any other value) indicates to leave things unchanged.
+
+Now that we've made this patch - we can load up the game, and this is what our new map looks like!
+
+![](readme-imgs/custom-map-image-1.png)
+
+Looks nice so far! Now, let's say we want to put a little connection on that map to the right map.
+
+```jsonc
+[
+/* ...Continued from above. */
+{
+    "type": "EXIT",
+    "count": 1
+},{
+    "type": "ENTER",
+    "index": "connections"
+},{
+    "type": "ADD_ARRAY_ELEMENT",
+    "content": {
+        "tx": 22,
+        "ty": 36,
+        "dir": "HORIZONTAL",
+        "size": 3,
+        "map1": "my-very-cool-map", //use your 'customName' from above!
+        "map2": 18
+    }
+}]
+```
+
+And if we load up the map in game...
+
+![](readme-imgs/custom-map-image-2.png)
+
+We now have a nice lovely connection between these two maps! The same process applies to icons/landmarks, just with `map` instead of `map1` and/or `map2`. Note that the `customName` property only applies to that floor in question. Other floors will not know what it's referring to!
+
+Enjoy mapping!
+
 ## Commands
 This tweak pack contains a variety of commands which are designed to help modders with deving - designed to be easy to use through the console.
 
@@ -465,6 +559,7 @@ This tweak pack contains a variety of commands which are designed to help modder
 - [Reloading an Enemy Type](#cmdreloadenemytypeenemyname-reloadeffects)
 - [Spawning Enemies](#cmdspawnenemyenemyname-leveloverride-settings-pos)
 - [Reloading the Current Map](#cmdreloadmap)
+- [Reloading Area Files](#cmdreloadareas)
 - [Resetting Map Variables](#cmdresetmapvarsincludetmp)
 - [Resetting Temp Variables](#cmdresettmpvars)
 
@@ -516,6 +611,9 @@ Parameters:
 
 ### `cmd.reloadMap()`
 Reloads the current map the player is in, spawning you at the exact same position as you were pre-reloading.
+
+### `cmd.reloadAreas()`
+Reloads all area files. Primarily intended for those adding custom maps to areas via [the custom map utilities](#custom-map-utilities), but can be used anywhere.
 
 ### `cmd.resetMapVars(includeTmp?)`
 Clears all the variables associated with the current map, and if specified the temporary variables in the current map as well.

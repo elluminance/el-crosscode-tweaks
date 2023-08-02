@@ -24,7 +24,7 @@ el.ModalColorPicker = sc.ModalButtonInteract.extend({
     use255: true,
     
     init(varPath, label, callback, use255 = true) {
-        let text = label ? ig.LangLabel.getText(label) : ig.lang.get(label || "sc.gui.menu.colorPicker.title");
+        let text = typeof label == "object" ? ig.LangLabel.getText(label) : ig.lang.get(label || "sc.gui.menu.colorPicker.title");
         this.parent(
             text,
             null,
