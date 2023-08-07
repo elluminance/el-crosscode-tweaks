@@ -99,6 +99,7 @@ Removes the visual stat cap present in many circumstances - allowing you to see 
 * **Arena Death Softlock Bugfix**: Fixes a potential softlock when restarting an arena round immediately after dying.
 * **Skip Beginning Fix**: Fixes stat tracking not working at first if you use the NG+ perk "Skip Beginning". 
 * **Ball Autofiring**: By holding the `F` key, you can automatically fire balls using mouse and keyboard - something previously exclusive to controller controls. (***NOTE***: requires [input-api](https://github.com/CCDirectLink/input-api) to function properly.)
+* **Custom Map Name Fix**: Fixes custom mod map/area names as sometimes being displayed as `[object Object]` in save slots.
 
 ---
 # For Modders
