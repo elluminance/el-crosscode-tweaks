@@ -14,7 +14,12 @@ window.cmd = {
     },
     addCredits: (amount: number) => sc.model.player.addCredit(amount),
 
-    teleport: (mapName: string, destination?: ig.TeleportPosition) => ig.game.teleport(mapName, destination),
+    teleport(mapName: string, marker?: string, destination?: ig.TeleportPosition.Settings){
+        //@ts-ignore
+        destination ??= {};
+        if(marker) destination!.marker = ""
+        ig.game.teleport(mapName, destination as ig.TeleportPosition);
+    },
     
     /*
      * will reload all player configs to reflect any changes
@@ -88,10 +93,11 @@ window.cmd = {
         }
     },
 
-    resetMapVars(includeTmp: boolean = false) {
-        ig.vars.storage.map = {};
+    resetMapVars(includeTmp: boolean = false, reloadMap: boolean = false) {
+        ig.vars.storage.map = ig.vars.storage.maps[ig.vars.currentLevelName] = {};
         if(includeTmp) ig.vars.storage.tmp = {};
         ig.game.varsChangedDeferred();
+        if(reloadMap) this.reloadMap();
     },
 
     resetTmpVars() {

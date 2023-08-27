@@ -106,7 +106,7 @@ Removes the visual stat cap present in many circumstances - allowing you to see 
 ## Action Steps
 Many new action steps that are designed to simplify the creation of various actions - both player and enemy!
 
-**Note:** The examples will use comments as a way of filling in missing/"unneeded" data to illustrate how to use the action steps - though they WILL NOT work with comments in actual practice. Remember that JSON does not support comments, I'm merely using them here for demonstration purposes only.
+**Note:** The examples will use comments as a way of filling in missing/"unneeded" data to illustrate how to use the action steps - though they WILL NOT work with comments in actual practice. Remember that JSON does not support comments, I'm merely using them here for demonstration purposes only. **HOWEVER**, if you are using a new version of CCLoader (one with Simplify v2.13.0 or higher) - JSON with Comments (which includes trailing commas) can and will be supported for all JSON files!
 
 Table of Contents:
 * Flow Control:
@@ -552,19 +552,21 @@ Enjoy mapping!
 This tweak pack contains a variety of commands which are designed to help modders with deving - designed to be easy to use through the console.
 
 **Table of Contents**:
-- [Adding Items](#cmdadditemid-amount-hidemsg)
-- [Adding Credits](#cmdaddcreditsamount)
-- [Teleporting](#cmdteleportmapname-destination)
-- [Reloading Player Configs](#cmdreloadplayerconfigsreloadeffects)
-- [Reloading Effect Sheets](#cmdreloadeffectsheets)
-- [Reloading an Enemy Type](#cmdreloadenemytypeenemyname-reloadeffects)
-- [Spawning Enemies](#cmdspawnenemyenemyname-leveloverride-settings-pos)
-- [Reloading the Current Map](#cmdreloadmap)
-- [Reloading Area Files](#cmdreloadareas)
-- [Resetting Map Variables](#cmdresetmapvarsincludetmp)
-- [Resetting Temp Variables](#cmdresettmpvars)
+- [Adding Items](#adding-items)
+- [Adding Credits](#adding-credits)
+- [Teleporting](#teleporting)
+- [Reloading Player Configs](#reloading-player-configs)
+- [Reloading Effect Sheets](#reloading-effect-sheets)
+- [Reloading an Enemy Type](#reloading-enemy-data)
+- [Spawning Enemies](#spawning-enemies)
+- [Reloading the Current Map](#reloading-the-current-map)
+- [Reloading Area Files](#reloading-all-area-definitions)
+- [Resetting Map Variables](#resetting-map-vars)
+- [Resetting Temp Variables](#resetting-tmp-vars)
 
-### `cmd.addItem(id, amount?, hideMsg?)`
+### Adding items
+*command:* `cmd.addItem(id, amount?, hideMsg?)`
+
 A safe version of `sc.model.player.addItem(...)`, not allowing you to add invalid items to the inventory (which can cause crashes).
 
 Parameters:
@@ -572,36 +574,48 @@ Parameters:
 - `amount`: How many items to add to the inventory. Defaults to 1.
 - `hideMsg`: Whether or not to show the message in the corner that you got a new item. Defaults to false.
 
-### `cmd.addCredits(amount)`
+### Adding credits:
+*command:* `cmd.addCredits(amount)`
 Gives money to the player - should be self explanatory.
 
 Parameters:
 - `amount`: How many credits to add.
 
-### `cmd.teleport(mapName, destination?)`
-A shorthand version of `ig.game.teleport()`.
+### Teleporting
+*command:* `cmd.teleport(mapName, marker?, destination?)`
+
+A shorthand version of `ig.game.teleport()` designed for ease of use.
 
 Parameters:
 - `mapName`: The name of the map in question that you're teleporting to.
+- `marker`: The marker in the map to teleport to.
 - `destination`: An object containing information about where to place the player upon teleportation. (todo: elaborate on this)
 
-### `cmd.reloadPlayerConfigs(reloadEffects?)`
+### Reloading player configs
+*command:* `cmd.reloadPlayerConfigs(reloadEffects?)`
+
 A way to quickly reload all player/party member configs, so you don't have to reload the game to see a change in effect. By default, will also reload all effects.
 
 Parameters:
 - `reloadEffects`: Whether or not to reload the effect sheets as well. Defaults to true.
 
-### `cmd.reloadEffectSheets()`
+### Reloading effect sheets
+*command:* `cmd.reloadEffectSheets()`
+
 Will cause all effects to be reloaded, allowing you to see any changes to effect sheets to be reflected without reloading the game.
 
-### `cmd.reloadEnemyType(enemyName, reloadEffects?)`
+### Reloading enemy data:
+*command:* `cmd.reloadEnemyType(enemyName, reloadEffects?)`
+
 Will cause a specific enemy file to be reloaded from disk, allowing any changes to be reflected in-game without having to restart. By default, reloads all effects as well.
 
 Parameters:
 - `enemyName`: The path to the enemy type that will be reloaded.
 - `reloadEffects`: Whether or not to reload the effect sheets as well. Defaults to true.
 
-### `cmd.spawnEnemy(enemyName, levelOverride?, settings?, pos?)`
+### Spawning enemies
+*command:* `cmd.spawnEnemy(enemyName, levelOverride?, settings?, pos?)`
+
 Spawns the enemy specified by `enemyName`, defaulting to the player's position. Enemy level can be conveniently overridden if desired, as well as any other miscellaneous settings that you desire to change.
 
 Parameters:
@@ -610,18 +624,27 @@ Parameters:
 - `settings`: An object containing the information related to the enemy type. 
 - `pos`: A vec3 containing the position to spawn the enemy, defaulting to the player's position.
 
-### `cmd.reloadMap()`
+### Reloading the current map
+*command:* `cmd.reloadMap()`
+
 Reloads the current map the player is in, spawning you at the exact same position as you were pre-reloading.
 
-### `cmd.reloadAreas()`
+### Reloading all area definitions
+*command:* `cmd.reloadAreas()`
+
 Reloads all area files. Primarily intended for those adding custom maps to areas via [the custom map utilities](#custom-map-utilities), but can be used anywhere.
 
-### `cmd.resetMapVars(includeTmp?)`
+### Resetting map vars
+*command:* `cmd.resetMapVars(includeTmp?, reloadMap?)`
+
 Clears all the variables associated with the current map, and if specified the temporary variables in the current map as well.
 
 Parameters:
 - `includeTmp`: Whether or not to include the `tmp` namespace in map clearing as well.
+- `reloadMap`: Whether the map should be reloaded or not automatically (required for some puzzle elements to be reset).
 
-### `cmd.resetTmpVars()`
+### Resetting tmp vars
+*command:* `cmd.resetTmpVars()`
+
 Clears all temporary variables which are found in the `tmp` namespace.
 

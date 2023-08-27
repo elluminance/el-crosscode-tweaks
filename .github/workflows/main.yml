@@ -28,11 +28,12 @@ jobs:
         run: npm install; npm run build
 
       - name: Create archive
-        run: zip -q -r els-tweaks.ccmod assets dist js ccmod.json package.json prestart.js
+        run: zip -q -r els-tweaks.ccmod assets dist ccmod.json package.json
 
       - name: Get version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
       - name: Create release
         run: |
           gh release create ${{ steps.get_version.outputs.VERSION }} -d -t "EL's Tweaks ${{ steps.get_version.outputs.VERSION }}" ${{ env.FILES }}
