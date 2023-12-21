@@ -78,8 +78,8 @@ sc.MapWorldMap.inject({
     _setAreaName(a) {
         this.parent(a)
         let area = a.area,
-            chestCount = sc.stats.getMap("chests", a.key) ?? 0,
-            totalChests = sc.map.getChestCount(a.key) ?? 0,
+            chestCount = sc.stats.getMap("chests", a.key) || 0,
+            totalChests = sc.map.getChestCount(a.key) || 0,
             chestString = ""
 
         totalChests += sc.map.getExtraAreaChests(a.key)
