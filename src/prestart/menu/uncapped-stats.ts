@@ -25,10 +25,11 @@ sc.ParamHudGui.inject({
 
     updateParamHud(skip) {
         const additional_digits = sc.options.get("el-uncapped-stats-enable") ? sc.options.get("el-uncapped-stats-extra-digits") || 1 : 0;
+        const showTrueAttack = sc.options.get("el-uncapped-stats-attack-extra");
         const digit_factor = 10 ** additional_digits;
         
         this.hp._number.setMaxNumber(10000 * digit_factor - 1);
-        this.atk._number.setMaxNumber(1000 * digit_factor - 1);
+        this.atk._number.setMaxNumber(showTrueAttack ? 1e24 - 1 : (1000 * digit_factor - 1));
         this.def._number.setMaxNumber(1000 * digit_factor - 1);
         this.foc._number.setMaxNumber(1000 * digit_factor - 1);
 
@@ -37,7 +38,7 @@ sc.ParamHudGui.inject({
         this.targetSizes.hp = 62 + 8 * digits.limit(0, additional_digits);
         
         digits = getDigits(sc.model.player.params.getStat("attack")) - 3;
-        this.targetSizes.atk = 54 + 8 * digits.limit(0, additional_digits);
+        this.targetSizes.atk = 54 + 8 * digits.limit(0, showTrueAttack ? 20 : additional_digits);
         
         digits = getDigits(sc.model.player.params.getStat("defense")) - 3;
         this.targetSizes.def = 54 + 8 * digits.limit(0, additional_digits);

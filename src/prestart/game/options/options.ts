@@ -18,9 +18,9 @@ el.UNCAPPED_STAT_DIGITS = {
 }
 
 // a tiny bit hacky, but hey, it works!
-let options: {[key: string]: sc.OptionDefinition} = {};
+let options: PartialRecord<keyof sc.OPTIONS_DEFINITION.KnownTypesMap, sc.OptionDefinition> = {};
 
-for(let [key, value] of Object.entries(sc.OPTIONS_DEFINITION)) {
+for(let [key, value] of (Object.entries(sc.OPTIONS_DEFINITION) as [keyof sc.OPTIONS_DEFINITION.KnownTypesMap, sc.OptionDefinition][])) {
     options[key] = value;
 
     switch(key){
@@ -92,6 +92,13 @@ for(let [key, value] of Object.entries(sc.OPTIONS_DEFINITION)) {
                 showPercentage: false,
                 hasDivider: false,
                 header: "el-tweaks"
+            }
+            options["el-uncapped-stats-attack-extra"] = {
+                type: "CHECKBOX",
+                init: true,
+                cat: sc.OPTION_CATEGORY.GENERAL,
+                hasDivider: false,
+                header: "el-tweaks",
             }
             break;
         case "keys-dash2":

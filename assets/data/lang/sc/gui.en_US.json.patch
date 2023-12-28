@@ -51,13 +51,18 @@
             },
 
             "el-uncapped-stats-enable": {
-                "name": "Uncapped Stats",
+                "name": "\\c[3][US]\\c[0] Uncapped Stats",
                 "description": "Allows stat displays to go beyond their original visual cap."
             },
 
             "el-uncapped-stats-extra-digits": {
                 "name": "\\c[3][US]\\c[0] Additional Digits",
                 "description": "If Uncapped Stats is enabled, show this many more digits in the HUD."
+            },
+
+            "el-uncapped-stats-attack-extra": {
+                "name": "\\c[3][US]\\c[0] True Attack Stat",
+                "description": "If Uncapped Stats is enabled, show additional digits for attack specifically."
             },
 
             "controls":{

@@ -61,9 +61,14 @@ declare global {
                 "el-dash-effect": sc.OptionDefinition.CHECKBOX;
                 "el-arena-hp-bonus": sc.OptionDefinition.CHECKBOX;
                 "el-arena-item-restore": sc.OptionDefinition.CHECKBOX;
-                
+                "el-item-spawn-cheat": sc.OptionDefinition.CHECKBOX;
+
                 "el-uncapped-stats-enable": sc.OptionDefinition.CHECKBOX;
                 "el-uncapped-stats-extra-digits": sc.OptionDefinition.OBJECT_SLIDER;
+                "el-uncapped-stats-attack-extra": sc.OptionDefinition.CHECKBOX;
+
+                "keys-walk": sc.OptionDefinition.CONTROLS;
+                "keys-autoThrow": sc.OptionDefinition.CONTROLS;
             }
         }
 
