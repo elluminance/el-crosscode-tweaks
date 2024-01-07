@@ -12,6 +12,10 @@
                     "NO_SHOCK": "Using Shock is disabled.",
                     "NO_WAVE": "Using Wave is disabled."
                 }
+            },
+
+            "menu": {
+                "forceAscendedScale": "Scale ascended gear to cup level?"
             }
         },
 
@@ -38,6 +42,11 @@
             "el-arena-item-restore": {
                 "name": "Arena: Item Restoration",
                 "description": "Returns items used during an arena round after the round is over."
+            },
+
+            "el-arena-force-scaling": {
+                "name": "Arena: Gear Scaling",
+                "description": "Adds option to force ascended gear scaling on any cup."
             },
             
             "el-dash-effect": {

@@ -68,6 +68,14 @@ for(let [key, value] of (Object.entries(sc.OPTIONS_DEFINITION) as [keyof sc.OPTI
                 hasDivider: false,
                 header: "el-tweaks"
             }
+            options["el-arena-force-scaling"] = {
+                type: "CHECKBOX",
+                init: true,
+                cat: sc.OPTION_CATEGORY.GENERAL,
+                hasDivider: false,
+                header: "el-tweaks"
+            }
+
             options["el-item-spawn-cheat"] = {
                 type: "CHECKBOX",
                 init: false,

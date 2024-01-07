@@ -61,6 +61,7 @@ declare global {
                 "el-dash-effect": sc.OptionDefinition.CHECKBOX;
                 "el-arena-hp-bonus": sc.OptionDefinition.CHECKBOX;
                 "el-arena-item-restore": sc.OptionDefinition.CHECKBOX;
+                "el-arena-force-scaling": sc.OptionDefinition.CHECKBOX;
                 "el-item-spawn-cheat": sc.OptionDefinition.CHECKBOX;
 
                 "el-uncapped-stats-enable": sc.OptionDefinition.CHECKBOX;
