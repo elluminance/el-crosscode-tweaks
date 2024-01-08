@@ -45,7 +45,7 @@
             },
 
             "el-arena-force-scaling": {
-                "name": "Arena: Gear Scaling",
+                "name": "Arena: Force Gear Scaling",
                 "description": "Adds option to force ascended gear scaling on any cup."
             },
             

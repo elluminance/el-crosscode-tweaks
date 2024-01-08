@@ -24,12 +24,20 @@ declare global {
             }
         }
 
+        namespace Arena {
+            interface Runtime {
+                forceScaling: boolean;
+            }
+        }
+
         interface Arena {
             cupsInitialized: boolean
             trackedCups: string[]
             itemCache: { [id: number]: number }
             damageToHeal: number
             isScalingStats: boolean;
+            
+            forceScaling: boolean;
         }
 
         interface ARENA_CHALLENGES {
@@ -140,7 +148,11 @@ declare global {
             }
         }
 
-
+        namespace SaveSlot.Data {
+            interface Arena {
+                forceScaling: boolean;
+            }
+        }
     }
 
     namespace el {

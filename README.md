@@ -10,7 +10,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 &nbsp;
 
 # Table of Contents
-* **[Additions For Users](#for-users)**
+* **[Additions For Players](#for-players)**
   * [Arena Tweaks](#arena-tweaks)
   * [Assist Mode Changes](#assist-mode)
   * [NG+ Perks](#ng-perks)
@@ -30,7 +30,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 
 &nbsp;
 
-# For Users
+# For Players
 ## Arena Tweaks
 
 #### HP Recovered Bonus
@@ -44,6 +44,13 @@ Adds an HP Recovery bonus to arena rounds to help offset the damage penalty.
 ![](/readme-imgs/arena-sandwich.png)
 
 Any item that is used during an arena round will be automatically returned upon ending a round (regardless if you win, lose, or just exit the round in general).
+
+*Can be disabled in options.*
+
+#### Ascended Gear Scaling
+![](/readme-imgs/arena-force-scaling.png)
+
+Adds an option to allow any arena challenge to forcefully scale ascended gear to the cup level. The message will not display in situations where it doesn't make sense (such as cups which already scale or if you're not wearing ascended gear).
 
 *Can be disabled in options.*
 
@@ -100,7 +107,7 @@ Removes the visual stat cap present in many circumstances - allowing you to see 
 * **Skip Beginning Fix**: Fixes stat tracking not working at first if you use the NG+ perk "Skip Beginning". 
 * **Ball Autofiring**: By holding the `F` key, you can automatically fire balls using mouse and keyboard - something previously exclusive to controller controls. (***NOTE***: requires [input-api](https://github.com/CCDirectLink/input-api) to function properly.)
 * **Custom Map Name Fix**: Fixes custom mod map/area names as sometimes being displayed as `[object Object]` in save slots.
-* **Arena Ascended Gear Scaling**: Fixes the ascended gear scaling modifier for arena cups/rounds to actually work properly. 
+* **Arena Ascended Gear Scaling**: Fixes the ascended gear scaling modifier for arena cups/rounds to actually work properly for individual rounds (and not erroneously apply to some cups which might lack the scaling)
 
 ---
 # For Modders

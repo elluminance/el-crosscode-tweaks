@@ -9,6 +9,7 @@ type CupList = Record<string, {order: number}>;
 
 sc.Arena.inject({
     isScalingStats: false,
+    forceScaling: true,
     itemCache: {},
     damageToHeal: 0,
     trackedCups: [
@@ -30,17 +31,24 @@ sc.Arena.inject({
         }
     },
 
+    enterArenaMode(cupName, round) {
+        this.parent(cupName, round);
+        if (sc.options.get("el-arena-force-scaling") && this.forceScaling) {
+            this.runtime.forceScaling = this.forceScaling;
+        }
+    },
+
     onLevelLoadStart() {
         this.parent();
         if(this.active) {
             // fixes bug related to restarting round just as you die
             sc.model.player.params.defeated = false;
         
-            if(this.hasChallenge("WEAPON_ADJUST")) {
+            if(this.hasChallenge("WEAPON_ADJUST") || this.runtime.forceScaling) {
                 sc.inventory.updateScaledEquipment(this.getCupLevel(this.runtime.cup));
                 sc.model.player.updateStats();
                 this.isScalingStats = true;
-            } else {
+            } else if (this.isScalingStats) {
                 sc.inventory.updateScaledEquipment(sc.model.player.level);
                 sc.model.player.updateStats();
                 this.isScalingStats = false;
@@ -139,6 +147,18 @@ sc.Arena.inject({
 
     hasAscendedChallenge(cupName) {
         return this.getCupCoreAttrib(cupName, "mods")?.includes("WEAPON_ADJUST");
+    },
+
+    // this won't persist if the mod is uninstalled/reinstalled.
+    // ...but who cares? it's not the end of the world if it's lost.
+    // it's just a single button press.
+    onStorageSave(savefile) {
+        this.parent!(savefile);
+        savefile.arena.forceScaling = this.forceScaling ?? true;
+    },
+    onStoragePreLoad(savefile) {
+        this.parent!(savefile);
+        this.forceScaling = savefile.arena?.forceScaling ?? true;
     },
 })
 

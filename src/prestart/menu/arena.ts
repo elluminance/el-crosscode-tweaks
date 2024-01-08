@@ -1,7 +1,9 @@
 function shouldAskAboutAscended(button: sc.ArenaRoundEntryButton) {
     let mods = sc.arena.getCupCoreAttrib(button.key!, "mods");
 
-    return sc.options.get("el-arena-force-scaling") && !mods?.includes("WEAPON_ADJUST");
+    return sc.options.get("el-arena-force-scaling")
+        && !mods?.includes("WEAPON_ADJUST")
+        && Object.values(sc.model.player.equip).find(x => sc.inventory.isScalable(x)) != undefined;
 }
 
 sc.ArenaRoundList.inject({
@@ -15,7 +17,7 @@ sc.ArenaRoundList.inject({
             let forceScaleOptionGui = new ig.GuiElementBase;
             
             let textGui = new sc.TextGui(ig.lang.get("sc.gui.arena.menu.forceAscendedScale"));
-            let checkbox = new sc.CheckboxGui(true);
+            let checkbox = new sc.CheckboxGui(sc.arena.forceScaling);
     
             textGui.setAlign(ig.GUI_ALIGN.X_RIGHT, ig.GUI_ALIGN.Y_CENTER);
     
@@ -40,6 +42,8 @@ sc.ArenaRoundList.inject({
             guiBase.buttongroup.pressCallbacks[0] = function(button) {
                 if(button != checkbox) {
                     pressCallback(button);
+                } else {
+                    sc.arena.forceScaling = button.pressed;
                 }
             };
 
