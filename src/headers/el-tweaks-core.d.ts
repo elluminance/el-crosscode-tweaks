@@ -29,6 +29,7 @@ declare global {
             trackedCups: string[]
             itemCache: { [id: number]: number }
             damageToHeal: number
+            isScalingStats: boolean;
         }
 
         interface ARENA_CHALLENGES {

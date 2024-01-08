@@ -88,7 +88,7 @@ Item search functionality requires [CCInventorySearch](https://github.com/conorl
 
 ![](/readme-imgs/uncapped-stats-after.png)
 
-Removes the visual stat cap present in many circumstances - allowing you to see what your stats really are! Allows the stat display to go up to 999999999, though it's incredibly unlikely for that limit ever to be reached.
+Removes the visual stat cap present in many circumstances - allowing you to see what your stats really are! Allows the stat display to go up to 999999999, though it's incredibly unlikely for that limit ever to be reached. You can also have it so only attack will be able to go to a very, very high value - for whatever reasons you might want that.
 
 **Warning**: If the standalone [Uncapped Stats](https://github.com/EL20202/cc-uncapped-stats) is installed, the this part of the mod will not function. Please remove the standalone version if installing this mod, as the standalone version will not be updated!
 
@@ -100,6 +100,7 @@ Removes the visual stat cap present in many circumstances - allowing you to see 
 * **Skip Beginning Fix**: Fixes stat tracking not working at first if you use the NG+ perk "Skip Beginning". 
 * **Ball Autofiring**: By holding the `F` key, you can automatically fire balls using mouse and keyboard - something previously exclusive to controller controls. (***NOTE***: requires [input-api](https://github.com/CCDirectLink/input-api) to function properly.)
 * **Custom Map Name Fix**: Fixes custom mod map/area names as sometimes being displayed as `[object Object]` in save slots.
+* **Arena Ascended Gear Scaling**: Fixes the ascended gear scaling modifier for arena cups/rounds to actually work properly. 
 
 ---
 # For Modders

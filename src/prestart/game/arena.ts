@@ -8,6 +8,7 @@ sc.ARENA_SCORE_TYPES.DAMAGE_HEALED = {
 type CupList = Record<string, {order: number}>;
 
 sc.Arena.inject({
+    isScalingStats: false,
     itemCache: {},
     damageToHeal: 0,
     trackedCups: [
@@ -34,6 +35,22 @@ sc.Arena.inject({
         if(this.active) {
             // fixes bug related to restarting round just as you die
             sc.model.player.params.defeated = false;
+        
+            if(this.hasChallenge("WEAPON_ADJUST")) {
+                sc.inventory.updateScaledEquipment(this.getCupLevel(this.runtime.cup));
+                sc.model.player.updateStats();
+                this.isScalingStats = true;
+            } else {
+                sc.inventory.updateScaledEquipment(sc.model.player.level);
+                sc.model.player.updateStats();
+                this.isScalingStats = false;
+            }
+        } else {
+            if(this.isScalingStats) {
+                sc.inventory.updateScaledEquipment(sc.model.player.level);
+                sc.model.player.updateStats();
+                this.isScalingStats = false;
+            }
         }
     },
 
@@ -118,7 +135,11 @@ sc.Arena.inject({
             return sortedCups;
         }
         return cups
-    }
+    },
+
+    hasAscendedChallenge(cupName) {
+        return this.getCupCoreAttrib(cupName, "mods")?.includes("WEAPON_ADJUST");
+    },
 })
 
 sc.ARENA_CHALLENGE_ICONS = {
