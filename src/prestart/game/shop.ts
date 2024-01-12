@@ -156,7 +156,7 @@ sc.ShopListMenu.inject({
             itemAmount: number,
             item: sc.Inventory.Item,
             itemEquipLevel: number,
-            moneyLeft = (currency ? currency.get() : sc.model.player.credit) - sc.menu.getTotalCost(),
+            moneyLeft = (currency ? currency.get() : sc.menu.shopCoinMode ? sc.arena.getTotalArenaCoins() : sc.model.player.credit) - sc.menu.getTotalCost(),
             itemCost: number,
             itemQuantity: number,
             itemName: string,
