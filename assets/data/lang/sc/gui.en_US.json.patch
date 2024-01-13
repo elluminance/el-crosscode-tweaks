@@ -146,6 +146,10 @@
                     "blue": "Blue"
                 }
             }
+        },
+
+        "trade-tracker": {
+            "title": "Trading"
         }
     }
 }

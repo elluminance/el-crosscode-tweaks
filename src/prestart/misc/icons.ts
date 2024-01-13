@@ -5,5 +5,6 @@ sc.fontsystem.smallFont.pushIconSet(small_icons);
 
 let i = 0;
 sc.fontsystem.smallFont.setMapping({
-    "timesGreen": [small_index, i++]
+    "timesGreen": [small_index, i++],
+    "trade-icon-small": [small_index, i++],
 })

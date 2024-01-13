@@ -1,6 +1,7 @@
 import "./el-tweaks-shop";
 import "./el-tweaks-color-picker";
 import "./el-tweaks-steps";
+import "./el-tweaks-gui"
 import "./item-spawner";
 
 export { };
