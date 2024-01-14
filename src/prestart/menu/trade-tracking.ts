@@ -22,7 +22,8 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
             let tradeOption = trader.options[option!];
             y += textGui.hook.size.y + 2;
             textGui.setPos(6, 0);
-            textGui.setText(`\\i[trade-icon-small] ${sc.inventory.getItemName(tradeOption.get[0].id)}`);
+            let itemID = tradeOption.get[0].id;
+            textGui.setText(`\\i[trade-icon-small]\\i[item-small${sc.inventory.getRaritySuffix(sc.inventory.getItem(itemID)!.rarity)}]${sc.inventory.getItemName(itemID)}` + (tradeOption.get[0].amount != 1 ? `\\i[times]${tradeOption.get[0].amount}` : ""));
             //textGui.setText()
 
             for(let item of tradeOption.require) {
