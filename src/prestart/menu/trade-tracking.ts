@@ -13,6 +13,11 @@ function getTradeCost(trade: sc.TradeModel.TradeOption) {
 el.TradeTrackerGui = sc.RightHudBoxGui.extend({
     init() {
         this.parent(ig.lang.get("sc.gui.trade-tracker.title"));
+        sc.Model.addObserver(sc.model, this);
+    },
+
+    _isVisible: function() {
+        return !sc.model.isCutscene() && !sc.model.isHUDBlocked() && !sc.model.isForceCombat()
     },
 
     setTrade(trade, option) {
@@ -20,6 +25,7 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
 
         let trader = sc.trade.traders[trade || ""];
         if(trade && trader) {
+            this.hasTrade = true;
             let gui = new ig.GuiElementBase;
             //let foundTrader = sc.trade.getFoundTrader(trade);
             //let name = sc.trade.getTraderName(trade);
@@ -53,9 +59,31 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
             this.pushContent(gui, true);
             gui.hook.pos.x = 0;
             this.contentEntries[0].setSize(gui.hook.size.x, gui.hook.size.y+8)
-            this.show();
+            if(this._isVisible()) this.show();
+            else this.hide(true);
         } else {
+            this.hasTrade = false;
             this.hide();
+        }
+    },
+    
+    modelChanged(model, message, data) {
+        if (model === sc.model) {
+            if ((message == sc.GAME_MODEL_MSG.SUB_STATE_CHANGED
+                || message == sc.GAME_MODEL_MSG.STATE_CHANGED)
+                && !sc.model.isTeleport() && !sc.model.isLoading())
+            {
+                if(sc.model.isReset()) {
+                    this.setTrade(null);
+                    this.hide();
+                } else {
+                    if(!this._isVisible() || sc.model.isMenu()) {
+                        this.hide();
+                    } else if (this.hasTrade) {
+                        this.show(false, 0.2);
+                    }
+                }
+            }
         }
     },
 })
@@ -118,6 +146,7 @@ el.TradeTrackerGui.ItemEntry = ig.BoxGui.extend({
         
         this.numberGui.setNumber(count);
     },
+
 
     updateDrawables(renderer) {
         this.parent(renderer);
@@ -213,8 +242,69 @@ el.TradeTrackerGui.CreditEntry = ig.BoxGui.extend({
 sc.CrossCode.inject({
     init() {
         this.parent();
-        sc.gui.rightHudPanel.addHudBoxBefore(new el.TradeTrackerGui, sc.gui.moneyHud);
-        //@ts-ignore
-        window.elTradeGui = sc.gui.rightHudPanel.boxes.find(x => x instanceof el.TradeTrackerGui);
+        sc.gui.tradeTrackerGui = new el.TradeTrackerGui;
+        sc.gui.rightHudPanel.addHudBoxBefore(sc.gui.tradeTrackerGui, sc.gui.moneyHud);
+    },
+})
+
+sc.TradeInfo.inject({
+    startTradeMenu() {
+        this.parent();
+        sc.trade.traderKey = this.key;
+    },
+})
+
+sc.TradeMenu.inject({
+    init(trade) {
+        this.parent(trade);
+
+        this.favButton = new sc.ButtonGui("\\i[help3]" + ig.lang.get("sc.gui.menu.quests.fav"), undefined, true, sc.BUTTON_TYPE.SMALL);
+        this.favButton.setPos(this.money.hook.pos.x + this.money.hook.size.x + 4, 0);
+        this.favButton.setAlign(ig.GUI_ALIGN.X_RIGHT, ig.GUI_ALIGN.Y_TOP);
+        this.favButton.hook.transitions = {
+            DEFAULT: {
+                state: {},
+                time: 0.2,
+                timeFunction: KEY_SPLINES.EASE
+            },
+            HIDDEN: {
+                state: {
+                    offsetY: -sc.BUTTON_TYPE.SMALL.height
+                },
+                time: 0.2,
+                timeFunction: KEY_SPLINES.LINEAR
+            }
+        };
+        this.favButton.doStateTransition("HIDDEN", true);
+        this.addChildGui(this.favButton);
+
+        this.favButton.onButtonPress = this.onFavButtonPressed.bind(this);
+    },
+
+    enterTrade() {
+        this.parent();
+        this.favButton.doStateTransition("DEFAULT");
+
+        sc.trade.buttonInteract.addGlobalButton(this.favButton, this._onFavButtonCheck.bind(this));
+    },
+
+    _onHelpButtonPressed() {
+        this.parent();
+        this.favButton.doStateTransition("HIDDEN");
+    },
+    
+    _exitMenu() {
+        this.parent();
+        this.favButton.doStateTransition("HIDDEN");
+    },
+
+    _onFavButtonCheck() {
+        return sc.control.menuHotkeyHelp3()
+    },
+    
+    onFavButtonPressed() {
+        console.log(`setting fav trade to ${sc.trade.traderKey}/${sc.trade.tradeIndex}`)
+
+        sc.gui.tradeTrackerGui.setTrade(sc.trade.traderKey, sc.trade.tradeIndex)
     },
 })

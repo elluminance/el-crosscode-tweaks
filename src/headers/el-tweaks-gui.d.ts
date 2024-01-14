@@ -43,9 +43,29 @@ declare global {
                 updateCount(this: this): void;
             }
         }
-        interface TradeTrackerGui extends sc.RightHudBoxGui {
+        interface TradeTrackerGui extends sc.RightHudBoxGui, sc.Model.Observer {
+            hasTrade: boolean;
+            
             setTrade(this: this, trade: string | null, option?: number): void;
+            _isVisible(this: this): boolean;
         }
         let TradeTrackerGui: TradeTrackerGui.Constructor;
+    }
+
+    namespace sc {
+        interface Gui {
+            tradeTrackerGui: el.TradeTrackerGui;
+        }
+
+        interface TradeModel {
+            traderKey: string;
+        }
+
+        interface TradeMenu {
+            favButton: sc.ButtonGui;
+
+            _onFavButtonCheck(this: this): boolean;
+            onFavButtonPressed(this: this): void;
+        }
     }
 }
