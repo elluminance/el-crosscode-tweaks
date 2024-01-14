@@ -14,4 +14,5 @@ sc.fontsystem.smallFont.setMapping({
     "item-small-unique": [small_index, i++],
     "item-small-backer": [small_index, i++],
     "item-small-scale": [small_index, i++],
+    "credit": [small_index, i++],
 })

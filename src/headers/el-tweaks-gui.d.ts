@@ -7,6 +7,7 @@ declare global {
                 new (): TradeTrackerGui;
 
                 ItemEntry: ItemEntry.Constructor;
+                CreditEntry: CreditEntry.Constructor;
             }
 
             namespace ItemEntry {
@@ -22,6 +23,22 @@ declare global {
                 nameGui: sc.TextGui;
                 numberGui: sc.NumberGui;
                 maxNumberGui: sc.NumberGui;
+
+                updateCount(this: this): void;
+            }
+            
+            namespace CreditEntry {
+                interface Constructor extends ImpactClass<CreditEntry> {
+                    new (cust: number): CreditEntry;
+                }
+            }
+            interface CreditEntry extends ig.BoxGui, sc.Model.Observer {
+                needed: number;
+                
+                nameGui: sc.TextGui;
+                numberGui: sc.NumberGui;
+                maxNumberGui: sc.NumberGui;
+                maxOffset: number; 
 
                 updateCount(this: this): void;
             }

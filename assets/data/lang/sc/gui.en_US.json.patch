@@ -149,7 +149,8 @@
         },
 
         "trade-tracker": {
-            "title": "Trading"
+            "title": "Trading",
+            "credits": "Cost"
         }
     }
 }
