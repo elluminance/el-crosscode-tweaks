@@ -81,6 +81,7 @@ declare global {
 
             toggleFavoriteTrader(this: this, key: string, option: number): boolean;
             isActiveTraderFavorite(this: this): boolean;
+            isTraderFavorite(this: this, key: string, option: number): boolean;
             getFavoriteTraderIndex(this: this, key: string, option: number): number;
         }
         
@@ -104,6 +105,20 @@ declare global {
             favDisplay: el.TradeFavDisplay;
             
             updateFavorites(this: this, isFavorite: boolean): void;
+        }
+        
+        interface TradeEntryButton {
+            favDisplay: el.TradeFavDisplay;
+        }
+
+        namespace TradeIconGui {
+            interface Entry {
+                index: number;
+            } 
+        }
+
+        interface TradeIconGui {
+            _trader: string;
         }
     }
 }

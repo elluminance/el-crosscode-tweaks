@@ -251,8 +251,8 @@ sc.CrossCode.inject({
 
 sc.TradeInfo.inject({
     startTradeMenu() {
-        this.parent();
         sc.trade.traderKey = this.key;
+        this.parent();
     },
 })
 
@@ -312,6 +312,10 @@ sc.TradeMenu.inject({
     },
 })
 
+//TODO: look into sc.trade.resetTrader() maybe?
+//also sc.trade.unlockParents() - handle upgraded trades seamlessly.
+//and most importantly saving/loading of favorites
+
 sc.TradeModel.inject({
     traderKey: "",
     favoriteTraders: [],
@@ -342,7 +346,9 @@ sc.TradeModel.inject({
     getFavoriteTraderIndex(key, option) {
         return this.favoriteTraders.findIndex(x => key === x.key && option === x.option)
     },
-    
+    isTraderFavorite(key, option) {
+        return this.getFavoriteTraderIndex(key, option) !== -1;
+    },
     isActiveTraderFavorite() {
         return this.getFavoriteTraderIndex(this.traderKey, this.tradeIndex) !== -1;
     },
@@ -357,19 +363,24 @@ Object.assign(sc.TRADE_MODEL_EVENT, {
 })
 
 sc.TradeDialogMenu.inject({
+    _createContent(...args) {
+        this.parent(...args);        
+        this.getItems.updateFavorites(sc.trade.isActiveTraderFavorite());
+    },
+
     modelChanged(model, message, data) {
+        this.parent(model, message, data);
         if(model === sc.trade) {
             switch(message) {
                 case sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_ADDED:
                 case sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_REMOVED:
                     this.getItems.updateFavorites(sc.trade.isActiveTraderFavorite());
-                    return;
+                    break;
                 case sc.TRADE_MODEL_EVENT.OFFER_CHANGED:
                     this.getItems.updateFavorites(sc.trade.isActiveTraderFavorite());
                     break;
             }
         }
-        this.parent(model, message, data);
     },
 })
 
@@ -399,6 +410,42 @@ el.TradeFavDisplay = ig.GuiElementBase.extend({
     updateDrawables(renderer) {
         if(this.isFavorite) {
             renderer.addGfx(this.gfx, 0, 1, 112, 32, 96, 24);
+        }
+    },
+})
+
+sc.TradeEntryButton.inject({
+    init(text, trader, offer, id, desciption, amount, required, level) {
+        this.parent(text, trader, offer, id, desciption, amount, required, level);
+        this.favDisplay = new el.TradeFavDisplay;
+        this.favDisplay.setPos(-1,-2);
+        this.addChildGui(this.favDisplay);
+        if(sc.trade.isTraderFavorite(trader, offer)) {
+            this.favDisplay.isFavorite = true;
+        }
+    },
+})
+let favStarGfx = new ig.Image("media/gui/el/el-tweaks-gui.png")
+sc.TradeIconGui.inject({
+    init(trader) {
+        this._trader = trader;
+        this.parent(trader);
+    },
+    _createContent() {
+        this.parent();
+
+        let trader = this._trader;
+        let i = 0;
+        for(const entry of this.entries) {
+            entry.index = i;
+            let callback = entry.gui.textBlock.drawCallback;
+            entry.gui.setDrawCallback(function(this: typeof entry.gui, width: number, height: number) {
+                if(sc.trade.isTraderFavorite(trader, entry.index)) {
+                    favStarGfx.draw(0, 1, 112, 56, 14, 14);
+                }
+                callback?.(width, height);
+            }.bind(entry.gui));
+            i++;
         }
     },
 })
