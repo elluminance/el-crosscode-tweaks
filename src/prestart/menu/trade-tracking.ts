@@ -10,6 +10,7 @@ function getTradeCost(trade: sc.TradeModel.TradeOption) {
     }
 }
 
+//#region GUI
 el.TradeTrackerGui = sc.RightHudBoxGui.extend({
     init() {
         this.parent(ig.lang.get("sc.gui.trade-tracker.title"));
@@ -238,6 +239,7 @@ el.TradeTrackerGui.CreditEntry = ig.BoxGui.extend({
         }
     },
 })
+//#endregion
 
 sc.CrossCode.inject({
     init() {
@@ -303,8 +305,100 @@ sc.TradeMenu.inject({
     },
     
     onFavButtonPressed() {
-        console.log(`setting fav trade to ${sc.trade.traderKey}/${sc.trade.tradeIndex}`)
+        // console.log(`setting fav trade to ${sc.trade.traderKey}/${sc.trade.tradeIndex}`)
 
-        sc.gui.tradeTrackerGui.setTrade(sc.trade.traderKey, sc.trade.tradeIndex)
+        sc.trade.toggleFavoriteTrader(sc.trade.traderKey, sc.trade.tradeIndex)
+        //sc.gui.tradeTrackerGui.setTrade(sc.trade.traderKey, sc.trade.tradeIndex)
+    },
+})
+
+sc.TradeModel.inject({
+    traderKey: "",
+    favoriteTraders: [],
+
+    toggleFavoriteTrader(key, option) {
+        let index = this.getFavoriteTraderIndex(key, option);
+        if(index != -1) {
+            this.favoriteTraders.splice(index, 1);
+            sc.Model.notifyObserver(this, sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_ADDED);
+            return false;
+        } else {
+            this.favoriteTraders.push({key, option});
+            this.favoriteTraders.sort((x, y) => {
+                if(x.key > y.key) return -1; 
+                if(x.key < y.key) return 1;
+                return x.option - y.option;
+            })
+            sc.Model.notifyObserver(this, sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_REMOVED);
+            return true;
+        }
+    },
+
+    exitTrade() {
+        this.parent();
+        this.traderKey = "";
+    },
+
+    getFavoriteTraderIndex(key, option) {
+        return this.favoriteTraders.findIndex(x => key === x.key && option === x.option)
+    },
+    
+    isActiveTraderFavorite() {
+        return this.getFavoriteTraderIndex(this.traderKey, this.tradeIndex) !== -1;
+    },
+})
+
+//@ts-expect-error
+let value = Math.max(...Object.values(sc.TRADE_MODEL_EVENT));
+Object.assign(sc.TRADE_MODEL_EVENT, {
+    "FAVORITE_TRADER_ADDED": ++value,
+    "FAVORITE_TRADER_REMOVED": ++value,
+    "FAVORITE_TRADER_SELECTED": ++value,
+})
+
+sc.TradeDialogMenu.inject({
+    modelChanged(model, message, data) {
+        if(model === sc.trade) {
+            switch(message) {
+                case sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_ADDED:
+                case sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_REMOVED:
+                    this.getItems.updateFavorites(sc.trade.isActiveTraderFavorite());
+                    return;
+                case sc.TRADE_MODEL_EVENT.OFFER_CHANGED:
+                    this.getItems.updateFavorites(sc.trade.isActiveTraderFavorite());
+                    break;
+            }
+        }
+        this.parent(model, message, data);
+    },
+})
+
+sc.TradeItemBox.inject({
+    isFavorite: false,
+    favGfx: new ig.Image("media/gui/el/el-tweaks-gui.png"),
+    favImg: null,
+    
+    setContent(items, buttongroup, startIndex, isTrade) {
+        let val = this.parent(items, buttongroup, startIndex, isTrade);
+        if(!this.favDisplay) {
+            this.favDisplay = new el.TradeFavDisplay;
+        }
+        this.addChildGui(this.favDisplay);
+        return val;
+    },
+
+    updateFavorites(isFavorite) {
+        this.favDisplay.isFavorite = isFavorite;
+    }
+})
+
+el.TradeFavDisplay = ig.GuiElementBase.extend({
+    isFavorite: false,
+    gfx: new ig.Image("media/gui/el/el-tweaks-gui.png"),
+
+    updateDrawables(renderer) {
+        if(this.isFavorite) {
+            renderer.addGfx(this.gfx, 0, 1, 112, 32, 96, 24);
+        }
     },
 })

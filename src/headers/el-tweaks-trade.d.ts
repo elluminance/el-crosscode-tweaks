@@ -50,6 +50,17 @@ declare global {
             _isVisible(this: this): boolean;
         }
         let TradeTrackerGui: TradeTrackerGui.Constructor;
+
+        interface TradeFavDisplay extends ig.GuiElementBase {
+            gfx: ig.Image;
+            isFavorite: boolean;
+        }
+        interface TradeFavDisplayConstructor extends ImpactClass<TradeFavDisplay> {
+            new (): TradeFavDisplay;
+        }
+        var TradeFavDisplay: TradeFavDisplayConstructor;
+
+        interface TradeFavDisplay extends{}
     }
 
     namespace sc {
@@ -57,8 +68,26 @@ declare global {
             tradeTrackerGui: el.TradeTrackerGui;
         }
 
+        namespace TradeModel {
+            interface FavoriteTrader {
+                key: string;
+                option: number;
+            }
+        }
+
         interface TradeModel {
             traderKey: string;
+            favoriteTraders: TradeModel.FavoriteTrader[];
+
+            toggleFavoriteTrader(this: this, key: string, option: number): boolean;
+            isActiveTraderFavorite(this: this): boolean;
+            getFavoriteTraderIndex(this: this, key: string, option: number): number;
+        }
+        
+        enum TRADE_MODEL_EVENT {
+            FAVORITE_TRADER_ADDED,
+            FAVORITE_TRADER_REMOVED,
+            FAVORITE_TRADER_SELECTED,
         }
 
         interface TradeMenu {
@@ -66,6 +95,15 @@ declare global {
 
             _onFavButtonCheck(this: this): boolean;
             onFavButtonPressed(this: this): void;
+        }
+
+        interface TradeItemBox {
+            isFavorite: boolean;
+            favGfx: ig.Image;
+            favImg: ig.ImageGui;
+            favDisplay: el.TradeFavDisplay;
+            
+            updateFavorites(this: this, isFavorite: boolean): void;
         }
     }
 }
