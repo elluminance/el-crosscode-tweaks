@@ -314,28 +314,81 @@ sc.TradeMenu.inject({
 
 //TODO: look into sc.trade.resetTrader() maybe?
 //also sc.trade.unlockParents() - handle upgraded trades seamlessly.
-//and most importantly saving/loading of favorites
 
 sc.TradeModel.inject({
     traderKey: "",
-    favoriteTraders: [],
+    favoriteTraders: {},
+    favoriteTraderKeys: [],
+    favoriteTraderIndex: -1,
+    favoriteTraderOptionIndex: -1,
 
     toggleFavoriteTrader(key, option) {
-        let index = this.getFavoriteTraderIndex(key, option);
-        if(index != -1) {
-            this.favoriteTraders.splice(index, 1);
+        if(this.isTraderFavorite(key, option)) {
+            this.favoriteTraders[key].erase(option);
+            if(this.favoriteTraders[key].length == 0) {
+                delete this.favoriteTraders[key];
+                this.favoriteTraderKeys.erase(key);
+            }
             sc.Model.notifyObserver(this, sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_ADDED);
             return false;
         } else {
-            this.favoriteTraders.push({key, option});
-            this.favoriteTraders.sort((x, y) => {
-                if(x.key > y.key) return -1; 
-                if(x.key < y.key) return 1;
-                return x.option - y.option;
-            })
+            if(!(key in this.favoriteTraders)) {
+                this.favoriteTraders[key] = [];
+                this.favoriteTraderKeys.push(key);
+            }
+            this.favoriteTraders[key].push(option);
+            this.favoriteTraders[key].sort((a,b) => a-b);
             sc.Model.notifyObserver(this, sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_REMOVED);
             return true;
         }
+    },
+
+
+    //TODO: Handle trades being added/removed while being tracked.
+    cycleFavTrader(count) {
+        if(this.favoriteTraderKeys.length == 0) return false;
+
+        let traderIndex = this.favoriteTraderIndex;
+        let optionIndex = this.favoriteTraderOptionIndex;
+        let favTraders = this.favoriteTraders;
+        let favKeys = this.favoriteTraderKeys;
+
+        let showingTrade = false;
+        if(traderIndex == -1) {
+            showingTrade = true;
+
+            if(count >= 0) {
+                traderIndex = 0;
+                optionIndex = 0;
+            } else if(count < 0) {
+                traderIndex = favKeys.length - 1;
+                optionIndex = favTraders[favKeys[traderIndex]].length - 1;
+            }
+        } else {
+            optionIndex += count;
+            let key = favKeys[traderIndex];
+            if(favTraders[key].length <= optionIndex) {
+                traderIndex++;
+                optionIndex = 0;
+            } else if (optionIndex < 0) {
+                traderIndex--;
+                optionIndex = favTraders[key]?.length - 1;
+            }
+            showingTrade = !(traderIndex == -1 || traderIndex >= favKeys.length);
+
+            if(!showingTrade) {
+                traderIndex = -1;
+                optionIndex = -1;
+            }
+        } 
+
+        this.favoriteTraderIndex = traderIndex;
+        this.favoriteTraderOptionIndex = optionIndex;
+
+        let trader = favKeys[traderIndex];
+        sc.gui.tradeTrackerGui.setTrade(trader, favTraders[trader]?.[optionIndex]);
+
+        return showingTrade;
     },
 
     exitTrade() {
@@ -343,14 +396,27 @@ sc.TradeModel.inject({
         this.traderKey = "";
     },
 
-    getFavoriteTraderIndex(key, option) {
-        return this.favoriteTraders.findIndex(x => key === x.key && option === x.option)
-    },
     isTraderFavorite(key, option) {
-        return this.getFavoriteTraderIndex(key, option) !== -1;
+        return this.favoriteTraders[key]?.includes(option) || false;
     },
     isActiveTraderFavorite() {
-        return this.getFavoriteTraderIndex(this.traderKey, this.tradeIndex) !== -1;
+        return this.isTraderFavorite(this.traderKey, this.tradeIndex);
+    },
+
+    onStorageSave(savefile) {
+        this.parent!(savefile);
+        savefile.vars.storage.favoriteTraders = ig.copy(this.favoriteTraders);
+    },
+    onStoragePreLoad(savefile) {
+        this.parent!(savefile);
+        
+        if(savefile.vars.storage.favoriteTraders) {
+            this.favoriteTraders = ig.copy(savefile.vars.storage.favoriteTraders);
+        } else {
+            this.favoriteTraders = {};
+        }
+
+        this.favoriteTraderKeys = Object.keys(this.favoriteTraders);
     },
 })
 
@@ -381,6 +447,30 @@ sc.TradeDialogMenu.inject({
                     break;
             }
         }
+    },
+})
+
+sc.QuestModel.inject({
+    cycleFavQuest(count, skip) {
+        if (this.showingFavTrader) {
+            this.showingFavTrader = sc.trade.cycleFavTrader(count);
+            if(!this.showingFavTrader && count < 0) {
+                this.parent(count, skip)
+            }
+        //if there are no marked quests
+        //or you're going beyond the "end"
+        //or you're going before the "beginning"
+        } else if(this.markedQuests.length === 0
+        || (count > 0 && this.focusQuest >= this.markedQuests.length - 1)
+        || (count < 0 && this.focusQuest === -1)
+        ) {
+            if(!(count < 0 && this.focusQuest === -1)) this.parent(count, skip)
+            if(sc.trade.favoriteTraderKeys.length !== 0) {
+                this.showingFavTrader = sc.trade.cycleFavTrader(count);
+
+                
+            }
+        } else this.parent(count, skip);
     },
 })
 

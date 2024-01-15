@@ -75,14 +75,21 @@ declare global {
             }
         }
 
+        interface QuestModel {
+            showingFavTrader: boolean;
+        }
+
         interface TradeModel {
             traderKey: string;
-            favoriteTraders: TradeModel.FavoriteTrader[];
+            favoriteTraders: Record<string, number[]>;
+            favoriteTraderKeys: string[];
+            favoriteTraderIndex: number;
+            favoriteTraderOptionIndex: number;
 
             toggleFavoriteTrader(this: this, key: string, option: number): boolean;
             isActiveTraderFavorite(this: this): boolean;
             isTraderFavorite(this: this, key: string, option: number): boolean;
-            getFavoriteTraderIndex(this: this, key: string, option: number): number;
+            cycleFavTrader(this: this, count: number): boolean;
         }
         
         enum TRADE_MODEL_EVENT {
