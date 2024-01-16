@@ -79,23 +79,25 @@ declare global {
             showingFavTrader: boolean;
         }
 
+        namespace TradeModel {
+            type FavoriteTrade = [string, number];
+        }
         interface TradeModel {
             traderKey: string;
-            favoriteTraders: Record<string, number[]>;
-            favoriteTraderKeys: string[];
+            favoriteTraders: TradeModel.FavoriteTrade[]
             favoriteTraderIndex: number;
-            favoriteTraderOptionIndex: number;
 
             toggleFavoriteTrader(this: this, key: string, option: number): boolean;
             isActiveTraderFavorite(this: this): boolean;
             isTraderFavorite(this: this, key: string, option: number): boolean;
             cycleFavTrader(this: this, count: number): boolean;
+            getFavoriteTrade(this: this): TradeModel.FavoriteTrade | [];
         }
         
         enum TRADE_MODEL_EVENT {
             FAVORITE_TRADER_ADDED,
             FAVORITE_TRADER_REMOVED,
-            FAVORITE_TRADER_SELECTED,
+            FAVORITE_TRADER_CHANGED,
         }
 
         interface TradeMenu {

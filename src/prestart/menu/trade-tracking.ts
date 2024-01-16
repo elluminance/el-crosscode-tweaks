@@ -15,6 +15,7 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
     init() {
         this.parent(ig.lang.get("sc.gui.trade-tracker.title"));
         sc.Model.addObserver(sc.model, this);
+        sc.Model.addObserver(sc.trade, this);
     },
 
     _isVisible: function() {
@@ -85,6 +86,10 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
                     }
                 }
             }
+        } else if (model === sc.trade) {
+            if(message === sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_CHANGED) {
+                this.setTrade(...(sc.trade.getFavoriteTrade() as sc.TradeModel.FavoriteTrade));
+            } 
         }
     },
 })
@@ -310,6 +315,7 @@ sc.TradeMenu.inject({
         sc.trade.toggleFavoriteTrader(sc.trade.traderKey, sc.trade.tradeIndex)
         //sc.gui.tradeTrackerGui.setTrade(sc.trade.traderKey, sc.trade.tradeIndex)
     },
+
 })
 
 //TODO: look into sc.trade.resetTrader() maybe?
@@ -317,28 +323,29 @@ sc.TradeMenu.inject({
 
 sc.TradeModel.inject({
     traderKey: "",
-    favoriteTraders: {},
-    favoriteTraderKeys: [],
+    favoriteTraders: [],
+    // favoriteTraderKeys: [],
     favoriteTraderIndex: -1,
-    favoriteTraderOptionIndex: -1,
+    // favoriteTraderOptionIndex: -1,
 
     toggleFavoriteTrader(key, option) {
         if(this.isTraderFavorite(key, option)) {
-            this.favoriteTraders[key].erase(option);
-            if(this.favoriteTraders[key].length == 0) {
-                delete this.favoriteTraders[key];
-                this.favoriteTraderKeys.erase(key);
-            }
-            sc.Model.notifyObserver(this, sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_ADDED);
+            let index = this.favoriteTraders.findIndex(([x_key, x_val]) => x_key == key && x_val == option);
+
+            this.favoriteTraders.splice(index, 1);
+            if(index <= this.favoriteTraderIndex) sc.quests.cycleFavQuest(-1);
+            sc.Model.notifyObserver(this, sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_REMOVED, index);
             return false;
         } else {
-            if(!(key in this.favoriteTraders)) {
-                this.favoriteTraders[key] = [];
-                this.favoriteTraderKeys.push(key);
+            this.favoriteTraders.push([key, option]);
+            this.favoriteTraders.sort(([x_key, x_val], [y_key, y_val]) => x_key == y_key ? x_val - y_val : 0);
+
+            let favTrader = this.favoriteTraders[this.favoriteTraderIndex];
+            if(favTrader && favTrader[0] == key && favTrader[1] >= option) {
+                this.favoriteTraderIndex++;
             }
-            this.favoriteTraders[key].push(option);
-            this.favoriteTraders[key].sort((a,b) => a-b);
-            sc.Model.notifyObserver(this, sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_REMOVED);
+
+            sc.Model.notifyObserver(this, sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_ADDED);
             return true;
         }
     },
@@ -346,48 +353,24 @@ sc.TradeModel.inject({
 
     //TODO: Handle trades being added/removed while being tracked.
     cycleFavTrader(count) {
-        if(this.favoriteTraderKeys.length == 0) return false;
+        if(this.favoriteTraders.length == 0) return false;
 
-        let traderIndex = this.favoriteTraderIndex;
-        let optionIndex = this.favoriteTraderOptionIndex;
-        let favTraders = this.favoriteTraders;
-        let favKeys = this.favoriteTraderKeys;
+        this.favoriteTraderIndex += count;
 
-        let showingTrade = false;
-        if(traderIndex == -1) {
+        let showingTrade = true;
+        if(count >= 0) {
+            if(this.favoriteTraderIndex >= this.favoriteTraders.length) {
+                this.favoriteTraderIndex = -1;
+                showingTrade = false;
+            }
+        } else if(this.favoriteTraderIndex <= -2) {
+            this.favoriteTraderIndex = this.favoriteTraders.length - 1;
             showingTrade = true;
+        } else if (this.favoriteTraderIndex === -1) {
+            showingTrade = false;
+        }
 
-            if(count >= 0) {
-                traderIndex = 0;
-                optionIndex = 0;
-            } else if(count < 0) {
-                traderIndex = favKeys.length - 1;
-                optionIndex = favTraders[favKeys[traderIndex]].length - 1;
-            }
-        } else {
-            optionIndex += count;
-            let key = favKeys[traderIndex];
-            if(favTraders[key].length <= optionIndex) {
-                traderIndex++;
-                optionIndex = 0;
-            } else if (optionIndex < 0) {
-                traderIndex--;
-                optionIndex = favTraders[key]?.length - 1;
-            }
-            showingTrade = !(traderIndex == -1 || traderIndex >= favKeys.length);
-
-            if(!showingTrade) {
-                traderIndex = -1;
-                optionIndex = -1;
-            }
-        } 
-
-        this.favoriteTraderIndex = traderIndex;
-        this.favoriteTraderOptionIndex = optionIndex;
-
-        let trader = favKeys[traderIndex];
-        sc.gui.tradeTrackerGui.setTrade(trader, favTraders[trader]?.[optionIndex]);
-
+        sc.Model.notifyObserver(this, sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_CHANGED);
         return showingTrade;
     },
 
@@ -397,7 +380,7 @@ sc.TradeModel.inject({
     },
 
     isTraderFavorite(key, option) {
-        return this.favoriteTraders[key]?.includes(option) || false;
+        return this.favoriteTraders.find(([x_key, x_val]) => x_key === key && x_val === option) !== undefined;
     },
     isActiveTraderFavorite() {
         return this.isTraderFavorite(this.traderKey, this.tradeIndex);
@@ -410,14 +393,18 @@ sc.TradeModel.inject({
     onStoragePreLoad(savefile) {
         this.parent!(savefile);
         
-        if(savefile.vars.storage.favoriteTraders) {
+        if(Array.isArray(savefile.vars.storage.favoriteTraders)) {
             this.favoriteTraders = ig.copy(savefile.vars.storage.favoriteTraders);
         } else {
-            this.favoriteTraders = {};
+            this.favoriteTraders = [];
         }
 
-        this.favoriteTraderKeys = Object.keys(this.favoriteTraders);
+        //this.favoriteTraderKeys = Object.keys(this.favoriteTraders);
     },
+
+    getFavoriteTrade() {
+        return this.favoriteTraders[this.favoriteTraderIndex] || [];
+    }
 })
 
 //@ts-expect-error
@@ -425,7 +412,7 @@ let value = Math.max(...Object.values(sc.TRADE_MODEL_EVENT));
 Object.assign(sc.TRADE_MODEL_EVENT, {
     "FAVORITE_TRADER_ADDED": ++value,
     "FAVORITE_TRADER_REMOVED": ++value,
-    "FAVORITE_TRADER_SELECTED": ++value,
+    "FAVORITE_TRADER_CHANGED": ++value,
 })
 
 sc.TradeDialogMenu.inject({
@@ -465,10 +452,8 @@ sc.QuestModel.inject({
         || (count < 0 && this.focusQuest === -1)
         ) {
             if(!(count < 0 && this.focusQuest === -1)) this.parent(count, skip)
-            if(sc.trade.favoriteTraderKeys.length !== 0) {
+            if(sc.trade.favoriteTraders.length !== 0) {
                 this.showingFavTrader = sc.trade.cycleFavTrader(count);
-
-                
             }
         } else this.parent(count, skip);
     },
