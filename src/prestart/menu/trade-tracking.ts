@@ -42,7 +42,7 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
             y += textGui.hook.size.y + 2;
             textGui.setPos(6, 0);
             let itemID = tradeOption.get[0].id;
-            textGui.setText(`\\i[trade-icon-small]\\i[item-small${sc.inventory.getRaritySuffix(sc.inventory.getItem(itemID)!.rarity)}]${sc.inventory.getItemName(itemID)}` + (tradeOption.get[0].amount != 1 ? `\\i[times]${tradeOption.get[0].amount}` : ""));
+            textGui.setText(`\\i[trade-icon-small]${sc.inventory.getItemNameWithIcon(itemID)}` + (tradeOption.get[0].amount != 1 ? `\\i[times]${tradeOption.get[0].amount}` : ""));
             //textGui.setText()
 
             for(let item of tradeOption.require) {
@@ -56,7 +56,7 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
             y += entry.hook.size.y + 1;
             gui.addChildGui(entry);
             //gui.setAlign(ig.GUI_ALIGN.X_CENTER, ig.GUI_ALIGN.Y_CENTER);
-            gui.setSize(158, y);
+            gui.setSize(162, y);
             this.pushContent(gui, true);
             gui.hook.pos.x = 0;
             this.contentEntries[0].setSize(gui.hook.size.x, gui.hook.size.y+8)
@@ -91,26 +91,26 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
 
 el.TradeTrackerGui.ItemEntry = ig.BoxGui.extend({
     gfx: new ig.Image("media/gui/basic.png"),
-    ninepatch: new ig.NinePatch("media/gui/menu.png", {
-        width: 2,
+    ninepatch: new ig.NinePatch("media/gui/el/el-tweaks-gui.png", {
+        width: 8,
         height: 0,
         left: 4,
-        top: 13,
+        top: 12,
         right: 4,
         bottom: 0,
         offsets: {
             "default": {
-                x: 488,
-                y: 0
+                x: 144,
+                y: 56
             }
         }
     }),
 
     init(itemID, needed) {
-        this.parent(150, 13);
+        this.parent(154, 12);
 
         this.item = itemID;
-        this.name = sc.inventory.getItemName(itemID);
+        this.name = sc.inventory.getItemNameWithIcon(itemID);
         this.needed = needed;
 
         this.nameGui = new sc.TextGui("", {
@@ -168,23 +168,23 @@ el.TradeTrackerGui.ItemEntry = ig.BoxGui.extend({
 
 el.TradeTrackerGui.CreditEntry = ig.BoxGui.extend({
     gfx: new ig.Image("media/gui/basic.png"),
-    ninepatch: new ig.NinePatch("media/gui/menu.png", {
-        width: 2,
+    ninepatch: new ig.NinePatch("media/gui/el/el-tweaks-gui.png", {
+        width: 8,
         height: 0,
         left: 4,
-        top: 13,
+        top: 12,
         right: 4,
         bottom: 0,
         offsets: {
             "default": {
-                x: 488,
-                y: 0
+                x: 144,
+                y: 56
             }
         }
     }),
 
     init(cost) {
-        this.parent(150, 13);
+        this.parent(154, 12);
 
         this.needed = cost;
         this.nameGui = new sc.TextGui("", {
@@ -193,13 +193,13 @@ el.TradeTrackerGui.CreditEntry = ig.BoxGui.extend({
         this.nameGui.setPos(6, -1);
         this.addChildGui(this.nameGui);
 
-        this.maxNumberGui = new sc.NumberGui(9999999, {
+        this.maxNumberGui = new sc.NumberGui(cost, {
             size: sc.NUMBER_SIZE.SMALL
         });
         this.maxNumberGui.setAlign(ig.GUI_ALIGN.X_RIGHT, ig.GUI_ALIGN.Y_TOP);
         this.maxNumberGui.setPos(4, 2);
         this.maxNumberGui.setNumber(cost);
-        this.maxOffset = this.maxNumberGui.hook.size.x;
+        this.maxOffset = this.maxNumberGui.hook.size.x + 4;
         
         this.numberGui = new sc.NumberGui(9999999, {
             size: sc.NUMBER_SIZE.SMALL
