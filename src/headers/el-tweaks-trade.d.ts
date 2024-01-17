@@ -44,6 +44,7 @@ declare global {
             }
         }
         interface TradeTrackerGui extends sc.RightHudBoxGui, sc.Model.Observer {
+            gfx: ig.Image;
             hasTrade: boolean;
             
             setTrade(this: this, trade: string | null, option?: number): void;
@@ -91,7 +92,7 @@ declare global {
             isActiveTraderFavorite(this: this): boolean;
             isTraderFavorite(this: this, key: string, option: number): boolean;
             cycleFavTrader(this: this, count: number): boolean;
-            getFavoriteTrade(this: this): TradeModel.FavoriteTrade | [];
+            getFavoriteTrade(this: this): TradeModel.FavoriteTrade | undefined;
         }
         
         enum TRADE_MODEL_EVENT {

@@ -12,9 +12,12 @@ function getTradeCost(trade: sc.TradeModel.TradeOption) {
 
 //#region GUI
 el.TradeTrackerGui = sc.RightHudBoxGui.extend({
+    gfx: new ig.Image("media/gui/el/el-tweaks-gui.png"),
+
     init() {
         this.parent(ig.lang.get("sc.gui.trade-tracker.title"));
         sc.Model.addObserver(sc.model, this);
+        sc.Model.addObserver(sc.options, this);
         sc.Model.addObserver(sc.trade, this);
     },
 
@@ -56,6 +59,20 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
             entry.setPos(4, y);
             y += entry.hook.size.y + 1;
             gui.addChildGui(entry);
+
+            let foundTrader = sc.trade.getFoundTrader(trade)
+            let areaName = new sc.TextGui(`${sc.trade.getTraderAreaName(trade, true)} - ${foundTrader.map || "???"}`, {
+                font: sc.fontsystem.tinyFont,
+            })
+
+            let img = new ig.ImageGui(this.gfx, 160, 56, 5, 9);
+            img.setPos(5, y);
+            areaName.setPos(5+7, y+2);
+            
+            gui.addChildGui(img);
+            gui.addChildGui(areaName);
+            y += areaName.hook.size.y;
+
             //gui.setAlign(ig.GUI_ALIGN.X_CENTER, ig.GUI_ALIGN.Y_CENTER);
             gui.setSize(162, y);
             this.pushContent(gui, true);
@@ -70,6 +87,7 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
     },
     
     modelChanged(model, message, data) {
+        let trade = sc.trade.getFavoriteTrade();
         if (model === sc.model) {
             if ((message == sc.GAME_MODEL_MSG.SUB_STATE_CHANGED
                 || message == sc.GAME_MODEL_MSG.STATE_CHANGED)
@@ -88,8 +106,20 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
             }
         } else if (model === sc.trade) {
             if(message === sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_CHANGED) {
-                this.setTrade(...(sc.trade.getFavoriteTrade() as sc.TradeModel.FavoriteTrade));
+                if(trade) {
+                    this.setTrade(trade[0], trade[1]);
+                } else {
+                    this.setTrade(null);
+                }
             } 
+        } else if (model === sc.options) {
+            if(message === sc.OPTIONS_EVENT.OPTION_CHANGED && sc.quests.showingFavTrader) {
+                if(trade) {
+                    this.setTrade(trade[0], trade[1]);
+                } else {
+                    this.setTrade(null);
+                }
+            }
         }
     },
 })
@@ -310,10 +340,7 @@ sc.TradeMenu.inject({
     },
     
     onFavButtonPressed() {
-        // console.log(`setting fav trade to ${sc.trade.traderKey}/${sc.trade.tradeIndex}`)
-
         sc.trade.toggleFavoriteTrader(sc.trade.traderKey, sc.trade.tradeIndex)
-        //sc.gui.tradeTrackerGui.setTrade(sc.trade.traderKey, sc.trade.tradeIndex)
     },
 
 })
@@ -324,9 +351,7 @@ sc.TradeMenu.inject({
 sc.TradeModel.inject({
     traderKey: "",
     favoriteTraders: [],
-    // favoriteTraderKeys: [],
     favoriteTraderIndex: -1,
-    // favoriteTraderOptionIndex: -1,
 
     toggleFavoriteTrader(key, option) {
         if(this.isTraderFavorite(key, option)) {
@@ -349,7 +374,6 @@ sc.TradeModel.inject({
             return true;
         }
     },
-
 
     //TODO: Handle trades being added/removed while being tracked.
     cycleFavTrader(count) {
@@ -379,6 +403,19 @@ sc.TradeModel.inject({
         this.traderKey = "";
     },
 
+    unlockParents(trader, characterName, originalTrader) {
+        let val = this.parent(trader, characterName, originalTrader);
+
+        for(let entry of this.favoriteTraders) {
+            if(entry[0] == originalTrader) {
+                entry[0] = trader;
+                sc.Model.notifyObserver(this, sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_CHANGED);
+            }
+        }
+
+        return val;
+    },
+
     isTraderFavorite(key, option) {
         return this.favoriteTraders.find(([x_key, x_val]) => x_key === key && x_val === option) !== undefined;
     },
@@ -388,18 +425,36 @@ sc.TradeModel.inject({
 
     onStorageSave(savefile) {
         this.parent!(savefile);
-        savefile.vars.storage.favoriteTraders = ig.copy(this.favoriteTraders);
+        let obj: any = {};
+
+        obj.favoriteTraders = ig.copy(this.favoriteTraders);
+        obj.showingFavTrader = sc.quests.showingFavTrader;
+        obj.favTraderIndex = this.favoriteTraderIndex;
+        
+        savefile.vars.storage.el_favTrader = obj;
     },
     onStoragePreLoad(savefile) {
         this.parent!(savefile);
-        
-        if(Array.isArray(savefile.vars.storage.favoriteTraders)) {
-            this.favoriteTraders = ig.copy(savefile.vars.storage.favoriteTraders);
+        let obj = savefile.vars.storage.el_favTrader;
+        if(obj) {
+            this.favoriteTraders = ig.copy(obj.favoriteTraders);
+            sc.quests.showingFavTrader = obj.showingFavTrader;
+            this.favoriteTraderIndex = obj.favTraderIndex;
+            
+            if((!sc.quests.showingFavTrader) || (!this.favoriteTraderIndex && this.favoriteTraderIndex !== 0)) {
+                sc.quests.showingFavTrader = false;
+                this.favoriteTraderIndex = -1
+            }
         } else {
             this.favoriteTraders = [];
+            sc.quests.showingFavTrader = false;
+            this.favoriteTraderIndex = -1;
         }
+    },
 
-        //this.favoriteTraderKeys = Object.keys(this.favoriteTraders);
+    onStoragePostLoad(savefile) {
+        this.parent && this.parent(savefile);
+        sc.Model.notifyObserver(this, sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_CHANGED);
     },
 
     getFavoriteTrade() {
