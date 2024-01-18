@@ -130,5 +130,23 @@ declare global {
         interface TradeIconGui {
             _trader: string;
         }
+
+        namespace TraderMenu {
+            interface SynopInfo {
+                button?: Optional<sc.TradeEntryButton>;
+            }
+        }
+
+        interface TraderMenu {
+            currentFocusedTrader: TraderMenu.SynopInfo;
+            favButton: sc.ButtonGui;
+
+            _onFavButtonCheck(this: this): boolean;
+            onFavButtonPressed(this: this): void;
+        }
+
+        interface TradersListBox {
+            lastFocusedListEntry?: Optional<sc.TradeEntryButton>;
+        }
     }
 }
