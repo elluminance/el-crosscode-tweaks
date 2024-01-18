@@ -61,13 +61,13 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
             gui.addChildGui(entry);
 
             let foundTrader = sc.trade.getFoundTrader(trade)
-            let areaName = new sc.TextGui(`${sc.trade.getTraderAreaName(trade, true)} - ${foundTrader.map || "???"}`, {
+            let areaName = new sc.TextGui(`${sc.trade.getTraderAreaName(trade, true)} - ${foundTrader?.map || "???"}`, {
                 font: sc.fontsystem.tinyFont,
             })
 
-            let img = new ig.ImageGui(this.gfx, 160, 56, 5, 9);
-            img.setPos(5, y);
-            areaName.setPos(5+7, y+2);
+            let img = new ig.ImageGui(this.gfx, 160, 56, 5, 10);
+            img.setPos(5, y+1);
+            areaName.setPos(5+8, y+2);
             
             gui.addChildGui(img);
             gui.addChildGui(areaName);
@@ -105,13 +105,17 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
                 }
             }
         } else if (model === sc.trade) {
-            if(message === sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_CHANGED) {
-                if(trade) {
-                    this.setTrade(trade[0], trade[1]);
-                } else {
-                    this.setTrade(null);
-                }
-            } 
+            switch(message) {
+                case sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_CHANGED:
+                case sc.TRADE_MODEL_EVENT.FAVORITE_TRADER_REMOVED:
+                    if(trade) {
+                        this.setTrade(trade[0], trade[1]);
+                    } else {
+                        this.setTrade(null);
+                    }
+                    break;
+
+            }
         } else if (model === sc.options) {
             if(message === sc.OPTIONS_EVENT.OPTION_CHANGED && sc.quests.showingFavTrader) {
                 if(trade) {
@@ -346,7 +350,6 @@ sc.TradeMenu.inject({
 })
 
 //TODO: look into sc.trade.resetTrader() maybe?
-//also sc.trade.unlockParents() - handle upgraded trades seamlessly.
 
 sc.TradeModel.inject({
     traderKey: "",
