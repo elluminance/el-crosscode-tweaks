@@ -14,6 +14,7 @@
     },
     "scripts": {
         "build": "tsc --build",
-        "watch": "tsc --watch"
+        "watch": "tsc --watch",
+        "make-ccmod": "tsc -b && zip -qr el-tweaks.ccmod ccmod.json package.json dist assets"
     }
 }

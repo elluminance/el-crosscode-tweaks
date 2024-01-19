@@ -146,6 +146,11 @@
                     "blue": "Blue"
                 }
             }
+        },
+
+        "trade-tracker": {
+            "title": "Trading",
+            "credits": "Cost"
         }
     }
 }
