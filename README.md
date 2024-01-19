@@ -5,7 +5,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 
 ***Note: Support will not be provided unless you are using the [latest release](https://github.com/EL20202/el-crosscode-tweaks/releases/latest).***
 
-*Readme is guaranteed accurate up to version 0.6.4. See changelog for more details.*
+*Readme is guaranteed accurate up to version 0.7.0. See changelog for more details.*
 
 &nbsp;
 
@@ -15,6 +15,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
   * [Assist Mode Changes](#assist-mode)
   * [NG+ Perks](#ng-perks)
   * [Uncapped Stats](#uncapped-stats)
+  * [Trade Tracking](#trade-favoriting)
   * [Bug Fixes/Minor Additions](#bug-fixesother-miscellaneous-additions)
 * **[Additions for Modders](#for-modders)**
   * [Action Steps](#action-steps)
@@ -98,6 +99,24 @@ Item search functionality requires [CCInventorySearch](https://github.com/conorl
 Removes the visual stat cap present in many circumstances - allowing you to see what your stats really are! Allows the stat display to go up to 999999999, though it's incredibly unlikely for that limit ever to be reached. You can also have it so only attack will be able to go to a very, very high value - for whatever reasons you might want that.
 
 **Warning**: If the standalone [Uncapped Stats](https://github.com/EL20202/cc-uncapped-stats) is installed, the this part of the mod will not function. Please remove the standalone version if installing this mod, as the standalone version will not be updated!
+
+## Trade Favoriting
+
+You can now track trades to see what items you need as you explore the world, just like how you can track quests!
+
+![](/readme-imgs/trade/img-trade-screen.png)
+
+![](/readme-imgs/trade/img-trader-screen.png)
+
+*Note the `Set Favorites` button at the top of both.*
+
+![](/readme-imgs/trade/img-overworld.png)
+
+*Favorited trades will have a little star icon on the overworld.*
+
+Once you have favorited a quest, you can cycle through them just like you would for favorite quests (by default `Q`/`E` or pressing the left/right sticks on controller). They show up after your favorited quests would.
+
+![](/readme-imgs/trade/img-ui.png)
 
 ## Bug Fixes/Other Miscellaneous Additions
 
@@ -506,6 +525,7 @@ File: `assets/data/areas/rhombus-sqr.json.patch`
             ],
 
             //where your map's top left corner should be placed.
+            //can be negative, too!
             "offX": 18,
             "offY": 35,
 
