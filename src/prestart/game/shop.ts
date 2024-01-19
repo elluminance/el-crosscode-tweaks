@@ -171,7 +171,7 @@ sc.ShopListMenu.inject({
                 itemEquipLevel = 0;
                 item.type === sc.ITEMS_TYPES.EQUIP && (itemEquipLevel = item.level || 1);
 
-                itemCost = Math.floor(b[k].price || (item.cost / (sc.menu.shopSellMode ? 2 : 1)));
+                itemCost = Math.floor(b[k].price || ((sc.menu.shopCoinMode ? item.coins! : item.cost) / (sc.menu.shopSellMode ? 2 : 1)));
                 itemQuantity = sc.menu.getItemQuantity(itemID, itemCost);
                 itemName = "\\i[" + (item.icon + sc.inventory.getRaritySuffix(item.rarity || 0) || "item-default") + "]" + ig.LangLabel.getText(item.name);
                 itemDesc = ig.LangLabel.getText(item.description);

@@ -25,10 +25,7 @@ jobs:
         run: sudo apt update; sudo apt install zip npm
 
       - name: Compile
-        run: npm install; npm run build
-
-      - name: Create archive
-        run: zip -q -r els-tweaks.ccmod assets dist ccmod.json package.json
+        run: npm install; npm run make-ccmod
 
       - name: Get version
         id: get_version
