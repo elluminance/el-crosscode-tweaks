@@ -182,7 +182,7 @@ sc.ShopListMenu.inject({
                     c = sc.stats.getMap("items", itemID as string)
                     maxVal = (button.data as any).maxOwn = b[k].maxOwn!;
                 } else maxVal = 99;
-                (moneyLeft < itemCost && !sc.menu.getItemQuantity(itemID, itemCost) || c >= Math.min(maxVal, maxOwn ?? 99)) && button.setActive(false);
+                (moneyLeft < itemCost && !sc.menu.getItemQuantity(itemID, itemCost) || c >= Math.min(maxVal ?? 99, maxOwn ?? 99)) && button.setActive(false);
                 this.list.addButton(button)
             }
         }

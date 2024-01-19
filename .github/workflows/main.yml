@@ -24,8 +24,11 @@ jobs:
       - name: Install dependencies
         run: sudo apt update; sudo apt install zip npm
 
-      - name: Compile
-        run: npm install; npm run make-ccmod
+      - name: Get NPM dependencies
+        run: npm install
+
+      - name: Build mod
+        run: npm run make-ccmod
 
       - name: Get version
         id: get_version
