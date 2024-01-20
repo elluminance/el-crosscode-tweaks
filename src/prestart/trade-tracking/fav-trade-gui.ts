@@ -49,7 +49,10 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
             gui.addChildGui(entry);
             this.credits = entry;
 
-            let foundTrader = sc.trade.getFoundTrader(trade)
+            let foundTrader = sc.trade.getFoundTrader(trade);
+            if(!foundTrader) {
+                foundTrader = sc.trade.el_tradersFound[trade];
+            }
             let areaName = new sc.TextGui(`${sc.trade.getTraderAreaName(trade, true)} - ${foundTrader?.map || "???"}`, {
                 font: sc.fontsystem.tinyFont,
             })
@@ -62,7 +65,6 @@ el.TradeTrackerGui = sc.RightHudBoxGui.extend({
             gui.addChildGui(areaName);
             y += areaName.hook.size.y;
 
-            //gui.setAlign(ig.GUI_ALIGN.X_CENTER, ig.GUI_ALIGN.Y_CENTER);
             gui.setSize(162, y);
             this.pushContent(gui, true);
             gui.hook.pos.x = 0;

@@ -85,11 +85,16 @@ declare global {
 
         namespace TradeModel {
             type FavoriteTrade = [string, number];
+
+            interface EL_TraderData {
+                area: ig.LangLabel;
+            }
         }
         interface TradeModel {
             traderKey: string;
             favoriteTraders: TradeModel.FavoriteTrade[]
             favoriteTraderIndex: number;
+            el_tradersFound: Record<string, TradeModel.FoundTrader>;
 
             toggleFavoriteTrader(this: this, key: string, option: number): boolean;
             isActiveTraderFavorite(this: this): boolean;

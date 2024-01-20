@@ -15,6 +15,8 @@ sc.TradeModel.inject({
     favoriteTraders: [],
     favoriteTraderIndex: -1,
 
+    el_tradersFound: {},
+
     toggleFavoriteTrader(key, option) {
         if(this.isTraderFavorite(key, option)) {
             let index = this.favoriteTraders.findIndex(([x_key, x_val]) => x_key == key && x_val == option);
@@ -64,6 +66,19 @@ sc.TradeModel.inject({
         this.traderKey = "";
     },
 
+    unlockTrader(trader, characterName) {
+        this.parent(trader, characterName);
+
+        if(this.traders[trader].noTrack) {
+            this.el_tradersFound[trader] = {
+                characterName: characterName || "",
+                map: sc.map.getCurrentMapName(),
+                area: sc.map.getCurrentPlayerAreaName(),
+                time: (new Date).getTime()
+            };
+        }
+    },
+
     unlockParents(trader, characterName, originalTrader) {
         let val = this.parent(trader, characterName, originalTrader);
 
@@ -86,12 +101,20 @@ sc.TradeModel.inject({
 
     onStorageSave(savefile) {
         this.parent!(savefile);
-        let obj: any = {};
-
-        obj.favoriteTraders = ig.copy(this.favoriteTraders);
-        obj.showingFavTrader = sc.quests.showingFavTrader;
-        obj.favTraderIndex = this.favoriteTraderIndex;
-        
+        let obj: any = {
+            favoriteTraders: ig.copy(this.favoriteTraders),
+            showingFavTrader: sc.quests.showingFavTrader,
+            favTraderIndex: this.favoriteTraderIndex,
+            tradersFound: {},
+        };
+        for(let [trader, data] of Object.entries(this.el_tradersFound)) {
+            obj.tradersFound[trader] = {
+                characterName: data.characterName,
+                map: data.map?.getSaveData?.() ?? "???",
+                area: data.area?.getSaveData?.() ?? "???",
+                time: data.time || 0,
+            }
+        }
         savefile.vars.storage.el_favTrader = obj;
     },
     onStoragePreLoad(savefile) {
@@ -105,6 +128,18 @@ sc.TradeModel.inject({
             if((!sc.quests.showingFavTrader) || (!this.favoriteTraderIndex && this.favoriteTraderIndex !== 0)) {
                 sc.quests.showingFavTrader = false;
                 this.favoriteTraderIndex = -1
+            }
+            this.el_tradersFound = {};
+
+            if(obj.tradersFound) {
+                for(let [trader, data] of Object.entries<any>(obj.tradersFound)) {
+                    this.el_tradersFound[trader] = {
+                        characterName : data.characterName,
+                        map: new ig.LangLabel(data.map || "???"),
+                        area: new ig.LangLabel(data.map || "???"),
+                        time: data.time || 0
+                    }
+                }
             }
         } else {
             this.favoriteTraders = [];
