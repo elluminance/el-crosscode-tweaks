@@ -2,6 +2,8 @@ export {};
 
 declare global {
     namespace el {
+        function getTradeCost(trade: sc.TradeModel.TradeOption): number;
+
         namespace TradeTrackerGui {
             interface Constructor extends ImpactClass<TradeTrackerGui> {
                 new (): TradeTrackerGui;
@@ -46,6 +48,7 @@ declare global {
         interface TradeTrackerGui extends sc.RightHudBoxGui, sc.Model.Observer {
             gfx: ig.Image;
             hasTrade: boolean;
+            credits: Optional<TradeTrackerGui.CreditEntry>;
             
             setTrade(this: this, trade: string | null, option?: number): void;
             _isVisible(this: this): boolean;

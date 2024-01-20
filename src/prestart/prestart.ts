@@ -17,7 +17,6 @@ import "./menu/color-picker.js"
 import "./menu/custom-map-utils.js"
 import "./menu/item-spawner.js"
 import "./menu/save-slot.js"
-import "./menu/trade-tracking.js"
 import "./menu/trophy.js"
 import "./menu/uncapped-stats.js"
 
@@ -27,3 +26,7 @@ import "./misc/mod-utils.js"
 import "./steps/action-steps.js"
 import "./steps/effect-entries.js"
 import "./steps/event-steps.js"
+
+import "./trade-tracking/base.js";
+import "./trade-tracking/fav-trade-gui.js";
+import "./trade-tracking/menu.js";
