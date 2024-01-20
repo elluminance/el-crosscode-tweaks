@@ -1,7 +1,7 @@
 {
 	"name": "el-tweaks",
     "displayName": "EL's Tweaks",
-	"version": "0.7.2",
+	"version": "0.7.3",
 	"description": "A coremod full of useful functionality for modders, as well as many tweaks for players.",
 
     "plugin": "./dist/plugin.js",
@@ -15,6 +15,6 @@
     "scripts": {
         "build": "tsc --build",
         "watch": "tsc --watch",
-        "make-ccmod": "tsc -b && zip -qr els-tweaks.ccmod ccmod.json package.json dist assets"
+        "make-ccmod": "tsc -b ./tsconfig.release.json && zip -qr els-tweaks.ccmod ccmod.json package.json dist assets"
     }
 }

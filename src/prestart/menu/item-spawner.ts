@@ -26,8 +26,6 @@ function itemTypeToIndex(item: sc.Inventory.Item) {
 //@ts-expect-error
 sc.SORT_TYPE.ITEM_ID = 22135;
 
-
-
 el.ItemSpawnerGui = sc.ModalButtonInteract.extend({
     transitions: {
         DEFAULT: {
@@ -124,7 +122,10 @@ el.ItemSpawnerGui = sc.ModalButtonInteract.extend({
         //#region Filtering
         this.filterButtongroup = new sc.ButtonGroup;
 
-        if(ig.GuiTextInputField) {
+
+        let textInput = nax.ccuilib.InputField || ig.GuiTextInputField;
+
+        if(textInput) {
             this.searchActive = true;
             
             this.searchText = new sc.TextGui(ig.lang.get("sc.gui.menu.elItemSpawner.search"), {
@@ -139,7 +140,7 @@ el.ItemSpawnerGui = sc.ModalButtonInteract.extend({
             this.filterGui.addChildGui(line);
             yOffset += 3;
 
-            this.inputField = new ig.GuiTextInputField(lineWidth, 20);
+            this.inputField = new textInput(lineWidth, 20);
             this.inputField!.onCharacterInput = () => {
                 this._createList();
             }

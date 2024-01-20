@@ -5,7 +5,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 
 ***Note: Support will not be provided unless you are using the [latest release](https://github.com/EL20202/el-crosscode-tweaks/releases/latest).***
 
-*Readme is guaranteed accurate up to version 0.7.0. See changelog for more details.*
+*Readme is guaranteed accurate up to version 0.7.3. See changelog for more details.*
 
 &nbsp;
 
@@ -85,7 +85,7 @@ Makes it so you cannot wear any equipment. Can you beat the game *naked*?
 
 An item spawn menu, allowing you to add any item in the game to your inventory. 
 
-Item search functionality requires [CCInventorySearch](https://github.com/conorlawton/CCInventorySearch) (or any other mod adding the text input element) to be installed.
+Item search functionality requires [CCUILib](https://github.com/conorlawton/CCUILib) to be installed.
 
 ## Uncapped Stats
 *Before*
