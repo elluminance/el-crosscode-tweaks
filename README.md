@@ -3,9 +3,11 @@
 
 Contains additions/fixes that are helpful to both normal players and modders alike!
 
-***Note: Support will not be provided unless you are using the [latest release](https://github.com/EL20202/el-crosscode-tweaks/releases/latest).***
+## [Click here to download!](https://github.com/EL20202/el-crosscode-tweaks/releases/latest)
+***Note: Support will not be provided unless you are using the latest release. Merely downloading***
 
-*Readme is guaranteed accurate up to version 0.7.3. See changelog for more details.*
+*Readme is guaranteed accurate up to version 0.7.4. See changelog for more details.*
+
 
 &nbsp;
 

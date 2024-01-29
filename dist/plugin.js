@@ -1,0 +1,1 @@
+throw Error("Looks like you downloaded the mod as a zip. Download the latest .ccmod release instead, because the zip won't work!");
