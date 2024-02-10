@@ -4,9 +4,9 @@
 Contains additions/fixes that are helpful to both normal players and modders alike!
 
 ## [Click here to download!](https://github.com/EL20202/el-crosscode-tweaks/releases/latest)
-***Note: Support will not be provided unless you are using the latest release. Merely downloading***
+***Note: Support will not be provided unless you are using the latest release. Merely downloading the zip will not work!***
 
-*Readme is guaranteed accurate up to version 0.7.4. See changelog for more details.*
+*Readme is guaranteed accurate up to version 0.7.5. See changelog for more details.*
 
 
 &nbsp;
@@ -129,7 +129,7 @@ Once you have favorited a quest, you can cycle through them just like you would 
 * **Ball Autofiring**: By holding the `F` key, you can automatically fire balls using mouse and keyboard - something previously exclusive to controller controls. (***NOTE***: requires [input-api](https://github.com/CCDirectLink/input-api) to function properly.)
 * **Custom Map Name Fix**: Fixes custom mod map/area names as sometimes being displayed as `[object Object]` in save slots.
 * **Arena Ascended Gear Scaling**: Fixes the ascended gear scaling modifier for arena cups/rounds to actually work properly for individual rounds (and not erroneously apply to some cups which might lack the scaling)
-* **Icon Fix** One DLC-only character lacks a proper head icon and just displays as `<?>`. If 
+* **Icon Fix** One DLC-only character lacks a proper head icon and just displays as `<?>`. If [extendable-severed-heads](https://github.com/CCDirectLink/extendable-severed-heads) (v1.1.0 or greater) is installed, this character will display properly.
 
 ---
 # For Modders
