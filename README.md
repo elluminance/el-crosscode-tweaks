@@ -129,6 +129,7 @@ Once you have favorited a quest, you can cycle through them just like you would 
 * **Ball Autofiring**: By holding the `F` key, you can automatically fire balls using mouse and keyboard - something previously exclusive to controller controls. (***NOTE***: requires [input-api](https://github.com/CCDirectLink/input-api) to function properly.)
 * **Custom Map Name Fix**: Fixes custom mod map/area names as sometimes being displayed as `[object Object]` in save slots.
 * **Arena Ascended Gear Scaling**: Fixes the ascended gear scaling modifier for arena cups/rounds to actually work properly for individual rounds (and not erroneously apply to some cups which might lack the scaling)
+* **Icon Fix** One DLC-only character lacks a proper head icon and just displays as `<?>`. If 
 
 ---
 # For Modders

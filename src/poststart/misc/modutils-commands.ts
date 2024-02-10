@@ -104,4 +104,10 @@ window.cmd = {
         ig.vars.storage.tmp = {};
         ig.game.varsChangedDeferred();
     },
+
+    changePlayerConfig(name: string) {
+        if(sc.PARTY_OPTIONS.includes(name)) {
+            sc.model.player.setConfig(sc.party.models[name].config)
+        }
+    }
 }

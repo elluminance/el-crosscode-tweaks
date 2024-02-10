@@ -1,9 +1,13 @@
 {
     "id": "el-tweaks",
-    "version": "0.7.4",
+    "version": "0.7.5",
 
     "title": "EL's Tweaks",
     "description": "A coremod full of useful functionality for modders, as well as many tweaks for players.",
 
-    "plugin": "./dist/plugin.js"
+    "plugin": "./dist/plugin.js",
+
+    "dependencies": {
+        "ccloader": "2.x.x"
+    }
 }

@@ -123,7 +123,7 @@ el.ItemSpawnerGui = sc.ModalButtonInteract.extend({
         this.filterButtongroup = new sc.ButtonGroup;
 
 
-        let textInput = nax.ccuilib.InputField || ig.GuiTextInputField;
+        let textInput = window.nax?.ccuilib?.InputField || ig.GuiTextInputField;
 
         if(textInput) {
             this.searchActive = true;

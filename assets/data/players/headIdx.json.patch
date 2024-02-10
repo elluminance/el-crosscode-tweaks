@@ -1,0 +1,11 @@
+[{
+    "type": "ENTER",
+    "index": "headIdx"
+},{
+    "type": "ADD_ARRAY_ELEMENT",
+    "content": {
+        "id": "main.sergey-av",
+        "img": "media/gui/severed-heads/sergey-av.png",
+        "name": "sergey-av"
+    }
+}]
