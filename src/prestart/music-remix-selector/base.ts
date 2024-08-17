@@ -19,7 +19,17 @@ el.MusicRemixController = ig.Class.extend({
     },
 
     getRemix(bgm) {
-        return this.selectedRemixes[bgm] || bgm;
+        //verify there is a remix associated and if there is, make sure it actually is valid
+        if (this.selectedRemixes[bgm] && (this.selectedRemixes[bgm] in this.remixes[bgm])) {
+            return this.selectedRemixes[bgm];
+        } else {
+            //otherwise, it's clearly invalid. we'll just delete it then.
+            if(this.selectedRemixes[bgm]) {
+                delete this.selectedRemixes[bgm];
+                this.saveToStorage();
+            }
+            return bgm;
+        }
     },
 
     setRemix(bgm, newBgm) {
