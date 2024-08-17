@@ -20,9 +20,6 @@ el.MusicRemixSelectorMenu = sc.ListInfoMenu.extend({
     init() {
         this.parent(new el.MusicRemixList, null, true);
         
-        //@ts-ignore
-        window.hhh = this;
-        
         this.list.hook.pos.x = 17;
 
         this.doStateTransition("DEFAULT");
