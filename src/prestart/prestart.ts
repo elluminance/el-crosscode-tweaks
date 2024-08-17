@@ -30,3 +30,5 @@ import "./steps/event-steps.js"
 import "./trade-tracking/base.js";
 import "./trade-tracking/fav-trade-gui.js";
 import "./trade-tracking/menu.js";
+
+import "./music-remix-selector/_core.js"

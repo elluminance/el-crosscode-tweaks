@@ -1,0 +1,55 @@
+{
+    "actions": {
+        "EL_SET_TARGET": {
+            "name": {
+                "type": "String",
+                "description": "Name of entity to target"
+            }
+        },
+        "GOTO_LABEL_WHILE": {
+            "attributes": {
+                "name": {
+                    "type": "String",
+                    "description": "Label to move to."
+                },
+                "condition": {
+                    "type": "VarCondition",
+                    "description": "Condition to jump to the label"
+                }
+            },
+            "initialObject": {
+                "name": null,
+                "condition": null
+            }
+        },
+
+        "EL_ELEMENT_IF": {
+            "eventType": "defaultBranching",
+            "branches": [
+                {
+                    "id": "neutral",
+                    "name": "NEUTRAL"
+                },
+                {
+                    "id": "heat",
+                    "name": "HEAT"
+                },
+                {
+                    "id": "cold",
+                    "name": "COLD"
+                },
+                {
+                    "id": "shock",
+                    "name": "SHOCK"
+                },
+                {
+                    "id": "wave",
+                    "name": "WAVE"
+                }
+            ],
+            "attributes": {
+
+            }
+        }
+    }
+}
