@@ -74,6 +74,11 @@
                 "description": "If Uncapped Stats is enabled, show additional digits for attack specifically."
             },
 
+            "el-open-remix-menu": {
+                "name": "Open Remix Menu",
+                "description": "Open the menu allowing one to select custom music remixes."
+            },
+
             "controls":{
                 "keys": {
                     "walk": "Walk",
@@ -145,6 +150,87 @@
                     "green": "Green",
                     "blue": "Blue"
                 }
+            },
+            "options-open-menu-button": "Open Menu",
+
+            "menu-titles": {
+                "el-music-selector": "Remix Selector"
+            },
+            "el-music-selector": {
+                "bgm": {
+                    "title": "Title",
+                    "oldHideout1": "Mysterious Place",
+                    "oldHideoutBattle": "Fierce Battle",
+                    "intro": "Awakened",
+                    "tutorial": "Cargo Hold",
+                    "tutorial-battle": "Battle 1",
+                    "cargoship-exterior": "M.S. Solar",
+                    "exposition": "Welcome to CrossWorlds",
+                    "challenge": "Challenge 1",
+                    "designer": "Taking What Does Not Belong",
+                    "bossbattle1": "Boss Battle",
+                    "crosscounter": "CrossCounter!",
+                    "escape": "Escape",
+                    "rhombusSquare": "Newcomer's Bridge",
+                    "rhombusDungeon": "Rhombus Dungeon",
+                    "challenge2": "Challenge 2",
+                    "emilie": "Valse d'Ahoge",
+                    "apolloTheme": "The Path of Justice",
+                    "rookieHarbor": "Rookie Harbor",
+                    "autumnsRise": "Autumn's Rise",
+                    "fieldBattle": "Battle 2",
+                    "casual": "Travelling Together",
+                    "lea": "Lea!",
+                    "bergenTrail": "Bergen Trail",
+                    "bergenVillage": "Bergen Village",
+                    "briefing": "Briefing",
+                    "firstScholars": "First Scholars",
+                    "coldDungeon": "Temple Mine",
+                    "ponder": "Improvising",
+                    "heatArea": "Maroon Valley",
+                    "heatVillage": "Ba'kii Kum",
+                    "sorrow": "Shocking Reveal",
+                    "heatDungeon": "Temple of the Valley",
+                    "dreamsequence": "Lucid Dream",
+                    "autumnsFall": "Autumn's Fall",
+                    "raidTheme": "Raid",
+                    "designerBoss1": "The Experience",
+                    "waiting": "Imprisoned",
+                    "aridField": "Vermillion Wasteland",
+                    "aridBattle": "Battle 3",
+                    "shizukaConfrontation": "Confrontation",
+                    "sadness": "Sadness",
+                    "infiltration": "Infiltration",
+                    "evoDungeon1": "Separated Again",
+                    "evoDungeon2": "Hack Your Way!",
+                    "evoEscape": "Escape Again",
+                    "snailBattle1": "Exponential Growth",
+                    "snailBattle2": "Exponential Conclusion",
+                    "sergeyExposition": "Past Events",
+                    "jungle": "Gaia's Garden",
+                    "basinKeep": "Basin Keep",
+                    "waveDungeon": "Temple of the Lake",
+                    "shockDungeon": "Temple of Thunder",
+                    "treeDungeon": "Temple of the Grand Tree",
+                    "forestField": "Sapphire Ridge",
+                    "rhombusSquare2": "Rhombus Square",
+                    "oldHideout2": "Old Hideout",
+                    "shizuka": "Shizuka",
+                    "trueIntentions": "True Intention",
+                    "lastDungeon": "Vermillion Dungeon",
+                    "finalBoss": "The Ultimate Experience",
+                    "credits": "Ending",
+                    "arena": "Arena Lobby",
+                    "bossRush": "Boss Rush",
+                    "glitchArea": "Glitch",
+                    "s-rank": "S-Rank Battle",
+                    "beach": "Azure Archipelago",
+                    "finalDungeon": "Temple of the Crater",
+                    "godBoss": "One Last Trial"
+                },
+
+                "default-name": "Unset",
+                "default-desc": "The original version of the track."
             }
         },
 

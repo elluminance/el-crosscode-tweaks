@@ -1,5 +1,5 @@
 import "./base.js";
-import "./prestart/gui.js";
+import "./gui.js";
 
 el.musicRemix.registerRemix("autumnsRise", "autumnsFall", {
     name: {

@@ -24,6 +24,14 @@ for(let [key, value] of (Object.entries(sc.OPTIONS_DEFINITION) as [keyof sc.OPTI
     options[key] = value;
 
     switch(key){
+        case "volume-sound": 
+            options["el-open-remix-menu"] = {
+                //@ts-expect-error
+                type: "OPEN_MENU",
+                menu: sc.MENU_SUBMENU.EL_MUSIC_SELECTOR,
+                cat: sc.OPTION_CATEGORY.GENERAL,
+            }
+            break;
         case "assist-attack-frequency": 
             options["assist-timing-window"] = {
                 type: "OBJECT_SLIDER",

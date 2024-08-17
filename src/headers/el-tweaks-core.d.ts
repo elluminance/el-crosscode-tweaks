@@ -81,6 +81,8 @@ declare global {
 
                 "keys-walk": sc.OptionDefinition.CONTROLS;
                 "keys-autoThrow": sc.OptionDefinition.CONTROLS;
+
+                "el-open-remix-menu": sc.OptionDefinition.OPEN_MENU;
             }
         }
 
@@ -139,6 +141,33 @@ declare global {
         interface NEW_GAME_OPTIONS {
             "no-equipment": NewGameOption;
             "guard-perfectionist": NewGameOption;
+        }
+
+        enum OPTION_TYPES {
+            OPEN_MENU,
+        }
+        namespace OPTION_GUIS_DEFS {
+            interface OPEN_MENU extends ig.GuiElementBase {
+                base: sc.OptionRow;
+                button: sc.ButtonGui;
+                option: sc.OptionDefinition.OPEN_MENU
+
+                onPressed(this: this, button: ig.FocusGui): void;
+            }
+            interface OPEN_MENU_CONSTRUCTOR extends ImpactClass<OPEN_MENU> {
+                new(base: sc.OptionRow, size: number, rowGroup: sc.RowButtonGroup): OPEN_MENU;
+            }
+        }
+        interface OPTION_GUIS {
+            [sc.OPTION_TYPES.OPEN_MENU]: OPTION_GUIS_DEFS.OPEN_MENU_CONSTRUCTOR;
+        }
+
+        namespace OptionDefinition {
+            interface OPEN_MENU {
+                type: "OPEN_MENU";
+                menu: sc.MENU_SUBMENU;
+                init?: null | undefined;
+            }
         }
     }
 

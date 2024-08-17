@@ -76,7 +76,7 @@ declare global {
             line: ig.ColorGui;
             buttons: el.MusicRemixButton[];
 
-            updateToggleStates(this: this, baseButton?: el.MusicRemixButton, setOn?: boolean): void;
+            updateToggleStates(this: this, baseButton?: el.MusicRemixButton): void;
         }
         interface MusicRemixSetConstructor extends ImpactClass<MusicRemixSet> {
             new (baseSong: string, list: sc.MultiColumnItemListBox, yButtonOffset: number): MusicRemixSet;

@@ -30,9 +30,13 @@ el.MusicRemixSelectorMenu = sc.ListInfoMenu.extend({
     },
     showMenu() {
         this.parent();
-        // sc.menu.buttonInteract.pushButtonGroup(this.buttongroup);
+        this.doStateTransition("DEFAULT");
         this.list.show();
         this.list.doStateTransition("DEFAULT");
+        sc.menu.pushBackCallback(() => {    
+            sc.menu.popBackCallback();
+            sc.menu.popMenu();
+        })
     },
     
     hideMenu() {
@@ -41,6 +45,7 @@ el.MusicRemixSelectorMenu = sc.ListInfoMenu.extend({
         this.doStateTransition("HIDDEN")
         this.list.doStateTransition("HIDDEN");
     },
+
 })
 
 const BUTTON_WIDTH = 174;
@@ -123,7 +128,7 @@ el.MusicRemixList = ig.GuiElementBase.extend({
             let songKey = el.musicRemix.getRemix(button.baseSong) === button.songKey ? null : button.songKey
             el.musicRemix.setRemix(button.baseSong, songKey);
 
-            this.sets[button.baseSong].updateToggleStates(button, !!songKey);
+            this.sets[button.baseSong].updateToggleStates(button);
         }
     },
 
@@ -175,7 +180,7 @@ el.MusicRemixSet = ig.GuiElementBase.extend({
         //this.background.setSize(this.hook.size.x + 4, this.hook.size.y + 1);
     },
 
-    updateToggleStates(baseButton, setOn) {
+    updateToggleStates(baseButton) {
         if (baseButton) {
             let anim = new sc.ItemMenuToggleAnimation(() => {
                 baseButton.updateToggleState();
@@ -213,9 +218,6 @@ el.MusicRemixButton = sc.ListBoxButton.extend({
         this.button.textChild.setText(radioButton + this.songName);
     }
 })
-
-//@ts-expect-error
-sc.MENU_SUBMENU.EL_MUSIC_SELECTOR = Math.max(...Object.values(sc.MENU_SUBMENU as unknown as Record<string, number>)) + 1;
 
 sc.SUB_MENU_INFO[sc.MENU_SUBMENU.EL_MUSIC_SELECTOR] = {
     Clazz: el.MusicRemixSelectorMenu,
