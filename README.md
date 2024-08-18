@@ -120,6 +120,14 @@ Once you have favorited a quest, you can cycle through them just like you would 
 
 ![](/readme-imgs/trade/img-ui.png)
 
+## Music Remix Selector
+
+Other mods may now add in custom remixes to songs and you can now freely swap between any of them as you with.
+
+https://github.com/user-attachments/assets/7ba3b3c8-529b-41d1-b015-40af1b0c0263
+
+For modders to add in custom remixes, look [here](#adding-music-remixes).
+
 ## Bug Fixes/Other Miscellaneous Additions
 
 * **Flash Step Fix**: Prior to CrossCode version 1.4.2-3, the modifier *Flash Step* had neglible effect on dash invincibility. This mod offers a fix to those who are playing older versions.
@@ -578,6 +586,35 @@ And if we load up the map in game...
 We now have a nice lovely connection between these two maps! The same process applies to icons/landmarks, just with `map` instead of `map1` and/or `map2`. Note that the `customName` property only applies to that floor in question. Other floors will not know what it's referring to!
 
 Enjoy mapping!
+
+## Adding Music Remixes
+
+For adding in custom remixes, first start by adding a normal entry to `ig.BGM_TRACK_LIST`.
+
+```js
+Object.assign(ig.BGM_TRACK_LIST, {
+    "some-remix-here": {
+        introPath: "media/bgm/remix/custom-song-i.ogg",
+        introEnd: 12.34,
+        path: "media/bgm/remix/custom-song.ogg",
+        loopEnd: 123.45,
+        volume: 0.5
+    },
+})
+```
+
+Then, register your custom remix with the mod:
+
+```js
+el.musicRemix.registerRemix("original-song", "some-remix-here", {
+    name: {
+        en_US: "Song name here"
+    },
+    desc: {
+        en_US: "Some description here, such as who made the remix or some information."
+    }
+})
+```
 
 ## Commands
 This tweak pack contains a variety of commands which are designed to help modders with deving - designed to be easy to use through the console.
