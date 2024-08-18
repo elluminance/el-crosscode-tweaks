@@ -184,6 +184,10 @@ declare global {
                 forceScaling: boolean;
             }
         }
+
+        interface BGM_TRACK {
+            order: number;
+        }
     }
 
     namespace el {

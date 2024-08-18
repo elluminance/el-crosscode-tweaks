@@ -1,4 +1,3 @@
-//@ts-check
 
 el.MusicRemixSelectorMenu = sc.ListInfoMenu.extend({
     transitions: {
@@ -108,7 +107,7 @@ el.MusicRemixList = ig.GuiElementBase.extend({
 
         this.list.list.columns = 1;
         let yOffset = 0;
-        for(let baseSong of Object.keys(el.musicRemix.remixes)) {
+        for(let baseSong of Object.keys(el.musicRemix.remixes).sort((a, b) => (ig.BGM_TRACK_LIST[a].order ?? 1e10) - (ig.BGM_TRACK_LIST[b].order ?? 1e10))) {
             counter.value = 0;
             let set = new el.MusicRemixSet(baseSong, this.list, yOffset);
             //@ts-ignore
