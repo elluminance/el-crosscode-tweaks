@@ -40,6 +40,11 @@ el.MusicRemixController = ig.Class.extend({
             delete this.selectedRemixes[bgm];
         }
 
+        //kinda hacky, but it works.
+        //any already set ones will be loaded in poststart.
+        if(bgm === "title") {
+            ig.Bgm.preloadStartTrack(newBgm || bgm);
+        }
         el.musicRemix.saveToStorage();
     },
 
