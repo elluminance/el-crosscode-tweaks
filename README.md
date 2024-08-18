@@ -6,7 +6,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
 ## [Click here to download!](https://github.com/EL20202/el-crosscode-tweaks/releases/latest)
 ***Note: Support will not be provided unless you are using the latest release. Merely downloading the zip will not work!***
 
-*Readme is guaranteed accurate up to version 0.7.5. See changelog for more details.*
+*Readme is guaranteed accurate up to version 0.8.0. See changelog for more details.*
 
 
 &nbsp;
@@ -18,6 +18,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
   * [NG+ Perks](#ng-perks)
   * [Uncapped Stats](#uncapped-stats)
   * [Trade Tracking](#trade-favoriting)
+  * [Music Remix Selector](#music-remix-selector)
   * [Bug Fixes/Minor Additions](#bug-fixesother-miscellaneous-additions)
 * **[Additions for Modders](#for-modders)**
   * [Action Steps](#action-steps)
@@ -28,6 +29,7 @@ Contains additions/fixes that are helpful to both normal players and modders ali
   * [Other Shop Additions](#other-shop-additions)
   * [Arena Additions](#arena-additions)
   * [Custom Map Utilities](#custom-map-utilities)
+  * [Adding custom remixes](#adding-music-remixes)
   * [Commands](#commands)
 &nbsp;
 
@@ -122,7 +124,7 @@ Once you have favorited a quest, you can cycle through them just like you would 
 
 ## Music Remix Selector
 
-Other mods may now add in custom remixes to songs and you can now freely swap between any of them as you with.
+Other mods may now add in custom remixes to songs and you can now freely swap between any of them as you with, using [CCRemasteredMelodies](https://github.com/Ronkad/CCRemasteredMelodies) as an example.
 
 https://github.com/user-attachments/assets/7ba3b3c8-529b-41d1-b015-40af1b0c0263
 
