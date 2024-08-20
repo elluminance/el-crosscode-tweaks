@@ -18,7 +18,6 @@ el.MusicRemixController = ig.Class.extend({
         }
     },
 
-    //todo: figure out why the title theme doesn't seem to be working.
     getRemix(bgm) {
         //verify there is a remix associated and if there is, make sure it actually is valid
         if (this.selectedRemixes[bgm] && (this.selectedRemixes[bgm] in this.remixes[bgm])) {
@@ -63,12 +62,6 @@ el.MusicRemixController = ig.Class.extend({
     },
 });
 el.musicRemix = new el.MusicRemixController;
-
-ig.Bgm.inject({
-    loadTrack(name) {
-        return this.parent(el.musicRemix.getRemix(name));
-    }
-})
 
 let trackOrder = [
     "title",

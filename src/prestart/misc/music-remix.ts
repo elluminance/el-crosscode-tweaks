@@ -1,3 +1,8 @@
+ig.Bgm.inject({
+    loadTrack(name) {
+        return this.parent(el.musicRemix.getRemix(name));
+    }
+})
 
 el.MusicRemixSelectorMenu = sc.ListInfoMenu.extend({
     transitions: {

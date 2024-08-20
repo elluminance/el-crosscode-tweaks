@@ -9,6 +9,10 @@ export default class implements PluginClass {
         //@ts-ignore
         window.el ??= {};
     }
+    
+    postload() {
+        import("./postload/postload.js");
+    }
 
     prestart() {
         //@ts-expect-error

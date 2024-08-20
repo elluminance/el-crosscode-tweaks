@@ -23,8 +23,7 @@ import "./menu/uncapped-stats.js"
 
 import "./misc/icons.js";
 import "./misc/mod-utils.js";
-
-import "./music-remix-selector/_core.js";
+import "./misc/music-remix.js";
 
 import "./steps/action-steps.js"
 import "./steps/effect-entries.js"
